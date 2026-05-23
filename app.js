@@ -148,6 +148,7 @@ function resetUserProfile() {
     selectParameter(activeParamId);
     drawWedges();
     drawOverlays();
+    initParameterList();
     triggerChime(150, "sine", 0.1, 0.4);
   }
 }
@@ -282,6 +283,39 @@ function initParameterList() {
         selectParameter(paramId);
       });
       legendGrid.appendChild(pill);
+    });
+  }
+
+  // 3. Responsive Mobile Grid Cards populated dynamically
+  const mobileGrid = document.getElementById("mobile-parameter-grid");
+  if (mobileGrid) {
+    mobileGrid.innerHTML = "";
+    palaceData.forEach((data, idx) => {
+      const paramId = data.id;
+      const hue = idx * (360 / TOTAL_AXES);
+      const score = userRatings[paramId] || 1;
+      
+      const card = document.createElement("div");
+      card.className = `mobile-grid-card ${paramId === activeParamId ? 'active' : ''}`;
+      card.id = `mobile-grid-card-${paramId}`;
+      
+      if (paramId === activeParamId) {
+        safeSetProperty(card, "--active-hue", hue);
+      }
+      
+      card.innerHTML = `
+        <div class="mobile-grid-card-left">
+          <span class="grid-card-num" style="background: hsl(${hue}, 72%, 60%);">${paramId}</span>
+          <span class="grid-card-name">${data.nameDE}</span>
+        </div>
+        <span class="grid-card-score" style="color: hsl(${hue}, 80%, 65%);">Lv.${score}</span>
+      `;
+      
+      card.addEventListener("click", () => {
+        selectParameter(paramId);
+      });
+      
+      mobileGrid.appendChild(card);
     });
   }
 }
@@ -734,6 +768,21 @@ function selectParameter(paramId, preventMobileDrawer = false) {
     }
   }
 
+  // Selected mobile grid card indicator: Dynamic HSL glowing match!
+  document.querySelectorAll(".mobile-grid-card").forEach(card => {
+    card.classList.remove("active");
+    safeSetProperty(card, "--active-hue", "");
+  });
+
+  const activeMobileCard = document.getElementById(`mobile-grid-card-${paramId}`);
+  if (activeMobileCard) {
+    activeMobileCard.classList.add("active");
+    safeSetProperty(activeMobileCard, "--active-hue", hue);
+    if (activeMobileCard.scrollIntoView) {
+      activeMobileCard.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }
+
   // Keep Speech Synthesis sync
   stopAllSpeech(true); // stop completely
 
@@ -792,6 +841,11 @@ function handleSliderChange(val) {
 
   document.getElementById("label-user-score").textContent = `Stufe ${rating}`;
   document.getElementById("user-score-slider").value = rating;
+
+  const activeCardScore = document.querySelector(`#mobile-grid-card-${activeParamId} .grid-card-score`);
+  if (activeCardScore) {
+    activeCardScore.textContent = `Lv.${rating}`;
+  }
 
   // Active rating change trigger sound chimes
   triggerChime(220 + rating * 60, "sine", 0.04, 0.15);
@@ -1243,7 +1297,7 @@ function handleResize() {
   
   const isMobile = window.innerWidth < 1200;
   const currentViewBox = svg.getAttribute("viewBox");
-  const targetViewBox = isMobile ? "0 0 600 950" : "0 0 950 600";
+  const targetViewBox = isMobile ? "50 230 500 500" : "-60 0 1070 600";
   
   if (currentViewBox !== targetViewBox) {
     svg.setAttribute("viewBox", targetViewBox);

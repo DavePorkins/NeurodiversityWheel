@@ -245,8 +245,7 @@ body.light-mode .glass-card:hover {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-nt), var(--color-ass), var(--color-adhd), var(--color-audhd), var(--color-user));
-  background-size: 150% 150%;
+  background: conic-gradient(from 0deg, var(--color-nt), var(--color-ass), var(--color-adhd), var(--color-audhd), var(--color-user), var(--color-nt));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -257,8 +256,8 @@ body.light-mode .glass-card:hover {
 }
 
 body.light-mode .logo-circle {
-  background: linear-gradient(135deg, #4ade80, #38bdf8, #c084fc, #f472b6, #2dd4bf);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: conic-gradient(from 0deg, var(--color-nt), var(--color-ass), var(--color-adhd), var(--color-audhd), var(--color-user), var(--color-nt));
+  border-color: rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 12px rgba(45, 212, 191, 0.25);
 }
 
@@ -286,7 +285,7 @@ body.light-mode .logo-circle:hover {
 }
 
 body.light-mode .logo-icon {
-  color: #2d263d !important;
+  color: #000000 !important;
   text-shadow: none;
 }
 
@@ -618,6 +617,11 @@ body.light-mode .profile-toggle:hover {
   0% { transform: translateX(-50%) scale(1); }
   50% { transform: translateX(-50%) scale(1.02); }
   100% { transform: translateX(-50%) scale(1); }
+}
+
+/* --- 🗂️ RESPONSIVE MOBILE PARAMETER GRID --- */
+.mobile-parameter-grid {
+  display: none;
 }
 
 /* --- 🗂️ UNIFIED PARAMETER LEGEND GRID --- */
@@ -1941,10 +1945,10 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   }
 
   .app-viewport {
-    height: auto;
-    overflow-y: auto;
+    height: auto !important;
+    overflow-y: auto !important;
     overflow-x: hidden !important;
-    padding: 0.75rem 0.5rem;
+    padding: 0.75rem 0.5rem 6.5rem 0.5rem !important; /* Generous bottom padding for scroll freedom! */
     width: 100% !important;
     max-width: 100% !important;
   }
@@ -1955,33 +1959,185 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     overflow-x: hidden !important;
   }
 
+  .header-main-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .logo-area {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .logo-title-row {
+    justify-content: center !important;
+  }
+
+  .header-controls {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    margin-top: 0.25rem !important;
+  }
+
   .app-header {
-    padding: 0.4rem 0.5rem !important;
-    margin-bottom: 0.25rem !important;
+    padding: 0.5rem 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    width: 100% !important;
   }
   .app-header .subtitle {
     display: none !important;
   }
   .logo-circle {
-    width: 36px !important;
-    height: 36px !important;
+    width: 48px !important;
+    height: 48px !important;
   }
   .logo-icon {
-    font-size: 1.05rem !important;
+    font-size: 1.45rem !important;
   }
   .logo-title-row h1 {
-    font-size: 1.2rem !important;
+    font-size: 1.4rem !important;
   }
   .version-badge {
-    padding: 0.1rem 0.35rem !important;
-    font-size: 0.65rem !important;
+    padding: 0.15rem 0.45rem !important;
+    font-size: 0.75rem !important;
   }
   .chart-section {
-    padding: 0.5rem 0.5rem 0.75rem 0.5rem !important;
+    padding: 0.5rem 0.5rem 1rem 0.5rem !important;
+    width: 100% !important;
   }
   
   .chart-wrapper {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important; /* Perfect square container on mobile */
+    max-width: 480px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     overflow: hidden !important;
+  }
+
+  #radar-chart {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide SVG flanking legend nodes and connectors on mobile viewports completely */
+  #wedges-connectors-group,
+  #wedges-legend-nodes-group {
+    display: none !important;
+  }
+
+  /* --- RESPONSIVE MOBILE PARAMETER GRID --- */
+  .mobile-parameter-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+    margin-top: 1.25rem !important;
+    width: 100% !important;
+  }
+  
+  .mobile-grid-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 0.5rem 0.6rem !important;
+    cursor: pointer !important;
+    transition: var(--transition-smooth) !important;
+  }
+  
+  body.light-mode .mobile-grid-card {
+    background: rgba(0, 0, 0, 0.025) !important;
+    border-color: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .mobile-grid-card.active {
+    background: hsla(var(--active-hue, 180), 85%, 55%, 0.1) !important;
+    border-color: hsl(var(--active-hue, 180), 85%, 62%) !important;
+    box-shadow: 0 0 10px hsla(var(--active-hue, 180), 85%, 55%, 0.15) !important;
+  }
+  
+  .mobile-grid-card-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    overflow: hidden !important;
+  }
+  
+  .grid-card-num {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .grid-card-name {
+    font-family: var(--font-body) !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  .grid-card-score {
+    font-family: var(--font-header) !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Compact Controls Overrides for Mobile viewports */
+  .chart-controls-panel {
+    padding-top: 0.75rem !important;
+    margin-top: 1.25rem !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+  }
+  
+  .toggles-area {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
+    width: 100% !important;
+  }
+  
+  .profile-toggle {
+    font-size: 0.76rem !important;
+    padding: 0.4rem 0.75rem !important;
+  }
+  
+  .actions-area {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+  
+  .glass-btn {
+    font-size: 0.76rem !important;
+    padding: 0.4rem 0.9rem !important;
   }
 
   #radar-chart {
