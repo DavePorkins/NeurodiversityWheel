@@ -1255,45 +1255,7 @@ body.light-mode .modal-header .close-btn {
   box-shadow: 0 6px 20px rgba(45, 212, 191, 0.5) !important;
 }
 
-/* Responsive adjustment */
-@media (max-width: 1024px) {
-  .app-viewport {
-    height: auto;
-    overflow-y: auto;
-    padding: 1rem;
-  }
-  .app-container {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    height: auto;
-  }
-  .chart-section {
-    height: auto;
-    overflow: visible;
-  }
-  .chart-wrapper {
-    aspect-ratio: 1 / 1;
-    max-height: 500px;
-  }
-  .detail-section {
-    height: auto;
-    overflow-y: visible;
-    max-height: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-viewport {
-    padding: 0.5rem;
-  }
-  .toggle-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .action-footer {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
+/* Header controls and toggle areas styled below */
 
 /* --- HEADER CONTROLS --- */
 .header-controls {
@@ -1951,7 +1913,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
 
 .legend-node-text {
   font-family: var(--font-header);
-  font-size: 12.5px; /* larger comfortable default flanking text font size */
+  font-size: 13.5px; /* larger comfortable default flanking text font size */
   font-weight: 500;
   fill: var(--text-muted);
   dominant-baseline: middle;
@@ -1963,7 +1925,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
 .legend-node-group.active .legend-node-text {
   fill: var(--text-primary);
   font-weight: 600;
-  font-size: 14.5px; /* larger highlighted flanking text font size */
+  font-size: 15.5px; /* larger highlighted flanking text font size */
 }
 
 /* Responsive adjustment overrides for 2 columns collapse & hardware-accelerated slide-in mobile drawers */

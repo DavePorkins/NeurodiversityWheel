@@ -37,9 +37,9 @@ const STORAGE_KEY = "mapping_neurodiversity_user_profile_perfect";
 
 let activeProfiles = {
   user: true,
-  nt: false,
-  adhd: false,
-  ass: false,
+  nt: true,
+  adhd: true,
+  ass: true,
   audhd: false
 };
 
@@ -61,7 +61,7 @@ window.addEventListener("DOMContentLoaded", () => {
   loadUserProfile();
   initParameterList(); // Build left list index column
   initChart();
-  selectParameter(1);
+  selectParameter(1, true);
   animateIntro();
   
   // Initialize resize and viewBox cropping
@@ -605,7 +605,7 @@ function drawOverlays() {
 }
 
 // --- 5. SELECTION & SIDEBAR UPDATING ---
-function selectParameter(paramId) {
+function selectParameter(paramId, preventMobileDrawer = false) {
   activeParamId = paramId;
   const hue = (paramId - 1) * (360 / TOTAL_AXES);
 
@@ -614,7 +614,7 @@ function selectParameter(paramId) {
   if (listPanel) listPanel.classList.remove("mobile-show");
   const detailPanel = document.querySelector ? document.querySelector(".detail-section") : null;
   if (detailPanel) {
-    if (window.innerWidth < 1200) {
+    if (window.innerWidth < 1200 && !preventMobileDrawer) {
       detailPanel.classList.add("mobile-show");
     } else {
       detailPanel.classList.remove("mobile-show");
