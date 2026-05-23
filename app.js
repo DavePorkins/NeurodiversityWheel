@@ -13,11 +13,11 @@ function updateLayoutConstants() {
   if (window.innerWidth < 1200) {
     CENTER_X = 300;
     CENTER_Y = 480;
-    MAX_RADIUS = 160;
+    MAX_RADIUS = 215;
   } else {
     CENTER_X = 475;
     CENTER_Y = 300;
-    MAX_RADIUS = 180;
+    MAX_RADIUS = 205;
   }
 }
 
@@ -426,7 +426,7 @@ function initChart() {
           yNode = defaultY;
           // Curved Concentric Schmiegung: Curves inward (closer to center) at top/bottom, pushed out in middle
           const distFromCenterY = Math.abs(defaultY - 300);
-          xNode = 240 + Math.pow(distFromCenterY / 250, 2) * 55;
+          xNode = 230 + Math.pow(distFromCenterY / 250, 2) * 55;
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
@@ -434,7 +434,7 @@ function initChart() {
           yNode = defaultY;
           // Curved Concentric Schmiegung: Curves inward (closer to center) at top/bottom, pushed out in middle
           const distFromCenterY = Math.abs(defaultY - 300);
-          xNode = 710 - Math.pow(distFromCenterY / 250, 2) * 55;
+          xNode = 720 - Math.pow(distFromCenterY / 250, 2) * 55;
           isLeft = false;
         }
       }
