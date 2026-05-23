@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapping Neurodiversity 🌸 Interaktives Buntes Kreisdiagramm v1.2</title>
+  <!-- Geometric Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-mode"> <!-- default theme is elegant dark-mode -->
+
+  <!-- Friendly warm decorative glow elements -->
+  <div class="pastel-glow glow-pink"></div>
+  <div class="pastel-glow glow-blue"></div>
+  <div class="pastel-glow glow-yellow"></div>
+
+  <div class="app-viewport">
+    <div class="app-container">
+      
+      <!-- LEFTMOST SECTION: Scrollable Parameter List Index -->
+      <aside class="list-section glass-panel">
+        <div class="list-header">
+          <div class="list-header-title-row">
+            <h3><i class="fa-solid fa-list-ol"></i> Parameter-Index</h3>
+            <button class="close-btn mobile-close-btn" onclick="toggleMobilePanel('list')" aria-label="Schließen" title="Index schließen">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <span class="helper-text">Wähle eine Achse aus:</span>
+        </div>
+        <div id="parameter-list-group" class="parameter-list">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </aside>
+      
+      <!-- MIDDLE SECTION: The Interactive Pastel Circle Wedges Chart -->
+      <main class="chart-section glass-panel">
+        <header class="app-header">
+          <div class="header-main-row">
+            <div class="logo-area">
+              <span class="logo-circle"><i class="fa-solid fa-infinity logo-icon"></i></span>
+              <div>
+                <div class="logo-title-row">
+                  <h1>Mapping Neurodiversity</h1>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v1.8</span>
+                </div>
+                <p class="subtitle">Das 20-Parameter-Kreisdiagramm nach Savannah Denny</p>
+              </div>
+            </div>
+            <!-- Toggle Controls in Header -->
+            <div class="header-controls">
+              <!-- Sound Toggle Button -->
+              <button id="sound-toggle-btn" class="control-toggle-btn active" onclick="toggleSound()" title="Sound-Effekte umschalten (An / Aus)">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+              <!-- Animation Toggle Button -->
+              <button id="animation-toggle-btn" class="control-toggle-btn active" onclick="toggleAnimations()" title="Hintergrund-Animationen umschalten (An / Aus)">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </button>
+              <!-- Theme Toggle Button -->
+              <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="toggleTheme()" title="Farbschema wechseln (Dunkel / Hell)">
+                <i class="fa-solid fa-sun"></i>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- The Pie Wedges (Kuchenstücke) SVG Chart Wrapper -->
+        <div class="chart-wrapper">
+          <!-- Wide viewBox for flanking nodes on desktop, cropped dynamically via JS on mobile -->
+          <svg id="radar-chart" viewBox="0 0 950 600" width="100%" height="100%">
+            <defs>
+              <!-- Glowing shadow filters for pastel visual excellence -->
+              <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+              
+              <!-- Multi-color gradients for comparison overlays -->
+              <linearGradient id="audhd-pastel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fda4af" stop-opacity="0.35" /> <!-- Rose -->
+                <stop offset="50%" stop-color="#c084fc" stop-opacity="0.35" /> <!-- Purple -->
+                <stop offset="100%" stop-color="#fed7aa" stop-opacity="0.35" /> <!-- Peach -->
+              </linearGradient>
+              
+              <linearGradient id="user-pastel-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.75" />
+                <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.9" />
+              </linearGradient>
+            </defs>
+
+            <!-- Flanking static curved bezier connectors and outer nodes web -->
+            <g id="wedges-connectors-group"></g>
+            <g id="wedges-legend-nodes-group"></g>
+
+            <!-- Dynamic SVG Cake Slices Grid & Wedges drawn by JS -->
+            <g id="wedges-background-group"></g>
+            <g id="wedges-active-group"></g>
+            <g id="wedges-labels-group"></g>
+            
+            <!-- Comparison fluid polygon overlays drawn on top -->
+            <g id="polygon-overlays-group"></g>
+            
+            <!-- Outer rings and decorative border centered at cx=475, cy=300, radius=180 -->
+            <circle id="chart-boundary-ring" cx="475" cy="300" r="180" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" class="chart-boundary-ring"></circle>
+            <circle id="chart-boundary-ring-outer" cx="475" cy="300" r="186" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" class="chart-boundary-ring-outer"></circle>
+            
+            <!-- Masking center donut hole at r=32 to hide narrow intersections perfectly -->
+            <circle id="chart-center-hole" cx="475" cy="300" r="32" fill="var(--center-hole-color)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" class="chart-center-hole"></circle> 
+          </svg>
+        </div>
+
+        <!-- Combined & Streamlined Chart Controls Panel -->
+        <section class="chart-controls-panel">
+          <div class="toggles-area">
+            <button id="toggle-user" class="profile-toggle active user-btn" onclick="toggleProfile('user')" title="Eigenes Profil umschalten">
+              <span class="color-dot user-dot"></span> Profil
+            </button>
+            <button id="toggle-nt" class="profile-toggle nt-btn" onclick="toggleProfile('nt')" title="Neurotypisches Spektrum umschalten">
+              <span class="color-dot nt-dot"></span> NT
+            </button>
+            <button id="toggle-adhd" class="profile-toggle adhd-btn" onclick="toggleProfile('adhd')" title="ADHS Spektrum umschalten">
+              <span class="color-dot adhd-dot"></span> ADHS
+            </button>
+            <button id="toggle-ass" class="profile-toggle ass-btn" onclick="toggleProfile('ass')" title="Autismus Spektrum umschalten">
+              <span class="color-dot ass-dot"></span> ASS
+            </button>
+            <button id="toggle-audhd" class="profile-toggle audhd-btn" onclick="toggleProfile('audhd')" title="AuDHD Misch-Spektrum umschalten">
+              <span class="color-dot audhd-dot"></span> AuDHD
+            </button>
+          </div>
+          <div class="actions-area">
+            <button class="glass-btn" onclick="openNotesModal()" title="Kritik und Grenzen dieses Worksheet-Reflexionsrads">
+              <i class="fa-solid fa-hand-holding-heart"></i> Kritik
+            </button>
+            <button class="glass-btn" onclick="resetUserProfile()" title="Setzt alle deine Ratings auf Stufe 1 zurück">
+              <i class="fa-solid fa-arrows-rotate"></i> Reset
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <!-- RIGHT SECTION: Beautiful detailed, scrollable Content Panel -->
+      <section class="detail-section glass-panel" id="detail-panel">
+        
+        <div class="parameter-header-card">
+          <div class="badge-row">
+            <div class="badge-left">
+              <span class="param-id-badge" id="detail-id">1</span>
+              <span class="param-axis-indicator" id="detail-nav-indicator">1 / 20</span>
+            </div>
+            <!-- Play Button and Mobile Close Button aligned horizontally -->
+            <div class="badge-right">
+              <div id="main-tts-wrapper" class="tts-player-wrapper">
+                <button id="btn-tts" class="main-play-btn" onclick="toggleMainSpeech()" title="Erklärung vorlesen lassen">
+                  <i class="fa-solid fa-circle-play"></i> Vorlesen
+                </button>
+              </div>
+              <button class="close-btn mobile-close-btn" onclick="toggleMobilePanel('details')" aria-label="Schließen" title="Details schließen">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+          <h2 id="detail-name-de">Akute Reizüberflutung</h2>
+          <h4 id="detail-name-en">Sensory Overload</h4>
+          <p class="definition-text" id="detail-definition">Der Zustand, in dem das sensorische Nervensystem mehr Inputs erhält, als es filtern, verarbeiten und abbauen kann.</p>
+        </div>
+
+        <!-- Deep Dive text block -->
+        <div class="deep-dive-panel">
+          <h3><i class="fa-solid fa-book-open-reader"></i> Das passiert in deinem Gehirn:</h3>
+          <p id="detail-deep-dive" class="deep-dive-text">Ausführlicher Erklärungstext der neurobiologischen und psychologischen Zusammenhänge.</p>
+        </div>
+
+        <!-- Deep Dive text block -->
+
+        <!-- 4-Voices Monologues with individual read-aloud buttons and relate-shortcuts -->
+        <div class="voices-container">
+          <h3><i class="fa-solid fa-people-group"></i> Die 4 Stimmen (Lived Experience)</h3>
+          <p class="voices-intro">Lies dir an, wie unterschiedliche Menschen diese Achse erfahren, und übernehme ihr Rating bei starker Übereinstimmung:</p>
+          
+          <!-- VOICE A: Neurotypisch -->
+          <div class="voice-card nt-card">
+            <header class="voice-card-header">
+              <div class="voice-meta">
+                <span class="voice-avatar nt-avatar"><i class="fa-solid fa-face-smile"></i></span>
+                <strong>Neurotypische Perspektive (NT)</strong>
+              </div>
+              <div id="voice-tts-wrapper-nt" class="voice-tts-wrapper">
+                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('nt')" title="Diese Stimme vorlesen lassen">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </div>
+            </header>
+            <blockquote class="voice-quote" id="quote-nt">„Routine ist für mich eine nette Gewohnheit...“</blockquote>
+            <footer class="voice-card-footer">
+              <span class="voice-badge">Erwartetes Level: <span id="badge-nt-score">1</span> / 5</span>
+              <button class="voice-relate-btn" onclick="adoptVoiceRating('nt')" title="Dieses Level als mein Profil übernehmen">
+                <i class="fa-solid fa-check"></i> Das bin ich
+              </button>
+            </footer>
+          </div>
+
+          <!-- VOICE B: ADHD -->
+          <div class="voice-card adhd-card">
+            <header class="voice-card-header">
+              <div class="voice-meta">
+                <span class="voice-avatar adhd-avatar"><i class="fa-solid fa-bolt-lightning"></i></span>
+                <strong>ADHS-Perspektive</strong>
+              </div>
+              <div id="voice-tts-wrapper-adhd" class="voice-tts-wrapper">
+                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('adhd')" title="Diese Stimme vorlesen lassen">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </div>
+            </header>
+            <blockquote class="voice-quote" id="quote-adhd">„Ich liebe die Idee von Routinen...“</blockquote>
+            <footer class="voice-card-footer">
+              <span class="voice-badge">Erwartetes Level: <span id="badge-adhd-score">3</span> / 5</span>
+              <button class="voice-relate-btn" onclick="adoptVoiceRating('adhd')" title="Dieses Level als mein Profil übernehmen">
+                <i class="fa-solid fa-check"></i> Das bin ich
+              </button>
+            </footer>
+          </div>
+
+          <!-- VOICE C: Autism -->
+          <div class="voice-card ass-card">
+            <header class="voice-card-header">
+              <div class="voice-meta">
+                <span class="voice-avatar ass-avatar"><i class="fa-solid fa-puzzle-piece"></i></span>
+                <strong>Autistische Perspektive (ASS)</strong>
+              </div>
+              <div id="voice-tts-wrapper-ass" class="voice-tts-wrapper">
+                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('ass')" title="Diese Stimme vorlesen lassen">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </div>
+            </header>
+            <blockquote class="voice-quote" id="quote-ass">„Routine ist mein Überlebensanker...“</blockquote>
+            <footer class="voice-card-footer">
+              <span class="voice-badge">Erwartetes Level: <span id="badge-ass-score">5</span> / 5</span>
+              <button class="voice-relate-btn" onclick="adoptVoiceRating('ass')" title="Dieses Level als mein Profil übernehmen">
+                <i class="fa-solid fa-check"></i> Das bin ich
+              </button>
+            </footer>
+          </div>
+
+          <!-- VOICE D: AuDHD Dilemma -->
+          <div class="voice-card audhd-card">
+            <header class="voice-card-header">
+              <div class="voice-meta">
+                <span class="voice-avatar audhd-avatar"><i class="fa-solid fa-yin-yang"></i></span>
+                <strong>Das AuDHD-Dilemma</strong>
+              </div>
+              <div id="voice-tts-wrapper-audhd" class="voice-tts-wrapper">
+                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('audhd')" title="Diese Stimme vorlesen lassen">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </div>
+            </header>
+            <blockquote class="voice-quote" id="quote-audhd">„Ich bin im ständigen Krieg mit mir selbst...“</blockquote>
+            <footer class="voice-card-footer">
+              <span class="voice-badge">Erwartetes Level: <span id="badge-audhd-score">4</span> / 5</span>
+              <button class="voice-relate-btn" onclick="adoptVoiceRating('audhd')" title="Dieses Level als mein Profil übernehmen">
+                <i class="fa-solid fa-check"></i> Das bin ich
+              </button>
+            </footer>
+          </div>
+        </div>
+
+        <div class="user-score-panel glass-card">
+          <div class="score-header">
+            <span>Deine Intensität bei <strong id="slider-param-name">Akute Reizüberflutung</strong>:</span>
+            <strong id="label-user-score" class="score-value">Stufe 3</strong>
+          </div>
+          <div class="slider-container">
+            <div class="slider-row">
+              <span class="slider-side-label left-label">Kaum</span>
+              <div class="slider-input-wrapper">
+                <input type="range" id="user-score-slider" min="1" max="5" step="1" value="3" oninput="handleSliderChange(this.value)">
+                <div class="slider-labels">
+                  <div class="slider-labels-inner">
+                    <span style="left: 0%"><strong>1</strong></span>
+                    <span style="left: 25%"><strong>2</strong></span>
+                    <span style="left: 50%"><strong>3</strong></span>
+                    <span style="left: 75%"><strong>4</strong></span>
+                    <span style="left: 100%"><strong>5</strong></span>
+                  </div>
+                </div>
+              </div>
+              <span class="slider-side-label right-label">Extrem</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sequential navigation buttons at bottom -->
+        <footer class="detail-navigation">
+          <button class="nav-btn" onclick="navigateParameter(-1)">
+            <i class="fa-solid fa-arrow-left-long"></i> Zurück
+          </button>
+          <button class="nav-btn primary-btn" onclick="navigateParameter(1)">
+            Weiter <i class="fa-solid fa-arrow-right-long"></i>
+          </button>
+        </footer>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Critical notes Modal dialog -->
+  <div id="notes-modal" class="modal-overlay">
+    <div class="modal-content glass-panel animate-scale">
+      <header class="modal-header">
+        <h2><i class="fa-solid fa-circle-exclamation warning-icon"></i> Wichtig zu bedenken (Kritik & Grenzen)</h2>
+        <button class="close-btn" onclick="closeNotesModal()" aria-label="Schließen"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <div class="modal-body">
+        <p>Dieses Kreisdiagramm ist ein wunderbares Gesprächs- und Reflexionswerkzeug, um dich mit dir selbst und anderen auszutauschen. Dennoch möchten wir einige kritische Punkte zu bedenken geben:</p>
+        
+        <ul class="criticism-list">
+          <li>
+            <strong>Keine klinische Diagnose:</strong> 
+            Dieses Worksheet ersetzt keine fundierte ärztliche oder psychologische Diagnostik. Es ist eine didaktische Heuristik zur Visualisierung subjektiver Erfahrungen.
+          </li>
+          <li>
+            <strong>Die Willkür der Skala (1–5):</strong> 
+            Menschliches Bewusstsein lässt sich nicht mathematisch starr beziffern. Betrachte die Level als grobe Orientierungspunkte, die von deiner Tagesform abhängen dürfen.
+          </li>
+          <li>
+            <strong>Reduzierte Komplexität:</strong> 
+            20 Parameter decken viele Facetten ab, bilden aber niemals die gesamte, fluide Vielfalt der menschlichen Wahrnehmung ab.
+          </li>
+          <li>
+            <strong>Subjektive Lived Experiences:</strong> 
+            Die Monologe der 4 Stimmen sind aus echten Erfahrungsberichten destilliert, erheben aber keinen Anspruch auf Allgemeingültigkeit. Jedes Gehirn ist einzigartig!
+          </li>
+        </ul>
+        
+        <div class="modal-alert-box">
+          <i class="fa-solid fa-circle-nodes accent-icon"></i>
+          <p><strong>Kooperation mit Flux:</strong> Dieses Tool entstand zur Unterstützung der studentischen Hochschulgruppe Flux am KIT, um Barrieren im Studienalltag abzubauen und den Peer-Austausch zu bereichern.</p>
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button class="modal-close-action-btn primary-btn" onclick="closeNotesModal()">Ich verstehe & Weiter</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Floating Mobile Action Toggles (Android browser support) -->
+  <div class="mobile-action-bar">
+    <button id="mobile-toggle-list" class="mobile-action-btn" onclick="toggleMobilePanel('list')">
+      <i class="fa-solid fa-list-ol"></i> Index
+    </button>
+    <button id="mobile-toggle-details" class="mobile-action-btn" onclick="toggleMobilePanel('details')">
+      <i class="fa-solid fa-circle-info"></i> Details
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="palace_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
