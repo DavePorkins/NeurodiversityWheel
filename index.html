@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapping Neurodiversity 🌸 Interaktives Buntes Kreisdiagramm v1.2</title>
+  <meta name="theme-color" id="meta-theme-color" content="#151121">
+  <title>Mapping Neurodiversity 🌸 v1.9</title>
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,7 +49,7 @@
               <div>
                 <div class="logo-title-row">
                   <h1>Mapping Neurodiversity</h1>
-                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v1.8</span>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v1.9</span>
                 </div>
                 <p class="subtitle">Das 20-Parameter-Kreisdiagramm nach Savannah Denny</p>
               </div>
@@ -136,8 +137,8 @@
             </button>
           </div>
           <div class="actions-area">
-            <button class="glass-btn" onclick="openNotesModal()" title="Kritik und Grenzen dieses Worksheet-Reflexionsrads">
-              <i class="fa-solid fa-hand-holding-heart"></i> Kritik
+            <button class="glass-btn" onclick="openNotesModal()" title="Allgemeine Informationen und Grenzen des Reflexionsrads">
+              <i class="fa-solid fa-circle-info"></i> Infos
             </button>
             <button class="glass-btn" onclick="resetUserProfile()" title="Setzt alle deine Ratings auf Stufe 1 zurück">
               <i class="fa-solid fa-arrows-rotate"></i> Reset
@@ -152,8 +153,11 @@
         <div class="parameter-header-card">
           <div class="badge-row">
             <div class="badge-left">
-              <span class="param-id-badge" id="detail-id">1</span>
-              <span class="param-axis-indicator" id="detail-nav-indicator">1 / 20</span>
+              <span class="param-axis-emblem" id="detail-axis-emblem">
+                <strong id="detail-id">1</strong>
+                <span class="emblem-divider">/</span>
+                <span class="emblem-total">20</span>
+              </span>
             </div>
             <!-- Play Button and Mobile Close Button aligned horizontally -->
             <div class="badge-right">
@@ -317,7 +321,7 @@
   <div id="notes-modal" class="modal-overlay">
     <div class="modal-content glass-panel animate-scale">
       <header class="modal-header">
-        <h2><i class="fa-solid fa-circle-exclamation warning-icon"></i> Wichtig zu bedenken (Kritik & Grenzen)</h2>
+        <h2><i class="fa-solid fa-circle-info warning-icon"></i> Allgemeine Infos (Kritik & Grenzen)</h2>
         <button class="close-btn" onclick="closeNotesModal()" aria-label="Schließen"><i class="fa-solid fa-xmark"></i></button>
       </header>
       <div class="modal-body">

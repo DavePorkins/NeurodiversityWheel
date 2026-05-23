@@ -81,10 +81,19 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- 2. THEME & LOCAL STORAGE ---
+function syncThemeColorMeta() {
+  const isDark = document.body.classList.contains("dark-mode");
+  const meta = document.getElementById("meta-theme-color");
+  if (meta) {
+    meta.setAttribute("content", isDark ? "#151121" : "#faf7f2");
+  }
+}
+
 function initTheme() {
   const savedTheme = localStorage.getItem("mapping_neurodiversity_theme") || "dark";
   document.body.className = savedTheme + "-mode";
   updateThemeToggleIcon();
+  syncThemeColorMeta();
 }
 
 function toggleTheme() {
@@ -93,6 +102,7 @@ function toggleTheme() {
   document.body.className = nextTheme + "-mode";
   localStorage.setItem("mapping_neurodiversity_theme", nextTheme);
   updateThemeToggleIcon();
+  syncThemeColorMeta();
   
   // Dynamic color updating for HSL background segments on theme change!
   initChart();
@@ -393,19 +403,19 @@ function initChart() {
         // Bottom Left: 11-15
         // Bottom Right: 6-10
         if (paramId >= 16 && paramId <= 20) {
-          xNode = 110;
+          xNode = 130;
           yNode = 40 + (20 - paramId) * 50;
           isLeft = true;
         } else if (paramId >= 1 && paramId <= 5) {
-          xNode = 490;
+          xNode = 470;
           yNode = 40 + (paramId - 1) * 50;
           isLeft = false;
         } else if (paramId >= 11 && paramId <= 15) {
-          xNode = 110;
+          xNode = 130;
           yNode = 720 + (15 - paramId) * 50;
           isLeft = true;
         } else if (paramId >= 6 && paramId <= 10) {
-          xNode = 490;
+          xNode = 470;
           yNode = 720 + (paramId - 6) * 50;
           isLeft = false;
         }
@@ -733,7 +743,6 @@ function updateSidebar(paramId) {
   if (!data) return;
 
   document.getElementById("detail-id").textContent = data.id;
-  document.getElementById("detail-nav-indicator").textContent = `${data.id} / ${TOTAL_AXES}`;
   document.getElementById("detail-name-de").textContent = data.nameDE;
   document.getElementById("detail-name-en").textContent = data.nameEN;
   document.getElementById("detail-definition").textContent = data.definition;
