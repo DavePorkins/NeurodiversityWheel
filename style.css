@@ -240,41 +240,59 @@ body.light-mode .glass-card:hover {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(30, 27, 46, 0.85); /* premium rich dark glass backing */
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, var(--color-nt), var(--color-ass), var(--color-adhd), var(--color-audhd));
+  background-size: 300% 300%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), 0 0 10px rgba(244, 114, 182, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 15px rgba(244, 114, 182, 0.3);
   transition: all 0.3s ease;
 }
 
+body.animations-enabled .logo-circle {
+  animation: logoGradient 8s ease infinite;
+}
+
+@keyframes logoGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 body.light-mode .logo-circle {
-  background: rgba(255, 255, 255, 0.85); /* premium rich light sand glass backing */
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 0 8px rgba(45, 212, 191, 0.1);
+  background: linear-gradient(135deg, #4ade80, #38bdf8, #c084fc, #f472b6);
+  background-size: 300% 300%;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 12px rgba(45, 212, 191, 0.2);
 }
 
 .logo-circle:hover {
-  border-color: var(--color-user);
-  box-shadow: 0 0 15px rgba(45, 212, 191, 0.35);
+  transform: scale(1.08) rotate(5deg);
+  border-color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 0 20px rgba(45, 212, 191, 0.5);
+}
+
+body.light-mode .logo-circle:hover {
+  border-color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12), 0 0 18px rgba(45, 212, 191, 0.4);
 }
 
 .logo-icon {
   font-size: 1.45rem; /* perfectly proportioned */
-  background: linear-gradient(135deg, var(--color-nt) 0%, var(--color-ass) 33%, var(--color-adhd) 66%, var(--color-audhd) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff !important;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background: none;
+  text-shadow: 0 1px 3px rgba(10, 5, 20, 0.3);
   display: inline-block;
   line-height: 1;
-  text-shadow: none;
   transform: translateY(0.5px); /* Subpixel centering compensation for infinity icon */
 }
 
 body.light-mode .logo-icon {
-  background: linear-gradient(135deg, #22c55e 0%, #0ea5e9 33%, #a855f7 66%, #ec4899 100%); /* slightly more saturated for bright light mode contrast */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .logo-title-row {
