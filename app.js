@@ -11,9 +11,9 @@ const TOTAL_AXES = 20;
 
 function updateLayoutConstants() {
   if (window.innerWidth < 1200) {
-    CENTER_X = 300;
-    CENTER_Y = 480;
-    MAX_RADIUS = 215;
+    CENTER_X = 475;
+    CENTER_Y = 550;
+    MAX_RADIUS = 225;
   } else {
     CENTER_X = 475;
     CENTER_Y = 300;
@@ -44,6 +44,7 @@ let activeProfiles = {
 };
 
 let activeParamId = 1;
+let previousParamId = null;
 let audioCtx = null;
 let soundEnabled = localStorage.getItem("mapping_neurodiversity_sound") !== "off";
 let animationsEnabled = localStorage.getItem("mapping_neurodiversity_animations") !== "off";
@@ -285,39 +286,6 @@ function initParameterList() {
       legendGrid.appendChild(pill);
     });
   }
-
-  // 3. Responsive Mobile Grid Cards populated dynamically
-  const mobileGrid = document.getElementById("mobile-parameter-grid");
-  if (mobileGrid) {
-    mobileGrid.innerHTML = "";
-    palaceData.forEach((data, idx) => {
-      const paramId = data.id;
-      const hue = idx * (360 / TOTAL_AXES);
-      const score = userRatings[paramId] || 1;
-      
-      const card = document.createElement("div");
-      card.className = `mobile-grid-card ${paramId === activeParamId ? 'active' : ''}`;
-      card.id = `mobile-grid-card-${paramId}`;
-      
-      if (paramId === activeParamId) {
-        safeSetProperty(card, "--active-hue", hue);
-      }
-      
-      card.innerHTML = `
-        <div class="mobile-grid-card-left">
-          <span class="grid-card-num" style="background: hsl(${hue}, 72%, 60%);">${paramId}</span>
-          <span class="grid-card-name">${data.nameDE}</span>
-        </div>
-        <span class="grid-card-score" style="color: hsl(${hue}, 80%, 65%);">Lv.${score}</span>
-      `;
-      
-      card.addEventListener("click", () => {
-        selectParameter(paramId);
-      });
-      
-      mobileGrid.appendChild(card);
-    });
-  }
 }
 
 function initChart() {
@@ -432,25 +400,19 @@ function initChart() {
       let isLeft = false;
 
       if (isMobile) {
-        // Top Left: 16-20
-        // Top Right: 1-5
-        // Bottom Left: 11-15
-        // Bottom Right: 6-10
-        if (paramId >= 16 && paramId <= 20) {
-          xNode = 130;
-          yNode = 40 + (20 - paramId) * 50;
+        if (paramId >= 11 && paramId <= 20) {
+          const slotIndex = 20 - paramId;
+          const defaultY = 50 + slotIndex * 105;
+          yNode = defaultY;
+          const distFromCenterY = Math.abs(defaultY - 550);
+          xNode = 160 + Math.pow(distFromCenterY / 500, 2) * 110;
           isLeft = true;
-        } else if (paramId >= 1 && paramId <= 5) {
-          xNode = 470;
-          yNode = 40 + (paramId - 1) * 50;
-          isLeft = false;
-        } else if (paramId >= 11 && paramId <= 15) {
-          xNode = 130;
-          yNode = 720 + (15 - paramId) * 50;
-          isLeft = true;
-        } else if (paramId >= 6 && paramId <= 10) {
-          xNode = 470;
-          yNode = 720 + (paramId - 6) * 50;
+        } else {
+          const slotIndex = paramId - 1;
+          const defaultY = 50 + slotIndex * 105;
+          yNode = defaultY;
+          const distFromCenterY = Math.abs(defaultY - 550);
+          xNode = 790 - Math.pow(distFromCenterY / 500, 2) * 110;
           isLeft = false;
         }
       } else {
@@ -501,6 +463,9 @@ function initChart() {
         connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
         connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
       }
+      connector.addEventListener("click", () => {
+        selectParameter(paramId);
+      });
       connectorsGroup.appendChild(connector);
 
       // 2. Legend Flanking Group
@@ -657,8 +622,101 @@ function selectParameter(paramId, preventMobileDrawer = false) {
     }
   }
 
-  // Highlight Left index item and scroll into view smoothly with safety check
-  document.querySelectorAll(".parameter-list-item").forEach(item => item.classList.remove("active"));
+  // Deactivate previous active elements if cached for buttery-smooth O(1) performance
+  if (previousParamId !== null && previousParamId !== paramId) {
+    const prevItem = document.getElementById(`list-item-${previousParamId}`);
+    if (prevItem) prevItem.classList.remove("active");
+
+    const prevRing = document.getElementById(`axis-indicator-${previousParamId}`);
+    if (prevRing) {
+      prevRing.classList.remove("active");
+      if (prevRing.style) {
+        prevRing.style.stroke = "";
+        prevRing.style.filter = "";
+      }
+    }
+
+    const prevLabel = document.getElementById(`svg-axis-label-${previousParamId}`);
+    if (prevLabel) prevLabel.classList.remove("active");
+
+    const prevLabelBg = document.getElementById(`svg-axis-label-bg-${previousParamId}`);
+    if (prevLabelBg && prevLabelBg.style) {
+      prevLabelBg.style.fill = "none";
+      prevLabelBg.style.stroke = "none";
+      prevLabelBg.style.filter = "";
+    }
+
+    const prevNodeGrp = document.getElementById(`legend-node-group-${previousParamId}`);
+    if (prevNodeGrp) {
+      prevNodeGrp.classList.remove("active");
+      const badge = prevNodeGrp.querySelector(".legend-node-badge");
+      if (badge && badge.style) {
+        badge.style.fill = "";
+        badge.style.stroke = "";
+      }
+    }
+
+    const prevConnector = document.getElementById(`connector-line-${previousParamId}`);
+    if (prevConnector) {
+      prevConnector.classList.remove("active");
+      if (prevConnector.style) {
+        prevConnector.style.stroke = "";
+        prevConnector.style.filter = "";
+      }
+    }
+
+    const prevPill = document.getElementById(`legend-pill-${previousParamId}`);
+    if (prevPill) {
+      prevPill.classList.remove("active");
+      safeSetProperty(prevPill, "--active-color", "");
+      safeSetProperty(prevPill, "--active-hue", "");
+    }
+  } else if (previousParamId === null) {
+    // Fallback: full sweep once on first initialization to clear any stale attributes
+    document.querySelectorAll(".parameter-list-item").forEach(item => item.classList.remove("active"));
+    document.querySelectorAll(".wedge-axis-indicator").forEach(ring => {
+      ring.classList.remove("active");
+      if (ring.style) {
+        ring.style.stroke = "";
+        ring.style.filter = "";
+      }
+    });
+    document.querySelectorAll(".svg-axis-label").forEach(lbl => {
+      lbl.classList.remove("active");
+      if (lbl.style) {
+        lbl.style.fill = "";
+      }
+    });
+    document.querySelectorAll(".svg-axis-label-bg").forEach(bg => {
+      if (bg.style) {
+        bg.style.fill = "none";
+        bg.style.stroke = "none";
+        bg.style.filter = "";
+      }
+    });
+    document.querySelectorAll(".legend-node-group").forEach(grp => {
+      grp.classList.remove("active");
+      const badge = grp.querySelector(".legend-node-badge");
+      if (badge && badge.style) {
+        badge.style.fill = "";
+        badge.style.stroke = "";
+      }
+    });
+    document.querySelectorAll(".connector-line").forEach(line => {
+      line.classList.remove("active");
+      if (line.style) {
+        line.style.stroke = "";
+        line.style.filter = "";
+      }
+    });
+    document.querySelectorAll(".legend-pill").forEach(pill => {
+      pill.classList.remove("active");
+      safeSetProperty(pill, "--active-color", "");
+      safeSetProperty(pill, "--active-hue", "");
+    });
+  }
+
+  // Highlight Left index item and scroll into view smoothly
   const activeItem = document.getElementById(`list-item-${paramId}`);
   if (activeItem) {
     activeItem.classList.add("active");
@@ -668,14 +726,6 @@ function selectParameter(paramId, preventMobileDrawer = false) {
   }
 
   // Outer wedge active border ring indicator: dynamic color matching HSL hue!
-  document.querySelectorAll(".wedge-axis-indicator").forEach(ring => {
-    ring.classList.remove("active");
-    if (ring.style) {
-      ring.style.stroke = "";
-      ring.style.filter = "";
-    }
-  });
-  
   const activeRing = document.getElementById(`axis-indicator-${paramId}`);
   if (activeRing) {
     activeRing.classList.add("active");
@@ -686,21 +736,6 @@ function selectParameter(paramId, preventMobileDrawer = false) {
   }
 
   // Selected perimeter number indicator: Dynamic HSL glowing match!
-  document.querySelectorAll(".svg-axis-label").forEach(lbl => {
-    lbl.classList.remove("active");
-    if (lbl.style) {
-      lbl.style.fill = "";
-    }
-  });
-
-  document.querySelectorAll(".svg-axis-label-bg").forEach(bg => {
-    if (bg.style) {
-      bg.style.fill = "none";
-      bg.style.stroke = "none";
-      bg.style.filter = "";
-    }
-  });
-  
   const activeLabel = document.getElementById(`svg-axis-label-${paramId}`);
   if (activeLabel) {
     activeLabel.classList.add("active");
@@ -715,23 +750,6 @@ function selectParameter(paramId, preventMobileDrawer = false) {
   }
 
   // Selected flanking node indicator and connector: Dynamic HSL glowing match!
-  document.querySelectorAll(".legend-node-group").forEach(grp => {
-    grp.classList.remove("active");
-    const badge = grp.querySelector(".legend-node-badge");
-    if (badge && badge.style) {
-      badge.style.fill = "";
-      badge.style.stroke = "";
-    }
-  });
-
-  document.querySelectorAll(".connector-line").forEach(line => {
-    line.classList.remove("active");
-    if (line.style) {
-      line.style.stroke = "";
-      line.style.filter = "";
-    }
-  });
-
   const activeNodeGrp = document.getElementById(`legend-node-group-${paramId}`);
   if (activeNodeGrp) {
     activeNodeGrp.classList.add("active");
@@ -752,12 +770,6 @@ function selectParameter(paramId, preventMobileDrawer = false) {
   }
 
   // Selected legend pill indicator: Dynamic HSL glowing match!
-  document.querySelectorAll(".legend-pill").forEach(pill => {
-    pill.classList.remove("active");
-    safeSetProperty(pill, "--active-color", "");
-    safeSetProperty(pill, "--active-hue", "");
-  });
-
   const activePill = document.getElementById(`legend-pill-${paramId}`);
   if (activePill) {
     activePill.classList.add("active");
@@ -768,20 +780,8 @@ function selectParameter(paramId, preventMobileDrawer = false) {
     }
   }
 
-  // Selected mobile grid card indicator: Dynamic HSL glowing match!
-  document.querySelectorAll(".mobile-grid-card").forEach(card => {
-    card.classList.remove("active");
-    safeSetProperty(card, "--active-hue", "");
-  });
-
-  const activeMobileCard = document.getElementById(`mobile-grid-card-${paramId}`);
-  if (activeMobileCard) {
-    activeMobileCard.classList.add("active");
-    safeSetProperty(activeMobileCard, "--active-hue", hue);
-    if (activeMobileCard.scrollIntoView) {
-      activeMobileCard.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }
-  }
+  // Cache current selection as previous for the next iteration
+  previousParamId = paramId;
 
   // Keep Speech Synthesis sync
   stopAllSpeech(true); // stop completely
@@ -842,10 +842,7 @@ function handleSliderChange(val) {
   document.getElementById("label-user-score").textContent = `Stufe ${rating}`;
   document.getElementById("user-score-slider").value = rating;
 
-  const activeCardScore = document.querySelector(`#mobile-grid-card-${activeParamId} .grid-card-score`);
-  if (activeCardScore) {
-    activeCardScore.textContent = `Lv.${rating}`;
-  }
+
 
   // Active rating change trigger sound chimes
   triggerChime(220 + rating * 60, "sine", 0.04, 0.15);

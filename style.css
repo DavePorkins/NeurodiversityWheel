@@ -134,39 +134,39 @@ body.dark-mode {
 .pastel-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(130px);
+  filter: blur(140px);
   z-index: -1;
-  opacity: 0.38; /* increased opacity for richer and more visible dark mode background colors */
+  opacity: 0.48; /* increased opacity for richer and more visible dark mode background colors */
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
 
 body.light-mode .pastel-glow {
-  opacity: 0.52; /* increased light mode background color richness */
+  opacity: 0.62; /* increased light mode background color richness */
 }
 
 .glow-pink {
-  width: 35vw;
-  height: 35vw;
+  width: 45vw;
+  height: 45vw;
   background: radial-gradient(circle, var(--color-audhd) 0%, transparent 70%);
-  top: -5%;
-  left: 10%;
+  top: -10%;
+  left: 5%;
 }
 
 .glow-blue {
-  width: 40vw;
-  height: 40vw;
+  width: 50vw;
+  height: 50vw;
   background: radial-gradient(circle, #38bdf8 0%, transparent 70%);
-  bottom: -10%;
-  right: 5%;
+  bottom: -15%;
+  right: 2%;
 }
 
 .glow-yellow {
-  width: 30vw;
-  height: 30vw;
+  width: 40vw;
+  height: 40vw;
   background: radial-gradient(circle, #fde047 0%, transparent 70%);
-  top: 30%;
-  right: 25%;
+  top: 25%;
+  right: 20%;
 }
 
 /* 2. ZWEI-SPALTEN UNIFIED DASHBOARD LAYOUT */
@@ -249,16 +249,22 @@ body.light-mode .glass-card:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 15px rgba(244, 114, 182, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.35); /* highly polished border */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), 0 0 15px rgba(244, 114, 182, 0.25);
   transition: var(--transition-smooth);
   flex-shrink: 0; /* prevents vertical squashing into i-shape on mobile viewports */
 }
 
 body.light-mode .logo-circle {
-  background: conic-gradient(from 0deg, var(--color-nt), var(--color-ass), var(--color-adhd), var(--color-audhd), var(--color-user), var(--color-nt));
-  border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 12px rgba(45, 212, 191, 0.25);
+  background: conic-gradient(from 0deg, 
+    hsla(340, 70%, 85%, 0.95), 
+    hsla(260, 70%, 85%, 0.95), 
+    hsla(200, 70%, 85%, 0.95), 
+    hsla(150, 60%, 85%, 0.95), 
+    hsla(45, 70%, 85%, 0.95), 
+    hsla(340, 70%, 85%, 0.95)); /* muted pastel spectrum */
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 12px rgba(45, 212, 191, 0.15);
 }
 
 .logo-circle:hover {
@@ -268,8 +274,8 @@ body.light-mode .logo-circle {
 }
 
 body.light-mode .logo-circle:hover {
-  border-color: #ffffff;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15), 0 0 18px rgba(45, 212, 191, 0.5);
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1), 0 0 18px rgba(45, 212, 191, 0.35);
 }
 
 .logo-icon {
@@ -617,11 +623,6 @@ body.light-mode .profile-toggle:hover {
   0% { transform: translateX(-50%) scale(1); }
   50% { transform: translateX(-50%) scale(1.02); }
   100% { transform: translateX(-50%) scale(1); }
-}
-
-/* --- 🗂️ RESPONSIVE MOBILE PARAMETER GRID --- */
-.mobile-parameter-grid {
-  display: none;
 }
 
 /* --- 🗂️ UNIFIED PARAMETER LEGEND GRID --- */
@@ -1311,24 +1312,24 @@ body.light-mode .control-toggle-btn {
 
 /* --- AMBIENT GLOW ANIMATIONS --- */
 @keyframes slow-glow-pink {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(3vw, -2vw) scale(1.06); }
-  66% { transform: translate(-2vw, 3vw) scale(0.94); }
-  100% { transform: translate(0, 0) scale(1); }
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate3d(6vw, -5vh, 0) scale(1.22) rotate(120deg); }
+  66% { transform: translate3d(-4vw, 4vh, 0) scale(0.85) rotate(240deg); }
+  100% { transform: translate3d(0, 0, 0) scale(1) rotate(360deg); }
 }
 
 @keyframes slow-glow-blue {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-2vw, 3vw) scale(0.95); }
-  66% { transform: translate(3vw, -1vw) scale(1.08); }
-  100% { transform: translate(0, 0) scale(1); }
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate3d(-5vw, 6vh, 0) scale(0.82) rotate(-120deg); }
+  66% { transform: translate3d(6vw, -3vh, 0) scale(1.25) rotate(-240deg); }
+  100% { transform: translate3d(0, 0, 0) scale(1) rotate(-360deg); }
 }
 
 @keyframes slow-glow-yellow {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(2vw, 2vw) scale(1.05); }
-  66% { transform: translate(-3vw, -3vw) scale(0.92); }
-  100% { transform: translate(0, 0) scale(1); }
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate3d(4vw, 4vh, 0) scale(1.18) rotate(90deg); }
+  66% { transform: translate3d(-6vw, -5vh, 0) scale(0.88) rotate(270deg); }
+  100% { transform: translate3d(0, 0, 0) scale(1) rotate(360deg); }
 }
 
 /* Active animations class on body */
@@ -1654,13 +1655,15 @@ body.light-mode .parameter-list-item.active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
+  flex-wrap: wrap; /* Allows natural wrapping on narrow desktops/tablets */
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
   border-radius: 20px;
   background: var(--glass-bg);
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
+  width: 100%;
 }
 
 body.light-mode .chart-controls-panel {
@@ -1670,15 +1673,20 @@ body.light-mode .chart-controls-panel {
 .toggles-area {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   flex-wrap: wrap;
+  flex: 1; /* Takes remaining space and centers beautifully */
+  min-width: 250px;
 }
 
 .actions-area {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   flex-shrink: 0;
+  flex-wrap: nowrap;
 }
 
 .glass-btn {
@@ -1862,7 +1870,8 @@ body.light-mode input[type=range]::-webkit-slider-thumb {
   stroke-width: 1.5px;
   stroke-dasharray: 4, 4;
   transition: var(--transition-smooth);
-  pointer-events: none;
+  pointer-events: stroke; /* allows tapping directly on the lines! */
+  cursor: pointer;
 }
 
 body.light-mode .connector-line {
@@ -1872,7 +1881,7 @@ body.light-mode .connector-line {
 .connector-line.active {
   stroke: var(--param-color, var(--color-user));
   stroke-width: 3px;
-  stroke-dasharray: none;
+  stroke-dasharray: 3, 3; /* Keep dashed character when active, just thicker! */
   filter: drop-shadow(0 0 6px var(--param-color, var(--color-user)));
 }
 
@@ -2032,84 +2041,13 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     overflow: hidden !important;
   }
 
-  /* Hide SVG flanking legend nodes and connectors on mobile viewports completely */
-  #wedges-connectors-group,
-  #wedges-legend-nodes-group {
-    display: none !important;
-  }
-
-  /* --- RESPONSIVE MOBILE PARAMETER GRID --- */
-  .mobile-parameter-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.5rem !important;
-    margin-top: 1.25rem !important;
-    width: 100% !important;
-  }
-  
-  .mobile-grid-card {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    background: rgba(255, 255, 255, 0.035) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 12px !important;
-    padding: 0.5rem 0.6rem !important;
-    cursor: pointer !important;
-    transition: var(--transition-smooth) !important;
-  }
-  
-  body.light-mode .mobile-grid-card {
-    background: rgba(0, 0, 0, 0.025) !important;
-    border-color: rgba(0, 0, 0, 0.05) !important;
-  }
-  
-  .mobile-grid-card.active {
-    background: hsla(var(--active-hue, 180), 85%, 55%, 0.1) !important;
-    border-color: hsl(var(--active-hue, 180), 85%, 62%) !important;
-    box-shadow: 0 0 10px hsla(var(--active-hue, 180), 85%, 55%, 0.15) !important;
-  }
-  
-  .mobile-grid-card-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.4rem !important;
-    overflow: hidden !important;
-  }
-  
-  .grid-card-num {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 50% !important;
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
-    color: #ffffff !important;
-    flex-shrink: 0 !important;
-  }
-  
-  .grid-card-name {
-    font-family: var(--font-body) !important;
-    font-size: 0.78rem !important;
-    font-weight: 500 !important;
-    color: var(--text-primary) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  
-  .grid-card-score {
-    font-family: var(--font-header) !important;
-    font-size: 0.78rem !important;
-    font-weight: 700 !important;
-    flex-shrink: 0 !important;
-  }
-
   /* Compact Controls Overrides for Mobile viewports */
   .chart-controls-panel {
-    padding-top: 0.75rem !important;
+    display: flex !important;
+    flex-direction: column !important; /* Stack vertically to save space and center elements perfectly */
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.8rem 0.5rem !important;
     margin-top: 1.25rem !important;
     gap: 0.75rem !important;
     width: 100% !important;
@@ -2119,7 +2057,8 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-    gap: 0.4rem !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
     width: 100% !important;
   }
   
@@ -2131,6 +2070,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   .actions-area {
     display: flex !important;
     justify-content: center !important;
+    align-items: center !important;
     gap: 0.5rem !important;
     width: 100% !important;
   }
