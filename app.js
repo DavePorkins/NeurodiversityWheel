@@ -450,13 +450,15 @@ function initChart() {
       let pathD = "";
       if (isLeft) {
         const startX = xNode + 15;
-        const ctrl1X = xNode + 65;
-        const ctrl2X = xCircle - 20;
+        const dist = xCircle - startX;
+        const ctrl1X = startX + dist * 0.4;
+        const ctrl2X = xCircle - dist * 0.4;
         pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
       } else {
         const startX = xNode - 15;
-        const ctrl1X = xNode - 65;
-        const ctrl2X = xCircle + 20;
+        const dist = startX - xCircle;
+        const ctrl1X = startX - dist * 0.4;
+        const ctrl2X = xCircle + dist * 0.4;
         pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
       }
       
