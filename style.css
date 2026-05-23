@@ -2021,6 +2021,8 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   .chart-section {
     padding: 0.5rem 0.5rem 1rem 0.5rem !important;
     width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
   }
   
   .chart-wrapper {
@@ -2029,15 +2031,18 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     max-width: 480px !important;
     margin: 0 auto !important;
     padding: 0 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    display: block !important;
+    position: relative !important;
     overflow: hidden !important;
   }
 
   #radar-chart {
+    display: block !important;
     width: 100% !important;
     height: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
     overflow: hidden !important;
   }
 
@@ -2080,9 +2085,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     padding: 0.4rem 0.9rem !important;
   }
 
-  #radar-chart {
-    overflow: hidden !important;
-  }
+
 
   /* Collapsed left column transforms into slide-in drawer on mobile */
   .list-section {

@@ -405,14 +405,14 @@ function initChart() {
           const defaultY = 50 + slotIndex * 105;
           yNode = defaultY;
           const distFromCenterY = Math.abs(defaultY - 550);
-          xNode = 160 + Math.pow(distFromCenterY / 500, 2) * 110;
+          xNode = 200 + Math.pow(distFromCenterY / 500, 2) * 110;
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
           const defaultY = 50 + slotIndex * 105;
           yNode = defaultY;
           const distFromCenterY = Math.abs(defaultY - 550);
-          xNode = 790 - Math.pow(distFromCenterY / 500, 2) * 110;
+          xNode = 750 - Math.pow(distFromCenterY / 500, 2) * 110;
           isLeft = false;
         }
       } else {
