@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v1.6
+// Mapping Neurodiversity - Cosmic Flanking Logic v2.7
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -1294,10 +1294,16 @@ function handleResize() {
   
   const isMobile = window.innerWidth < 1200;
   const currentViewBox = svg.getAttribute("viewBox");
-  const targetViewBox = isMobile ? "50 230 500 500" : "-60 0 1070 600";
+  const targetViewBox = isMobile ? "-80 0 1110 1100" : "-60 0 1070 600";
   
   if (currentViewBox !== targetViewBox) {
     svg.setAttribute("viewBox", targetViewBox);
+    
+    // Force layout reflow for mobile Chrome / WebViews aspect-ratio repaint bug
+    svg.style.display = "none";
+    svg.offsetHeight; // triggers browser layout calculation
+    svg.style.display = "block";
+
     initChart();
   }
 }

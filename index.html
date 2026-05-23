@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" id="meta-theme-color" content="#151121">
-  <title>Mapping Neurodiversity 🌸 v2.6</title>
+  <title>Mapping Neurodiversity 🌸 v2.7</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=2.6">
+  <link rel="stylesheet" href="style.css?v=2.7">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -50,7 +50,7 @@
               <div>
                 <div class="logo-title-row">
                   <h1>Mapping Neurodiversity</h1>
-                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v2.6</span>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v2.7</span>
                 </div>
                 <p class="subtitle">Das 20-Parameter-Kreisdiagramm nach Savannah Denny</p>
               </div>
@@ -75,8 +75,8 @@
 
         <!-- The Pie Wedges (Kuchenstücke) SVG Chart Wrapper -->
         <div class="chart-wrapper">
-          <!-- Wide viewBox for flanking nodes on desktop, cropped dynamically via JS on mobile -->
-          <svg id="radar-chart" viewBox="-60 0 1070 600" width="100%" height="100%">
+          <!-- Square viewBox optimized for mobile by default to prevent Chromium aspect-ratio repaint bugs -->
+          <svg id="radar-chart" viewBox="-80 0 1110 1100" width="100%" height="100%">
             <defs>
               <!-- Glowing shadow filters for pastel visual excellence -->
               <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -109,12 +109,12 @@
             <!-- Comparison fluid polygon overlays drawn on top -->
             <g id="polygon-overlays-group"></g>
             
-            <!-- Outer rings and decorative border centered at cx=475, cy=300, radius=180 -->
-            <circle id="chart-boundary-ring" cx="475" cy="300" r="180" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" class="chart-boundary-ring"></circle>
-            <circle id="chart-boundary-ring-outer" cx="475" cy="300" r="186" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" class="chart-boundary-ring-outer"></circle>
+            <!-- Outer rings and decorative border centered at cx=475, cy=550, radius=225 (mobile defaults) -->
+            <circle id="chart-boundary-ring" cx="475" cy="550" r="225" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" class="chart-boundary-ring"></circle>
+            <circle id="chart-boundary-ring-outer" cx="475" cy="550" r="231" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" class="chart-boundary-ring-outer"></circle>
             
             <!-- Masking center donut hole at r=32 to hide narrow intersections perfectly -->
-            <circle id="chart-center-hole" cx="475" cy="300" r="32" fill="var(--center-hole-color)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" class="chart-center-hole"></circle> 
+            <circle id="chart-center-hole" cx="475" cy="550" r="32" fill="var(--center-hole-color)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" class="chart-center-hole"></circle> 
           </svg>
         </div>
 
@@ -369,7 +369,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="palace_data.js?v=2.6"></script>
-  <script src="app.js?v=2.6"></script>
+  <script src="palace_data.js?v=2.7"></script>
+  <script src="app.js?v=2.7"></script>
 </body>
 </html>
