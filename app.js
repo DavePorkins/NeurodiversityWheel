@@ -49,6 +49,8 @@ let audioCtx = null;
 let soundEnabled = localStorage.getItem("mapping_neurodiversity_sound") !== "off";
 let animationsEnabled = localStorage.getItem("mapping_neurodiversity_animations") !== "off";
 let zoomFactor = 1.5;
+let persistentNodes = {}; // global cache of current coordinates for JS glide transition
+let animationFrameId = null;
 
 // Speech Synthesis & Standalone Player state
 let speechRate = parseFloat(localStorage.getItem("mapping_neurodiversity_speech_rate")) || 1.0;
@@ -593,151 +595,8 @@ function initChart() {
       }
     }
 
-    // Render all nodes and connectors based on final relaxed coordinates
-    nodes.forEach(node => {
-      const paramId = node.id;
-      const hue = node.hue;
-      const xNode = node.x;
-      const yNode = node.y;
-      const isLeft = node.isLeft;
-      const xCircle = node.xCircle;
-      const yCircle = node.yCircle;
-
-      let pathD = "";
-      if (isLeft) {
-        const startX = xNode + 15;
-        const dist = xCircle - startX;
-        const ctrl1X = startX + dist * 0.4;
-        const ctrl2X = xCircle - dist * 0.4;
-        pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
-      } else {
-        const startX = xNode - 15;
-        const dist = startX - xCircle;
-        const ctrl1X = startX - dist * 0.4;
-        const ctrl2X = xCircle + dist * 0.4;
-        pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
-      }
-
-      // 1. Get or draw curved Bezier spline connector
-      let connector = document.getElementById(`connector-line-${paramId}`);
-      if (!connector) {
-        connector = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        connector.setAttribute("id", `connector-line-${paramId}`);
-        connector.addEventListener("click", () => {
-          selectParameter(paramId);
-        });
-        connectorsGroup.appendChild(connector);
-      }
-      
-      connector.setAttribute("class", `connector-line ${paramId === activeParamId ? 'active' : ''}`);
-      connector.setAttribute("d", pathD);
-      
-      const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
-      if (connector.style) {
-        if (paramId === activeParamId) {
-          connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
-          connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
-        } else {
-          connector.style.stroke = connStroke;
-          connector.style.filter = "";
-        }
-      }
-
-      // 2. Get or draw Legend Flanking Group
-      let nodeGrp = document.getElementById(`legend-node-group-${paramId}`);
-      let nodeBadge, nodeBadgeText, nodeText;
-
-      if (!nodeGrp) {
-        nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
-        nodeGrp.addEventListener("click", () => {
-          selectParameter(paramId);
-        });
-
-        // Badge circle
-        nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        nodeBadge.setAttribute("r", "12");
-        nodeBadge.setAttribute("class", "legend-node-badge");
-        nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
-        nodeGrp.appendChild(nodeBadge);
-
-        // Badge text number
-        nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        nodeBadgeText.setAttribute("class", "legend-node-badge-text");
-        nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
-        nodeBadgeText.textContent = paramId;
-        nodeGrp.appendChild(nodeBadgeText);
-
-        // Flanking Node text label name
-        nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        nodeText.setAttribute("class", "legend-node-text");
-        nodeText.setAttribute("id", `legend-node-text-${paramId}`);
-        nodeGrp.appendChild(nodeText);
-
-        legendGroup.appendChild(nodeGrp);
-      } else {
-        nodeBadge = document.getElementById(`legend-node-badge-${paramId}`);
-        nodeBadgeText = document.getElementById(`legend-node-badge-text-${paramId}`);
-        nodeText = document.getElementById(`legend-node-text-${paramId}`);
-      }
-
-      nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
-      safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
-
-      if (isLight) {
-        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 70%, 35%)`);
-        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 85%, 22%)`);
-      } else {
-        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 75%, 72%)`);
-        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
-      }
-
-      // Update positions
-      if (nodeBadge) {
-        nodeBadge.setAttribute("cx", xNode);
-        nodeBadge.setAttribute("cy", yNode);
-        if (nodeBadge.style) {
-          if (paramId === activeParamId) {
-            nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
-            nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
-          } else {
-            nodeBadge.style.fill = "";
-            nodeBadge.style.stroke = "";
-          }
-        }
-      }
-
-      if (nodeBadgeText) {
-        nodeBadgeText.setAttribute("x", xNode);
-        nodeBadgeText.setAttribute("y", yNode + 0.5);
-      }
-
-      if (nodeText) {
-        nodeText.setAttribute("y", yNode);
-        if (isLeft) {
-          nodeText.setAttribute("x", xNode - 22);
-          nodeText.setAttribute("text-anchor", "end");
-        } else {
-          nodeText.setAttribute("x", xNode + 22);
-          nodeText.setAttribute("text-anchor", "start");
-        }
-
-        // Rebuild tspans cleanly
-        nodeText.innerHTML = "";
-        node.lines.forEach((line, lineIdx) => {
-          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-          tspan.textContent = line;
-          tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
-          if (lineIdx > 0) {
-            tspan.setAttribute("dy", "1.25em");
-          } else {
-            const totalOffset = -((node.lines.length - 1) * 15) / 2;
-            tspan.setAttribute("dy", `${totalOffset}px`);
-          }
-          nodeText.appendChild(tspan);
-        });
-      }
-    });
+    // Trigger smooth, unified, hardware-accelerated JS-based glide animation for all nodes!
+    animateNodesToTargets(nodes);
   }
 
   // Draw fills & overlays
@@ -1593,4 +1452,230 @@ function handleResize() {
 // --- 14. ORGANIC NEURAL FLANKING WABERN ANIMATION LOOP ---
 function animateNeuralNodes(timestamp) {
   // Disabled in v1.7 to focus on static readability and prevent mobile CPU lag
+}
+
+// --- 15. JS-BASED HARDWARE-ACCELERATED NODE GLIDE TRANSITION LOOP ---
+function animateNodesToTargets(targetNodes) {
+  if (typeof window === "undefined" || !window.requestAnimationFrame) {
+    // Fallback for non-browser/test environments
+    targetNodes.forEach(node => {
+      persistentNodes[node.id] = {
+        x: node.x,
+        y: node.y,
+        xCircle: node.xCircle,
+        yCircle: node.yCircle
+      };
+      renderSingleNodeDOM(node, node.x, node.y, node.xCircle, node.yCircle);
+    });
+    return;
+  }
+
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+
+  const startTime = performance.now();
+  const duration = 400; // 400ms duration for butter-smooth glide
+
+  const startPositions = {};
+  targetNodes.forEach(node => {
+    const current = persistentNodes[node.id];
+    if (current) {
+      startPositions[node.id] = {
+        x: current.x,
+        y: current.y,
+        xCircle: current.xCircle,
+        yCircle: current.yCircle
+      };
+    } else {
+      startPositions[node.id] = {
+        x: node.idealX,
+        y: node.idealY,
+        xCircle: node.xCircle,
+        yCircle: node.yCircle
+      };
+    }
+  });
+
+  function step(timestamp) {
+    const elapsed = timestamp - startTime;
+    let progress = Math.min(elapsed / duration, 1);
+    
+    // Beautiful ease-out-cubic
+    const ease = 1 - Math.pow(1 - progress, 3);
+
+    targetNodes.forEach(node => {
+      const start = startPositions[node.id];
+      const curX = start.x + (node.x - start.x) * ease;
+      const curY = start.y + (node.y - start.y) * ease;
+      const curXC = start.xCircle + (node.xCircle - start.xCircle) * ease;
+      const curYC = start.yCircle + (node.yCircle - start.yCircle) * ease;
+
+      persistentNodes[node.id] = {
+        x: curX,
+        y: curY,
+        xCircle: curXC,
+        yCircle: curYC
+      };
+
+      renderSingleNodeDOM(node, curX, curY, curXC, curYC);
+    });
+
+    if (progress < 1) {
+      animationFrameId = requestAnimationFrame(step);
+    }
+  }
+
+  animationFrameId = requestAnimationFrame(step);
+}
+
+function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
+  const paramId = node.id;
+  const hue = node.hue;
+  const xNodeVal = xNode;
+  const yNodeVal = yNode;
+  const isLeft = node.isLeft;
+  const xCircleVal = xCircle;
+  const yCircleVal = yCircle;
+  const isLight = document.body.classList.contains("light-mode");
+
+  const connectorsGroup = document.getElementById("wedges-connectors-group");
+  const legendGroup = document.getElementById("wedges-legend-nodes-group");
+  if (!connectorsGroup || !legendGroup) return;
+
+  // 1. Calculate Bezier path
+  let pathD = "";
+  if (isLeft) {
+    const startX = xNodeVal + 15;
+    const dist = xCircleVal - startX;
+    const ctrl1X = startX + dist * 0.4;
+    const ctrl2X = xCircleVal - dist * 0.4;
+    pathD = `M ${startX} ${yNodeVal} C ${ctrl1X} ${yNodeVal}, ${ctrl2X} ${yCircleVal}, ${xCircleVal} ${yCircleVal}`;
+  } else {
+    const startX = xNodeVal - 15;
+    const dist = startX - xCircleVal;
+    const ctrl1X = startX - dist * 0.4;
+    const ctrl2X = xCircleVal + dist * 0.4;
+    pathD = `M ${startX} ${yNodeVal} C ${ctrl1X} ${yNodeVal}, ${ctrl2X} ${yCircleVal}, ${xCircleVal} ${yCircleVal}`;
+  }
+
+  // 2. Get or draw curved Bezier spline connector
+  let connector = document.getElementById(`connector-line-${paramId}`);
+  if (!connector) {
+    connector = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    connector.setAttribute("id", `connector-line-${paramId}`);
+    connector.addEventListener("click", () => {
+      selectParameter(paramId);
+    });
+    connectorsGroup.appendChild(connector);
+  }
+  
+  connector.setAttribute("class", `connector-line ${paramId === activeParamId ? 'active' : ''}`);
+  connector.setAttribute("d", pathD);
+  
+  const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
+  if (connector.style) {
+    if (paramId === activeParamId) {
+      connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
+      connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
+    } else {
+      connector.style.stroke = connStroke;
+      connector.style.filter = "";
+    }
+  }
+
+  // 3. Get or draw Legend Flanking Group
+  let nodeGrp = document.getElementById(`legend-node-group-${paramId}`);
+  let nodeBadge, nodeBadgeText, nodeText;
+
+  if (!nodeGrp) {
+    nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
+    nodeGrp.addEventListener("click", () => {
+      selectParameter(paramId);
+    });
+
+    // Badge circle
+    nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    nodeBadge.setAttribute("r", "12");
+    nodeBadge.setAttribute("class", "legend-node-badge");
+    nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
+    nodeGrp.appendChild(nodeBadge);
+
+    // Badge text number
+    nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    nodeBadgeText.setAttribute("class", "legend-node-badge-text");
+    nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
+    nodeBadgeText.textContent = paramId;
+    nodeGrp.appendChild(nodeBadgeText);
+
+    // Flanking Node text label name
+    nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    nodeText.setAttribute("class", "legend-node-text");
+    nodeText.setAttribute("id", `legend-node-text-${paramId}`);
+    nodeGrp.appendChild(nodeText);
+
+    legendGroup.appendChild(nodeGrp);
+  } else {
+    nodeBadge = document.getElementById(`legend-node-badge-${paramId}`);
+    nodeBadgeText = document.getElementById(`legend-node-badge-text-${paramId}`);
+    nodeText = document.getElementById(`legend-node-text-${paramId}`);
+  }
+
+  nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
+  safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
+
+  if (isLight) {
+    safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 70%, 35%)`);
+    safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 85%, 22%)`);
+  } else {
+    safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 75%, 72%)`);
+    safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
+  }
+
+  // Update positions
+  if (nodeBadge) {
+    nodeBadge.setAttribute("cx", xNodeVal);
+    nodeBadge.setAttribute("cy", yNodeVal);
+    if (nodeBadge.style) {
+      if (paramId === activeParamId) {
+        nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
+        nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
+      } else {
+        nodeBadge.style.fill = "";
+        nodeBadge.style.stroke = "";
+      }
+    }
+  }
+
+  if (nodeBadgeText) {
+    nodeBadgeText.setAttribute("x", xNodeVal);
+    nodeBadgeText.setAttribute("y", yNodeVal + 0.5);
+  }
+
+  if (nodeText) {
+    nodeText.setAttribute("y", yNodeVal);
+    if (isLeft) {
+      nodeText.setAttribute("x", xNodeVal - 22);
+      nodeText.setAttribute("text-anchor", "end");
+    } else {
+      nodeText.setAttribute("x", xNodeVal + 22);
+      nodeText.setAttribute("text-anchor", "start");
+    }
+
+    // Rebuild tspans cleanly
+    nodeText.innerHTML = "";
+    node.lines.forEach((line, lineIdx) => {
+      const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+      tspan.textContent = line;
+      tspan.setAttribute("x", isLeft ? xNodeVal - 22 : xNodeVal + 22);
+      if (lineIdx > 0) {
+        tspan.setAttribute("dy", "1.25em");
+      } else {
+        const totalOffset = -((node.lines.length - 1) * 15) / 2;
+        tspan.setAttribute("dy", `${totalOffset}px`);
+      }
+      nodeText.appendChild(tspan);
+    });
+  }
 }
