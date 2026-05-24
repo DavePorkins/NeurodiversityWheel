@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.2 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.3 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -424,7 +424,10 @@ body.light-mode .wedge-background:hover {
 
 /* Das befüllte Kuchenstück (User Rating) */
 .wedge-active {
-  stroke-width: 1px;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  paint-order: stroke fill;
   cursor: pointer;
   transition: var(--transition-bounce);
 }
@@ -503,28 +506,30 @@ body.light-mode .svg-axis-label-bg {
 
 .polygon-overlay.user {
   stroke: var(--color-user);
-  fill: rgba(45, 212, 191, 0.02);
+  fill: rgba(45, 212, 191, 0.05); /* cozy 5% pale fill */
   filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.4));
 }
 
 .polygon-overlay.nt {
   stroke: var(--color-nt);
-  fill: none;
+  fill: rgba(168, 85, 247, 0.05); /* cozy 5% pale fill */
 }
 
 .polygon-overlay.adhd {
   stroke: var(--color-adhd);
+  fill: rgba(251, 146, 60, 0.05); /* cozy 5% pale fill */
   filter: drop-shadow(0 0 6px rgba(251, 146, 60, 0.45));
 }
 
 .polygon-overlay.ass {
   stroke: var(--color-ass);
+  fill: rgba(129, 140, 248, 0.05); /* cozy 5% pale fill */
   filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.45));
 }
 
 .polygon-overlay.audhd {
   stroke: var(--color-audhd);
-  fill: url(#audhd-pastel-grad);
+  fill: rgba(244, 114, 182, 0.05); /* cozy 5% pale fill */
   filter: drop-shadow(0 0 8px rgba(244, 114, 182, 0.5));
 }
 
@@ -2167,7 +2172,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     height: auto !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    padding: 0.5rem 0.25rem 4rem 0.25rem !important;
+    padding: 0.5rem 0.25rem 1.0rem 0.25rem !important; /* compact bottom space to avoid empty space on Android */
     width: 100% !important;
     max-width: 100% !important;
   }

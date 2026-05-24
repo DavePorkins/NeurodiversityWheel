@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.2
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -10,14 +10,14 @@ const INNER_RADIUS = 32;
 const TOTAL_AXES = 20;
 
 function updateLayoutConstants() {
-  if (window.innerWidth < 1200) {
+  if (typeof window !== "undefined" && window.innerWidth < 1200) {
     CENTER_X = 475;
     CENTER_Y = 550;
-    MAX_RADIUS = 330;
+    MAX_RADIUS = Math.max(220, Math.min(350, Math.round(350 - (zoomFactor - 1.0) * 80)));
   } else {
     CENTER_X = 475;
     CENTER_Y = 300;
-    MAX_RADIUS = 205;
+    MAX_RADIUS = Math.max(140, Math.min(220, Math.round(220 - (zoomFactor - 1.0) * 55)));
   }
 }
 
@@ -68,7 +68,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (savedZoom !== null) {
     zoomFactor = parseFloat(savedZoom);
   } else {
-    zoomFactor = 1.5;
+    zoomFactor = (typeof window !== "undefined" && window.innerWidth < 1200) ? 2.0 : 1.5;
   }
   document.documentElement.style.setProperty('--zoom-factor', zoomFactor);
   const badge = document.getElementById("zoom-level-badge");
@@ -430,15 +430,15 @@ function initChart() {
     // DYNAMIC FLANKING NODE GENERATION (Desktop Flanking Node Web vs Mobile Butterfly Wings)
     if (legendGroup && connectorsGroup) {
       const hue = i * (360 / TOTAL_AXES);
+      const isLight = document.body.classList.contains("light-mode");
       let xNode = 0;
       let yNode = 0;
       let isLeft = false;
 
       if (isMobile) {
-        // Dynamic horizontal radius shrinks as zoomFactor increases to prevent screen edge overflow!
-        const mobileShift = (zoomFactor - 1.5) * 140;
-        const R_x = 385 - mobileShift;
-        const R_y = 515 - (zoomFactor - 1.5) * 25;
+        // Dynamic mobile butterfly wing layout relative to MAX_RADIUS and zoomFactor!
+        const R_x = MAX_RADIUS + 50 + (zoomFactor - 1.0) * 10;
+        const R_y = MAX_RADIUS + 170 - (zoomFactor - 1.0) * 20;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
           const nodeAngle = Math.PI + 1.2 - (slotIndex / 9) * 2.4;
@@ -453,21 +453,18 @@ function initChart() {
           isLeft = false;
         }
       } else {
-        // Desktop horizontal column contraction: as zoomFactor increases, flanking columns shift inward
-        const desktopShift = (zoomFactor - 1.0) * 125;
+        // Desktop dynamic flanking columns: positioned relative to dynamically-scaled MAX_RADIUS!
+        const defaultY = 50 + (paramId >= 11 && paramId <= 20 ? 20 - paramId : paramId - 1) * 55;
+        yNode = defaultY;
+        const distFromCenterY = Math.abs(defaultY - 300);
+        // Add curve bowing to prevent columns looking like stiff straight lines
+        const curveOffset = Math.pow(distFromCenterY / 250, 2) * 55;
+        
         if (paramId >= 11 && paramId <= 20) {
-          const slotIndex = 20 - paramId;
-          const defaultY = 50 + slotIndex * 55;
-          yNode = defaultY;
-          const distFromCenterY = Math.abs(defaultY - 300);
-          xNode = (230 + desktopShift) + Math.pow(distFromCenterY / 250, 2) * 55;
+          xNode = CENTER_X - (MAX_RADIUS + 45 + (zoomFactor - 1.0) * 15) + curveOffset;
           isLeft = true;
         } else {
-          const slotIndex = paramId - 1;
-          const defaultY = 50 + slotIndex * 55;
-          yNode = defaultY;
-          const distFromCenterY = Math.abs(defaultY - 300);
-          xNode = (720 - desktopShift) - Math.pow(distFromCenterY / 250, 2) * 55;
+          xNode = CENTER_X + (MAX_RADIUS + 45 + (zoomFactor - 1.0) * 15) - curveOffset;
           isLeft = false;
         }
       }
@@ -496,6 +493,10 @@ function initChart() {
       }
       
       connector.setAttribute("d", pathD);
+      // Pre-colored soft pastel connector lines matching their unique hue!
+      const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
+      connector.style.stroke = connStroke;
+      
       if (paramId === activeParamId) {
         connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
         connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
@@ -512,7 +513,6 @@ function initChart() {
       safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
       
       // Contrast-aware hued text variables
-      const isLight = document.body.classList.contains("light-mode");
       if (isLight) {
         safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 70%, 35%)`);
         safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 85%, 22%)`);
@@ -765,7 +765,9 @@ function selectParameter(paramId, preventMobileDrawer = false) {
     if (prevConnector) {
       prevConnector.classList.remove("active");
       if (prevConnector.style) {
-        prevConnector.style.stroke = "";
+        const prevHue = (previousParamId - 1) * (360 / TOTAL_AXES);
+        const isLight = document.body.classList.contains("light-mode");
+        prevConnector.style.stroke = isLight ? `hsla(${prevHue}, 50%, 45%, 0.24)` : `hsla(${prevHue}, 60%, 70%, 0.26)`;
         prevConnector.style.filter = "";
       }
     }
@@ -810,7 +812,15 @@ function selectParameter(paramId, preventMobileDrawer = false) {
     document.querySelectorAll(".connector-line").forEach(line => {
       line.classList.remove("active");
       if (line.style) {
-        line.style.stroke = "";
+        const idParts = line.id.split("-");
+        const pId = parseInt(idParts[idParts.length - 1]);
+        if (!isNaN(pId)) {
+          const pHue = (pId - 1) * (360 / TOTAL_AXES);
+          const isLight = document.body.classList.contains("light-mode");
+          line.style.stroke = isLight ? `hsla(${pHue}, 50%, 45%, 0.24)` : `hsla(${pHue}, 60%, 70%, 0.26)`;
+        } else {
+          line.style.stroke = "";
+        }
         line.style.filter = "";
       }
     });
