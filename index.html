@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" id="meta-theme-color" content="#151121">
-  <title>Mapping Neurodiversity 🌸 v2.7</title>
+  <title>Mapping Neurodiversity 🌸 v2.8</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=2.7">
+  <link rel="stylesheet" href="style.css?v=2.8">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -50,13 +50,32 @@
               <div>
                 <div class="logo-title-row">
                   <h1>Mapping Neurodiversity</h1>
-                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v2.7</span>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v2.8</span>
                 </div>
                 <p class="subtitle">Das 20-Parameter-Kreisdiagramm nach Savannah Denny</p>
               </div>
             </div>
             <!-- Toggle Controls in Header -->
             <div class="header-controls">
+              <!-- Mobile-only Panels Toggles -->
+              <button id="header-toggle-list" class="header-panel-btn mobile-only-btn" onclick="toggleMobilePanel('list')" title="Index anzeigen">
+                <i class="fa-solid fa-list-ol"></i> <span>Index</span>
+              </button>
+              <button id="header-toggle-details" class="header-panel-btn mobile-only-btn" onclick="toggleMobilePanel('details')" title="Details anzeigen">
+                <i class="fa-solid fa-circle-info"></i> <span>Details</span>
+              </button>
+              
+              <!-- Info & Reset Actions (Desktop & Mobile) -->
+              <button class="header-action-btn" onclick="openNotesModal()" title="Allgemeine Informationen">
+                <i class="fa-solid fa-circle-question"></i> <span>Infos</span>
+              </button>
+              <button class="header-action-btn" onclick="resetUserProfile()" title="Profil zurücksetzen">
+                <i class="fa-solid fa-arrows-rotate"></i> <span>Reset</span>
+              </button>
+
+              <!-- Visual Divider -->
+              <span class="header-divider"></span>
+
               <!-- Sound Toggle Button -->
               <button id="sound-toggle-btn" class="control-toggle-btn active" onclick="toggleSound()" title="Sound-Effekte umschalten (An / Aus)">
                 <i class="fa-solid fa-volume-high"></i>
@@ -76,7 +95,7 @@
         <!-- The Pie Wedges (Kuchenstücke) SVG Chart Wrapper -->
         <div class="chart-wrapper">
           <!-- Square viewBox optimized for mobile by default to prevent Chromium aspect-ratio repaint bugs -->
-          <svg id="radar-chart" viewBox="-80 0 1110 1100" width="100%" height="100%">
+          <svg id="radar-chart" viewBox="-40 0 1030 1100" width="100%" height="100%">
             <defs>
               <!-- Glowing shadow filters for pastel visual excellence -->
               <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -135,14 +154,6 @@
             </button>
             <button id="toggle-audhd" class="profile-toggle audhd-btn" onclick="toggleProfile('audhd')" title="AuDHD Misch-Spektrum umschalten">
               <span class="color-dot audhd-dot"></span> AuDHD
-            </button>
-          </div>
-          <div class="actions-area">
-            <button class="glass-btn" onclick="openNotesModal()" title="Allgemeine Informationen und Grenzen des Reflexionsrads">
-              <i class="fa-solid fa-circle-info"></i> Infos
-            </button>
-            <button class="glass-btn" onclick="resetUserProfile()" title="Setzt alle deine Ratings auf Stufe 1 zurück">
-              <i class="fa-solid fa-arrows-rotate"></i> Reset
             </button>
           </div>
         </section>
@@ -358,18 +369,8 @@
     </div>
   </div>
 
-  <!-- Floating Mobile Action Toggles (Android browser support) -->
-  <div class="mobile-action-bar">
-    <button id="mobile-toggle-list" class="mobile-action-btn" onclick="toggleMobilePanel('list')">
-      <i class="fa-solid fa-list-ol"></i> Index
-    </button>
-    <button id="mobile-toggle-details" class="mobile-action-btn" onclick="toggleMobilePanel('details')">
-      <i class="fa-solid fa-circle-info"></i> Details
-    </button>
-  </div>
-
   <!-- Scripts -->
-  <script src="palace_data.js?v=2.7"></script>
-  <script src="app.js?v=2.7"></script>
+  <script src="palace_data.js?v=2.8"></script>
+  <script src="app.js?v=2.8"></script>
 </body>
 </html>

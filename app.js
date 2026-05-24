@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v2.7
+// Mapping Neurodiversity - Cosmic Flanking Logic v2.8
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -405,14 +405,14 @@ function initChart() {
           const defaultY = 50 + slotIndex * 105;
           yNode = defaultY;
           const distFromCenterY = Math.abs(defaultY - 550);
-          xNode = 200 + Math.pow(distFromCenterY / 500, 2) * 110;
+          xNode = 170 + Math.pow(distFromCenterY / 500, 2) * 110;
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
           const defaultY = 50 + slotIndex * 105;
           yNode = defaultY;
           const distFromCenterY = Math.abs(defaultY - 550);
-          xNode = 750 - Math.pow(distFromCenterY / 500, 2) * 110;
+          xNode = 780 - Math.pow(distFromCenterY / 500, 2) * 110;
           isLeft = false;
         }
       } else {
@@ -504,7 +504,6 @@ function initChart() {
       nodeText.setAttribute("y", yNode);
       nodeText.setAttribute("class", "legend-node-text");
       nodeText.setAttribute("id", `legend-node-text-${paramId}`);
-      nodeText.textContent = data.nameDE;
 
       if (isLeft) {
         nodeText.setAttribute("x", xNode - 22);
@@ -513,6 +512,53 @@ function initChart() {
         nodeText.setAttribute("x", xNode + 22);
         nodeText.setAttribute("text-anchor", "start");
       }
+
+      // Premium vertical multi-line wrapping for long names on mobile
+      const mobileLabelSplits = {
+        1: ["Akute", "Reizüberflutung"],
+        2: ["Suche nach", "Vertrautheit"],
+        3: ["Schwierigkeiten mit", "sozialen Signalen"],
+        4: ["Suche nach", "Gleichförmigkeit"],
+        5: ["Aufgaben-", "Paralyse"],
+        6: ["Objektpermanenz"],
+        7: ["Impulsivität"],
+        8: ["Zeitblindheit"],
+        9: ["Dopamin-", "Suche"],
+        10: ["Hyperaktivität", "(Körper/Geist)"],
+        11: ["Exekutive", "Dysfunktion"],
+        12: ["Maskierung"],
+        13: ["Körperliche", "Selbstregulation"],
+        14: ["Emotionale", "Dysregulation"],
+        15: ["Sensorische", "Besonderheiten"],
+        16: ["Spezialinteressen /", "Hyperfixationen"],
+        17: ["Priorisierungs-", "probleme"],
+        18: ["Interozeptions-", "Probleme"],
+        19: ["Sensibilität für", "Zurückweisung"],
+        20: ["Bedürfnis nach", "Routine"]
+      };
+
+      if (isMobile) {
+        const lines = mobileLabelSplits[paramId] || [data.nameDE];
+        if (lines.length > 1) {
+          lines.forEach((line, lineIdx) => {
+            const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+            tspan.textContent = line;
+            tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
+            if (lineIdx > 0) {
+              tspan.setAttribute("dy", "1.25em");
+            } else {
+              const totalOffset = -((lines.length - 1) * 15) / 2;
+              tspan.setAttribute("dy", `${totalOffset}px`);
+            }
+            nodeText.appendChild(tspan);
+          });
+        } else {
+          nodeText.textContent = data.nameDE;
+        }
+      } else {
+        nodeText.textContent = data.nameDE;
+      }
+      
       nodeGrp.appendChild(nodeText);
 
       legendGroup.appendChild(nodeGrp);
@@ -619,6 +665,20 @@ function selectParameter(paramId, preventMobileDrawer = false) {
       detailPanel.classList.add("mobile-show");
     } else {
       detailPanel.classList.remove("mobile-show");
+    }
+  }
+
+  // Update header buttons active states on mobile
+  const listBtn = document.getElementById("header-toggle-list");
+  const detailBtn = document.getElementById("header-toggle-details");
+  if (window.innerWidth < 1200) {
+    if (listBtn) listBtn.classList.remove("active");
+    if (detailBtn) {
+      if (preventMobileDrawer) {
+        detailBtn.classList.remove("active");
+      } else {
+        detailBtn.classList.add("active");
+      }
     }
   }
 
@@ -899,23 +959,34 @@ function closeNotesModal() {
 // Floating Index and Details slide-in overlays for Android mobile browsers
 function toggleMobilePanel(panelKey) {
   if (!document.querySelector) return;
+  const listPanel = document.querySelector(".list-section");
+  const detailPanel = document.querySelector(".detail-section");
+  const listBtn = document.getElementById("header-toggle-list");
+  const detailBtn = document.getElementById("header-toggle-details");
+
   if (panelKey === 'list') {
-    const listPanel = document.querySelector(".list-section");
     if (!listPanel) return;
     const isShowing = listPanel.classList.toggle("mobile-show");
     
-    // Close other drawer
-    const other = document.querySelector(".detail-section");
-    if (other) other.classList.remove("mobile-show");
+    if (isShowing) {
+      if (detailPanel) detailPanel.classList.remove("mobile-show");
+      if (listBtn) listBtn.classList.add("active");
+      if (detailBtn) detailBtn.classList.remove("active");
+    } else {
+      if (listBtn) listBtn.classList.remove("active");
+    }
     triggerChime(isShowing ? 400 : 300, "sine", 0.05, 0.2);
   } else {
-    const detailPanel = document.querySelector(".detail-section");
     if (!detailPanel) return;
     const isShowing = detailPanel.classList.toggle("mobile-show");
     
-    // Close other drawer
-    const other = document.querySelector(".list-section");
-    if (other) other.classList.remove("mobile-show");
+    if (isShowing) {
+      if (listPanel) listPanel.classList.remove("mobile-show");
+      if (detailBtn) detailBtn.classList.add("active");
+      if (listBtn) listBtn.classList.remove("active");
+    } else {
+      if (detailBtn) detailBtn.classList.remove("active");
+    }
     triggerChime(isShowing ? 400 : 300, "sine", 0.05, 0.2);
   }
 }
@@ -1294,7 +1365,7 @@ function handleResize() {
   
   const isMobile = window.innerWidth < 1200;
   const currentViewBox = svg.getAttribute("viewBox");
-  const targetViewBox = isMobile ? "-80 0 1110 1100" : "-60 0 1070 600";
+  const targetViewBox = isMobile ? "-40 0 1030 1100" : "-60 0 1070 600";
   
   if (currentViewBox !== targetViewBox) {
     svg.setAttribute("viewBox", targetViewBox);

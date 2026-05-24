@@ -1310,6 +1310,75 @@ body.light-mode .control-toggle-btn {
   color: var(--text-primary);
 }
 
+/* --- HEADER BUTTONS v2.8 --- */
+.header-panel-btn, .header-action-btn {
+  background: var(--glass-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0 1rem;
+  height: 40px;
+  border-radius: 20px;
+  font-family: var(--font-header);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.header-panel-btn i, .header-action-btn i {
+  font-size: 0.95rem;
+}
+
+.header-panel-btn:hover, .header-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--param-color, var(--color-user));
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header-panel-btn.active {
+  background: var(--param-color, var(--color-user)) !important;
+  border-color: var(--param-color, var(--color-user)) !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px var(--param-color, var(--color-user)) !important;
+}
+
+.header-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+  margin: 0 0.4rem;
+  display: inline-block;
+}
+
+body.light-mode .header-panel-btn, 
+body.light-mode .header-action-btn {
+  background: rgba(0, 0, 0, 0.025);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-muted);
+}
+
+body.light-mode .header-panel-btn:hover, 
+body.light-mode .header-action-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--param-color, var(--color-user));
+  color: var(--text-primary);
+}
+
+.mobile-only-btn {
+  display: inline-flex;
+}
+
+@media (min-width: 1200px) {
+  .mobile-only-btn {
+    display: none !important;
+  }
+}
+
 /* --- AMBIENT GLOW ANIMATIONS --- */
 @keyframes slow-glow-pink {
   0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
@@ -1931,7 +2000,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
 
 .legend-node-text {
   font-family: var(--font-header);
-  font-size: 13.5px; /* larger comfortable default flanking text font size */
+  font-size: clamp(13px, 1.15vw, 15px); /* dynamic fluid desktop size scaling with viewport */
   font-weight: 500;
   fill: var(--text-muted);
   dominant-baseline: middle;
@@ -1943,7 +2012,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
 .legend-node-group.active .legend-node-text {
   fill: var(--text-primary);
   font-weight: 600;
-  font-size: 15.5px; /* larger highlighted flanking text font size */
+  font-size: clamp(15px, 1.3vw, 17px); /* dynamic active fluid size scaling */
 }
 
 /* Responsive adjustment overrides for 2 columns collapse & hardware-accelerated slide-in mobile drawers */
@@ -2094,6 +2163,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     top: 0;
     left: 0;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     max-width: 100%;
     z-index: 1000;
@@ -2105,6 +2175,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     border-right: 1px solid var(--border-color);
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
   }
   .list-section.mobile-show {
     transform: translateX(0);
@@ -2117,6 +2188,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     top: 0;
     right: 0;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     max-width: 100%;
     z-index: 1000;
@@ -2129,6 +2201,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     box-shadow: none;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
+    padding: 1.5rem 1.5rem calc(6rem + env(safe-area-inset-bottom)) 1.5rem !important;
   }
   .detail-section.mobile-show {
     transform: translateX(0);
@@ -2179,68 +2252,45 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     background: rgba(0, 0, 0, 0.08);
   }
 
-  /* Make SVG Flanking text nodes slightly larger on mobile for premium readability */
+  /* Make SVG Flanking text nodes significantly larger and dynamically scalable on mobile for premium readability */
   .legend-node-text {
-    font-size: 12.5px !important;
+    font-size: clamp(15px, 3.8vw, 18px) !important;
   }
   .legend-node-group.active .legend-node-text {
-    font-size: 14.5px !important;
+    font-size: clamp(17px, 4.2vw, 20px) !important;
   }
 
-  /* Elegant Glass Floating Pill bottom action bar for mobile layout */
-  .mobile-action-bar {
+  .header-controls {
     display: flex !important;
-    position: fixed;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(26, 21, 41, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 30px;
-    padding: 0.5rem 0.75rem;
-    gap: 0.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(244, 114, 182, 0.1);
-    z-index: 999;
-    transition: var(--transition-smooth);
-  }
-  
-  body.light-mode .mobile-action-bar {
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(0, 0, 0, 0.06);
-    box-shadow: 0 10px 30px rgba(43, 38, 59, 0.06);
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    width: 100% !important;
+    margin-top: 0.4rem !important;
+    padding: 0 0.25rem !important;
   }
 
-  .mobile-action-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    font-family: var(--font-header);
-    font-size: 0.82rem;
-    font-weight: 600;
-    padding: 0.5rem 1.15rem;
-    border-radius: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    transition: var(--transition-bounce);
+  .header-panel-btn, .header-action-btn {
+    padding: 0 0.75rem !important;
+    font-size: 0.8rem !important;
+    height: 38px !important;
   }
 
-  .mobile-action-btn i {
-    font-size: 0.9rem;
+  .header-panel-btn span, .header-action-btn span {
+    font-size: 0.75rem !important;
   }
 
-  .mobile-action-btn:hover,
-  .mobile-action-btn:active {
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--color-user);
-  }
-
-  body.light-mode .mobile-action-btn:hover,
-  body.light-mode .mobile-action-btn:active {
-    background: rgba(0, 0, 0, 0.03);
-    color: var(--color-user);
+  /* Responsive button morphing into round icons on extremely narrow screens to ensure perfect horizontal fit */
+  @media (max-width: 380px) {
+    .header-panel-btn span, .header-action-btn span {
+      display: none !important;
+    }
+    .header-panel-btn, .header-action-btn {
+      width: 38px !important;
+      padding: 0 !important;
+      justify-content: center !important;
+      border-radius: 50% !important;
+    }
   }
 }
