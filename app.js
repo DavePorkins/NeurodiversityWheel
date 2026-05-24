@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v2.8
+// Mapping Neurodiversity - Cosmic Flanking Logic v2.9
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -48,6 +48,7 @@ let previousParamId = null;
 let audioCtx = null;
 let soundEnabled = localStorage.getItem("mapping_neurodiversity_sound") !== "off";
 let animationsEnabled = localStorage.getItem("mapping_neurodiversity_animations") !== "off";
+let zoomFactor = 1.0;
 
 // Speech Synthesis & Standalone Player state
 let speechRate = parseFloat(localStorage.getItem("mapping_neurodiversity_speech_rate")) || 1.0;
@@ -61,6 +62,20 @@ window.addEventListener("DOMContentLoaded", () => {
   initTheme();
   loadUserProfile();
   initParameterList(); // Build left list index column
+  
+  // Initialize Font-Zoom from localStorage
+  const savedZoom = localStorage.getItem("mapping_neurodiversity_zoom");
+  if (savedZoom !== null) {
+    zoomFactor = parseFloat(savedZoom);
+  } else {
+    zoomFactor = 1.0;
+  }
+  document.documentElement.style.setProperty('--zoom-factor', zoomFactor);
+  const badge = document.getElementById("zoom-level-badge");
+  if (badge) {
+    badge.textContent = Math.round(zoomFactor * 100) + "%";
+  }
+
   initChart();
   selectParameter(1, true);
   animateIntro();
@@ -82,6 +97,23 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- 2. THEME & LOCAL STORAGE ---
+function adjustZoom(delta) {
+  zoomFactor = parseFloat((zoomFactor + delta).toFixed(2));
+  if (zoomFactor < 0.7) zoomFactor = 0.7;
+  if (zoomFactor > 1.5) zoomFactor = 1.5;
+  
+  localStorage.setItem("mapping_neurodiversity_zoom", zoomFactor);
+  
+  // Apply zoom factor to CSS
+  document.documentElement.style.setProperty('--zoom-factor', zoomFactor);
+  
+  // Update zoom badge UI
+  const badge = document.getElementById("zoom-level-badge");
+  if (badge) {
+    badge.textContent = Math.round(zoomFactor * 100) + "%";
+  }
+}
+
 function syncThemeColorMeta() {
   const isDark = document.body.classList.contains("dark-mode");
   const meta = document.getElementById("meta-theme-color");
@@ -146,7 +178,7 @@ function saveUserProfile() {
 function resetUserProfile() {
   if (confirm("Möchtest du dein Spektrum-Profil wirklich auf Stufe 1 zurücksetzen?")) {
     initializeDefaultRatings();
-    selectParameter(activeParamId);
+    selectParameter(activeParamId, true);
     drawWedges();
     drawOverlays();
     initParameterList();
@@ -400,19 +432,19 @@ function initChart() {
       let isLeft = false;
 
       if (isMobile) {
+        const R_x = 300;
+        const R_y = 480;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
-          const defaultY = 50 + slotIndex * 105;
-          yNode = defaultY;
-          const distFromCenterY = Math.abs(defaultY - 550);
-          xNode = 170 + Math.pow(distFromCenterY / 500, 2) * 110;
+          const nodeAngle = Math.PI + 1.2 - (slotIndex / 9) * 2.4;
+          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
+          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
-          const defaultY = 50 + slotIndex * 105;
-          yNode = defaultY;
-          const distFromCenterY = Math.abs(defaultY - 550);
-          xNode = 780 - Math.pow(distFromCenterY / 500, 2) * 110;
+          const nodeAngle = -1.2 + (slotIndex / 9) * 2.4;
+          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
+          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
           isLeft = false;
         }
       } else {
