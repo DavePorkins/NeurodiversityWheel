@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.1
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.2
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -436,7 +436,7 @@ function initChart() {
 
       if (isMobile) {
         // Dynamic horizontal radius shrinks as zoomFactor increases to prevent screen edge overflow!
-        const mobileShift = (zoomFactor - 1.5) * 85;
+        const mobileShift = (zoomFactor - 1.5) * 140;
         const R_x = 385 - mobileShift;
         const R_y = 515 - (zoomFactor - 1.5) * 25;
         if (paramId >= 11 && paramId <= 20) {
@@ -454,7 +454,7 @@ function initChart() {
         }
       } else {
         // Desktop horizontal column contraction: as zoomFactor increases, flanking columns shift inward
-        const desktopShift = (zoomFactor - 1.0) * 75;
+        const desktopShift = (zoomFactor - 1.0) * 125;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
           const defaultY = 50 + slotIndex * 55;
@@ -892,6 +892,7 @@ function selectParameter(paramId, preventMobileDrawer = false) {
   stopAllSpeech(true); // stop completely
 
   updateSidebar(paramId);
+  syncViewportLock();
 }
 
 function updateSidebar(paramId) {
@@ -991,14 +992,37 @@ function toggleProfile(profileKey) {
 }
 
 // --- 8. MODALS & MOBILE LAYOUT DRAWERS ---
+function syncViewportLock() {
+  if (typeof document === "undefined" || !document.querySelector) return;
+  const listEl = document.querySelector(".list-section");
+  const detailEl = document.querySelector(".detail-section");
+  const modalEl = document.getElementById("notes-modal");
+  
+  const isListOpen = listEl && listEl.classList && listEl.classList.contains("mobile-show");
+  const isDetailOpen = detailEl && detailEl.classList && detailEl.classList.contains("mobile-show");
+  const isModalOpen = modalEl && modalEl.classList && modalEl.classList.contains("active");
+  
+  const shouldLock = (isListOpen || isDetailOpen || isModalOpen) && (typeof window !== "undefined" && window.innerWidth < 1200);
+  
+  if (document.body && document.body.classList) {
+    if (shouldLock) {
+      document.body.classList.add("drawer-open");
+    } else {
+      document.body.classList.remove("drawer-open");
+    }
+  }
+}
+
 function openNotesModal() {
   document.getElementById("notes-modal").classList.add("active");
   triggerChime(523.25, "sine", 0.08, 0.35);
+  syncViewportLock();
 }
 
 function closeNotesModal() {
   document.getElementById("notes-modal").classList.remove("active");
   triggerChime(392, "sine", 0.04, 0.25);
+  syncViewportLock();
 }
 
 // Floating Index and Details slide-in overlays for Android mobile browsers
@@ -1034,6 +1058,7 @@ function toggleMobilePanel(panelKey) {
     }
     triggerChime(isShowing ? 400 : 300, "sine", 0.05, 0.2);
   }
+  syncViewportLock();
 }
 
 // --- 9. AUDIO ENGINE & PRESETS ---
@@ -1422,6 +1447,7 @@ function handleResize() {
 
     initChart();
   }
+  syncViewportLock();
 }
 
 // --- 14. ORGANIC NEURAL FLANKING WABERN ANIMATION LOOP ---

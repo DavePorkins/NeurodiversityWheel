@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.0 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.2 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -63,6 +63,14 @@ body.light-mode {
 
 body.dark-mode {
   color-scheme: dark;
+}
+
+body.drawer-open {
+  overflow: hidden !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  position: fixed !important;
+  width: 100% !important;
 }
 
 /* Basis Styling */
@@ -142,15 +150,15 @@ body.dark-mode {
 .pastel-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(160px) !important;
+  filter: blur(110px) !important;
   z-index: -1;
-  opacity: 0.38; /* increased opacity for richer and more visible dark mode background colors */
+  opacity: 0.58; /* increased opacity for richer and more visible dark mode background colors */
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
 
 body.light-mode .pastel-glow {
-  opacity: 0.45; /* increased light mode background color richness */
+  opacity: 0.42; /* increased light mode background color richness */
 }
 
 .glow-pink {
@@ -2266,16 +2274,21 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 0.35rem !important;
+    gap: 0.25rem !important;
     width: 100% !important;
     overflow-x: visible !important;
     padding: 2px !important;
   }
   .profile-toggle {
     flex-shrink: 1 !important;
-    font-size: 0.72rem !important;
-    padding: 0.35rem 0.55rem !important;
+    font-size: 0.68rem !important;
+    padding: 0.28rem 0.4rem !important;
+    gap: 0.25rem !important;
     white-space: nowrap !important;
+  }
+  .profile-toggle .color-dot {
+    width: 5px !important;
+    height: 5px !important;
   }
   
   .actions-area {
@@ -2326,10 +2339,10 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     right: 0;
     height: 100vh;
     height: 100dvh;
-    width: 100vw;
-    max-width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
     z-index: 1000;
-    transform: translateX(102%);
+    transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     background: var(--bg-secondary);
     backdrop-filter: var(--glass-blur);
@@ -2341,7 +2354,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     padding: 1.5rem 1.5rem calc(6rem + env(safe-area-inset-bottom)) 1.5rem !important;
   }
   .detail-section.mobile-show {
-    transform: translateX(0);
+    transform: translateX(0) !important;
     box-shadow: -10px 0 40px rgba(0, 0, 0, 0.45);
   }
 
