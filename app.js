@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.8
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.10
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -467,19 +467,19 @@ function initChart() {
       let idealAngle = 0;
       let isLeft = false;
       
-      const s_min = Math.sin(-1.38); // wider angular spread to perfectly utilize top/bottom corners on mobile and desktop
-      const s_max = Math.sin(1.38);
+      const s_min = Math.sin(-1.30); // beautiful balanced angular orbit spread to perfectly align with wheel flanks
+      const s_max = Math.sin(1.30);
       
       if (paramId >= 11 && paramId <= 20) {
         const slotIndex = 20 - paramId; // 0 to 9
         const t = slotIndex / 9;
-        const s = s_min + t * (s_max - s_min); // Go from -1.38 to +1.38 (top to bottom)
+        const s = s_min + t * (s_max - s_min); // Go from -1.30 to +1.30 (top to bottom)
         idealAngle = Math.PI - Math.asin(s); // Left side: cosine will be negative
         isLeft = true;
       } else {
         const slotIndex = paramId - 1; // 0 to 9
         const t = slotIndex / 9;
-        const s = s_min + t * (s_max - s_min); // Go from -1.38 to +1.38 (top to bottom)
+        const s = s_min + t * (s_max - s_min); // Go from -1.30 to +1.30 (top to bottom)
         idealAngle = Math.asin(s); // Right side: cosine will be positive
         isLeft = false;
       }
@@ -518,8 +518,8 @@ function initChart() {
       lines.forEach(l => { if (l.length > maxCharLen) maxCharLen = l.length; });
 
       // Approximate dynamic text bounding box relative to zoomFactor
-      const approxWidth = maxCharLen * 8.0 * zoomFactor + 35; // wider safety margins to prevent horizontal overflow
-      const approxHeight = lines.length * 18.5 * zoomFactor + 16; // increased multiplier (18.5 instead of 14) to match actual responsive clamped font size perfectly!
+      const approxWidth = maxCharLen * 6.5 * zoomFactor + 30; // balanced bounding box for safety
+      const approxHeight = lines.length * 16.0 * zoomFactor + 14; // balanced multiplier for safe clamped line spacing headroom!
 
       nodes.push({
         id: paramId,
@@ -542,14 +542,11 @@ function initChart() {
     const iterations = 95;
 
     for (let iter = 0; iter < iterations; iter++) {
-      // 1. Attraction force to ideal orbit (turned off in final 20 iterations for absolute overlap resolution)
-      const applyAttraction = iter < (iterations - 20);
-      if (applyAttraction) {
-        for (let j = 0; j < nodes.length; j++) {
-          const node = nodes[j];
-          node.x += (node.idealX - node.x) * 0.15;
-          node.y += (node.idealY - node.y) * 0.15;
-        }
+      // 1. Attraction force to ideal orbit
+      for (let j = 0; j < nodes.length; j++) {
+        const node = nodes[j];
+        node.x += (node.idealX - node.x) * 0.15;
+        node.y += (node.idealY - node.y) * 0.15;
       }
 
       // 2. Central wheel circle collision avoidance

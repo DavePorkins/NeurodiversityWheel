@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.8 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.10 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -2257,7 +2257,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   
   .chart-wrapper {
     width: 100% !important;
-    aspect-ratio: 1 / 1 !important; /* Perfect square container on mobile */
+    aspect-ratio: 0.95 / 1 !important; /* Match native SVG aspect ratio perfectly to scale up circles and eliminate unutilized blank spaces */
     margin: 0 auto !important;
     padding: 0 !important;
     display: block !important;
