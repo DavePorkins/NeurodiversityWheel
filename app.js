@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.0
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.1
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -112,6 +112,9 @@ function adjustZoom(delta) {
   if (badge) {
     badge.textContent = Math.round(zoomFactor * 100) + "%";
   }
+  
+  // Re-draw chart on the fly for dynamic edge collision avoidance!
+  initChart();
 }
 
 function syncThemeColorMeta() {
@@ -432,8 +435,10 @@ function initChart() {
       let isLeft = false;
 
       if (isMobile) {
-        const R_x = 385;
-        const R_y = 515;
+        // Dynamic horizontal radius shrinks as zoomFactor increases to prevent screen edge overflow!
+        const mobileShift = (zoomFactor - 1.5) * 85;
+        const R_x = 385 - mobileShift;
+        const R_y = 515 - (zoomFactor - 1.5) * 25;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
           const nodeAngle = Math.PI + 1.2 - (slotIndex / 9) * 2.4;
@@ -448,21 +453,21 @@ function initChart() {
           isLeft = false;
         }
       } else {
+        // Desktop horizontal column contraction: as zoomFactor increases, flanking columns shift inward
+        const desktopShift = (zoomFactor - 1.0) * 75;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
           const defaultY = 50 + slotIndex * 55;
           yNode = defaultY;
-          // Curved Concentric Schmiegung: Curves inward (closer to center) at top/bottom, pushed out in middle
           const distFromCenterY = Math.abs(defaultY - 300);
-          xNode = 230 + Math.pow(distFromCenterY / 250, 2) * 55;
+          xNode = (230 + desktopShift) + Math.pow(distFromCenterY / 250, 2) * 55;
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
           const defaultY = 50 + slotIndex * 55;
           yNode = defaultY;
-          // Curved Concentric Schmiegung: Curves inward (closer to center) at top/bottom, pushed out in middle
           const distFromCenterY = Math.abs(defaultY - 300);
-          xNode = 720 - Math.pow(distFromCenterY / 250, 2) * 55;
+          xNode = (720 - desktopShift) - Math.pow(distFromCenterY / 250, 2) * 55;
           isLeft = false;
         }
       }
@@ -505,6 +510,17 @@ function initChart() {
       nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
       nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
       safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
+      
+      // Contrast-aware hued text variables
+      const isLight = document.body.classList.contains("light-mode");
+      if (isLight) {
+        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 70%, 35%)`);
+        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 85%, 22%)`);
+      } else {
+        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 75%, 72%)`);
+        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
+      }
+
       nodeGrp.addEventListener("click", () => {
         selectParameter(paramId);
       });
@@ -569,24 +585,21 @@ function initChart() {
         20: ["Bedürfnis nach", "Routine"]
       };
 
-      if (isMobile) {
-        const lines = mobileLabelSplits[paramId] || [data.nameDE];
-        if (lines.length > 1) {
-          lines.forEach((line, lineIdx) => {
-            const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-            tspan.textContent = line;
-            tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
-            if (lineIdx > 0) {
-              tspan.setAttribute("dy", "1.25em");
-            } else {
-              const totalOffset = -((lines.length - 1) * 15) / 2;
-              tspan.setAttribute("dy", `${totalOffset}px`);
-            }
-            nodeText.appendChild(tspan);
-          });
-        } else {
-          nodeText.textContent = data.nameDE;
-        }
+      // Universal split: Draw multi-line vertical centered wrapped labels on both Desktop and Mobile!
+      const lines = mobileLabelSplits[paramId] || [data.nameDE];
+      if (lines.length > 1) {
+        lines.forEach((line, lineIdx) => {
+          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan.textContent = line;
+          tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
+          if (lineIdx > 0) {
+            tspan.setAttribute("dy", "1.25em");
+          } else {
+            const totalOffset = -((lines.length - 1) * 15) / 2;
+            tspan.setAttribute("dy", `${totalOffset}px`);
+          }
+          nodeText.appendChild(tspan);
+        });
       } else {
         nodeText.textContent = data.nameDE;
       }

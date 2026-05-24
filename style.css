@@ -142,36 +142,36 @@ body.dark-mode {
 .pastel-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(140px);
+  filter: blur(160px) !important;
   z-index: -1;
-  opacity: 0.48; /* increased opacity for richer and more visible dark mode background colors */
+  opacity: 0.38; /* increased opacity for richer and more visible dark mode background colors */
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
 
 body.light-mode .pastel-glow {
-  opacity: 0.62; /* increased light mode background color richness */
+  opacity: 0.45; /* increased light mode background color richness */
 }
 
 .glow-pink {
-  width: 45vw;
-  height: 45vw;
+  width: 60vw;
+  height: 60vw;
   background: radial-gradient(circle, var(--color-audhd) 0%, transparent 70%);
   top: -10%;
   left: 5%;
 }
 
 .glow-blue {
-  width: 50vw;
-  height: 50vw;
+  width: 70vw;
+  height: 70vw;
   background: radial-gradient(circle, #38bdf8 0%, transparent 70%);
   bottom: -15%;
   right: 2%;
 }
 
 .glow-yellow {
-  width: 40vw;
-  height: 40vw;
+  width: 55vw;
+  height: 55vw;
   background: radial-gradient(circle, #fde047 0%, transparent 70%);
   top: 25%;
   right: 20%;
@@ -447,7 +447,7 @@ body.light-mode .wedge-axis-indicator.active {
 /* Radial direct Text Labels around the circle */
 .svg-axis-label {
   font-family: var(--font-header);
-  font-size: 10px; /* Precise bold numbers around the circle */
+  font-size: calc(10px * var(--zoom-factor, 1.5)) !important; /* Precise bold numbers around the circle */
   font-weight: 700;
   fill: var(--text-secondary);
   text-anchor: middle;
@@ -474,6 +474,7 @@ body.light-mode .svg-axis-label.active {
   fill: rgba(255, 255, 255, 0.02);
   stroke: rgba(255, 255, 255, 0.1);
   stroke-width: 1px;
+  r: calc(13px * var(--zoom-factor, 1.5)) !important;
   transition: var(--transition-smooth);
 }
 
@@ -1530,13 +1531,13 @@ body.light-mode .header-action-btn:hover {
 
 /* Active animations class on body */
 body.animations-enabled .glow-pink {
-  animation: slow-glow-pink 8s ease-in-out infinite;
+  animation: slow-glow-pink 25s ease-in-out infinite !important;
 }
 body.animations-enabled .glow-blue {
-  animation: slow-glow-blue 10s ease-in-out infinite;
+  animation: slow-glow-blue 35s ease-in-out infinite !important;
 }
 body.animations-enabled .glow-yellow {
-  animation: slow-glow-yellow 9s ease-in-out infinite;
+  animation: slow-glow-yellow 30s ease-in-out infinite !important;
 }
 
 /* --- STANDALONE SELF-TRANSFORMING TTS PLAYER STYLING --- */
@@ -2090,6 +2091,7 @@ body.light-mode .connector-line {
   fill: rgba(255, 255, 255, 0.02);
   stroke: rgba(255, 255, 255, 0.06);
   stroke-width: 1px;
+  r: calc(12px * var(--zoom-factor, 1.5)) !important;
   transition: var(--transition-bounce);
 }
 
@@ -2107,7 +2109,7 @@ body.light-mode .legend-node-badge {
 .legend-node-badge-text {
   font-family: var(--font-header);
   font-weight: 700;
-  font-size: 9px;
+  font-size: calc(9px * var(--zoom-factor, 1.5)) !important;
   fill: var(--text-secondary);
   text-anchor: middle;
   dominant-baseline: middle;
@@ -2117,19 +2119,19 @@ body.light-mode .legend-node-badge {
 
 .legend-node-group:hover .legend-node-badge-text,
 .legend-node-group.active .legend-node-badge-text {
-  fill: #151121; /* High contrast text on colored badge background */
+  fill: #151121 !important; /* High contrast text on colored badge background */
 }
 
 body.light-mode .legend-node-group:hover .legend-node-badge-text,
 body.light-mode .legend-node-group.active .legend-node-badge-text {
-  fill: #ffffff;
+  fill: #ffffff !important;
 }
 
 .legend-node-text {
   font-family: var(--font-header);
   font-size: calc(clamp(13px, 1.15vw, 15px) * var(--zoom-factor, 1)); /* dynamic fluid desktop size scaling with viewport */
   font-weight: 500;
-  fill: var(--text-muted);
+  fill: var(--node-text-color, var(--text-muted)) !important;
   dominant-baseline: middle;
   transition: var(--transition-bounce);
   pointer-events: auto; /* enable click detection directly on parameter text label */
@@ -2137,8 +2139,8 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
 
 .legend-node-group:hover .legend-node-text,
 .legend-node-group.active .legend-node-text {
-  fill: var(--text-primary);
-  font-weight: 600;
+  fill: var(--node-text-color-active, var(--text-primary)) !important;
+  font-weight: 700;
   font-size: calc(clamp(15px, 1.3vw, 17px) * var(--zoom-factor, 1)); /* dynamic active fluid size scaling */
 }
 
@@ -2149,6 +2151,8 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     overflow-x: hidden !important;
     overflow-y: auto !important;
     height: auto !important;
+    overscroll-behavior: none !important;
+    touch-action: pan-y !important;
   }
 
   .app-viewport {
@@ -2221,6 +2225,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     width: 100% !important;
     height: auto !important;
     overflow: visible !important;
+    touch-action: pan-y !important;
   }
   
   .chart-wrapper {
@@ -2231,6 +2236,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     display: block !important;
     position: relative !important;
     overflow: hidden !important;
+    touch-action: none !important;
   }
 
   #radar-chart {
@@ -2386,9 +2392,11 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   /* Make SVG Flanking text nodes significantly larger and dynamically scalable on mobile for premium readability */
   .legend-node-text {
     font-size: calc(clamp(15px, 3.8vw, 18px) * var(--zoom-factor, 1)) !important;
+    fill: var(--node-text-color, var(--text-muted)) !important;
   }
   .legend-node-group.active .legend-node-text {
     font-size: calc(clamp(17px, 4.2vw, 20px) * var(--zoom-factor, 1)) !important;
+    fill: var(--node-text-color-active, var(--text-primary)) !important;
   }
 
   .header-controls {
