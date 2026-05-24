@@ -70,7 +70,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (savedZoom !== null) {
     zoomFactor = parseFloat(savedZoom);
   } else {
-    zoomFactor = (typeof window !== "undefined" && window.innerWidth < 1200) ? 2.0 : 1.5;
+    zoomFactor = 1.5;
   }
   document.documentElement.style.setProperty('--zoom-factor', zoomFactor);
   const badge = document.getElementById("zoom-level-badge");
@@ -121,15 +121,21 @@ function adjustZoom(delta) {
 
 function syncThemeColorMeta() {
   const isDark = document.body.classList.contains("dark-mode");
-  const meta = document.getElementById("meta-theme-color");
-  if (meta) {
-    meta.setAttribute("content", isDark ? "#151121" : "#faf7f2");
+  const color = isDark ? "#151121" : "#faf7f2";
+  const metaTags = document.querySelectorAll('meta[name="theme-color"]');
+  if (metaTags.length > 0) {
+    metaTags.forEach(meta => {
+      meta.setAttribute("content", color);
+    });
   }
 }
 
 function initTheme() {
   const savedTheme = localStorage.getItem("mapping_neurodiversity_theme") || "dark";
   document.body.className = savedTheme + "-mode";
+  if (document.documentElement) {
+    document.documentElement.className = savedTheme + "-mode";
+  }
   updateThemeToggleIcon();
   syncThemeColorMeta();
 }
@@ -138,6 +144,9 @@ function toggleTheme() {
   const isDark = document.body.classList.contains("dark-mode");
   const nextTheme = isDark ? "light" : "dark";
   document.body.className = nextTheme + "-mode";
+  if (document.documentElement) {
+    document.documentElement.className = nextTheme + "-mode";
+  }
   localStorage.setItem("mapping_neurodiversity_theme", nextTheme);
   updateThemeToggleIcon();
   syncThemeColorMeta();
@@ -1578,16 +1587,15 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
   const legendGroup = document.getElementById("wedges-legend-nodes-group");
   if (!connectorsGroup || !legendGroup) return;
 
-  // 1. Calculate Bezier path
+  // 1. Calculate Bezier path (connects directly to the label base point xNodeVal)
+  const startX = xNodeVal;
   let pathD = "";
   if (isLeft) {
-    const startX = xNodeVal + 15;
     const dist = xCircleVal - startX;
     const ctrl1X = startX + dist * 0.4;
     const ctrl2X = xCircleVal - dist * 0.4;
     pathD = `M ${startX} ${yNodeVal} C ${ctrl1X} ${yNodeVal}, ${ctrl2X} ${yCircleVal}, ${xCircleVal} ${yCircleVal}`;
   } else {
-    const startX = xNodeVal - 15;
     const dist = startX - xCircleVal;
     const ctrl1X = startX - dist * 0.4;
     const ctrl2X = xCircleVal + dist * 0.4;
@@ -1619,9 +1627,9 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
     }
   }
 
-  // 3. Get or draw Legend Flanking Group
+  // 3. Get or draw Legend Flanking Group (Clean text labels only, no redundant badges!)
   let nodeGrp = document.getElementById(`legend-node-group-${paramId}`);
-  let nodeBadge, nodeBadgeText, nodeText;
+  let nodeText;
 
   if (!nodeGrp) {
     nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -1630,31 +1638,15 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
       selectParameter(paramId);
     });
 
-    // Badge circle
-    nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    nodeBadge.setAttribute("r", "12");
-    nodeBadge.setAttribute("class", "legend-node-badge");
-    nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
-    nodeGrp.appendChild(nodeBadge);
-
-    // Badge text number
-    nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    nodeBadgeText.setAttribute("class", "legend-node-badge-text");
-    nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
-    nodeBadgeText.textContent = paramId;
-    nodeGrp.appendChild(nodeBadgeText);
-
     // Flanking Node text label name
     nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
     nodeText.setAttribute("class", "legend-node-text");
-    nodeText.setAttribute("id", `legend-node-text-${paramId}`);
+    nodeText.setAttribute("id", `legend-text-${paramId}`); // match original selector safely
     nodeGrp.appendChild(nodeText);
 
     legendGroup.appendChild(nodeGrp);
   } else {
-    nodeBadge = document.getElementById(`legend-node-badge-${paramId}`);
-    nodeBadgeText = document.getElementById(`legend-node-badge-text-${paramId}`);
-    nodeText = document.getElementById(`legend-node-text-${paramId}`);
+    nodeText = document.getElementById(`legend-text-${paramId}`) || nodeGrp.querySelector(".legend-node-text");
   }
 
   nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
@@ -1668,33 +1660,13 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
     safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
   }
 
-  // Update positions
-  if (nodeBadge) {
-    nodeBadge.setAttribute("cx", xNodeVal);
-    nodeBadge.setAttribute("cy", yNodeVal);
-    if (nodeBadge.style) {
-      if (paramId === activeParamId) {
-        nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
-        nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
-      } else {
-        nodeBadge.style.fill = "";
-        nodeBadge.style.stroke = "";
-      }
-    }
-  }
-
-  if (nodeBadgeText) {
-    nodeBadgeText.setAttribute("x", xNodeVal);
-    nodeBadgeText.setAttribute("y", yNodeVal + 0.5);
-  }
-
   if (nodeText) {
     nodeText.setAttribute("y", yNodeVal);
     if (isLeft) {
-      nodeText.setAttribute("x", xNodeVal - 22);
+      nodeText.setAttribute("x", xNodeVal - 14);
       nodeText.setAttribute("text-anchor", "end");
     } else {
-      nodeText.setAttribute("x", xNodeVal + 22);
+      nodeText.setAttribute("x", xNodeVal + 14);
       nodeText.setAttribute("text-anchor", "start");
     }
 
@@ -1703,7 +1675,7 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
     node.lines.forEach((line, lineIdx) => {
       const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
       tspan.textContent = line;
-      tspan.setAttribute("x", isLeft ? xNodeVal - 22 : xNodeVal + 22);
+      tspan.setAttribute("x", isLeft ? xNodeVal - 14 : xNodeVal + 14);
       if (lineIdx > 0) {
         tspan.setAttribute("dy", "1.25em");
       } else {

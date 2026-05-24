@@ -46,7 +46,7 @@
 }
 
 /* --- ☀️ LIGHT THEME REDEFINITIONS (Hochkontrast-Warmpastell) --- */
-body.light-mode {
+html.light-mode, body.light-mode {
   color-scheme: light;
   --bg-primary: #faf7f2; /* Warmes Sand/Cremeweiß */
   --bg-secondary: #ffffff;
@@ -2163,18 +2163,26 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   html, body {
     overflow-x: hidden !important;
     overflow-y: auto !important;
+    min-height: 100% !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
     height: auto !important;
     overscroll-behavior: none !important;
     touch-action: pan-y !important;
+    background-color: var(--bg-primary) !important;
   }
 
   .app-viewport {
+    min-height: 100% !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
     height: auto !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    padding: 0.5rem 0.25rem 1.0rem 0.25rem !important; /* compact bottom space to avoid empty space on Android */
+    padding: 0.5rem 0.25rem 0.25rem 0.25rem !important; /* compact bottom space to avoid empty space on Android and maximize screen height */
     width: 100% !important;
     max-width: 100% !important;
+    background-color: var(--bg-primary) !important;
   }
   .app-container {
     grid-template-columns: 1fr !important;
