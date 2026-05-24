@@ -429,10 +429,10 @@ function initChart() {
     labelsGroup.appendChild(textLabel);
   }
 
-  // DYNAMIC COLLISION-AVOIDANCE PHYSICS ENGINE (v3.5-Physics)
+  // DYNAMIC COLLISION-AVOIDANCE PHYSICS ENGINE (v3.6-PhysicsPro)
   if (legendGroup && connectorsGroup) {
     const isLight = document.body.classList.contains("light-mode");
-    const minCircleDist = MAX_RADIUS + 38 * zoomFactor; // stable wheel + radial labels clearance
+    const minCircleDist = MAX_RADIUS + 48 * zoomFactor; // stable wheel + radial labels clearance
     const nodes = [];
 
     // Pre-calculate ideal coordinates and text dimensions for all 20 nodes
@@ -445,30 +445,19 @@ function initChart() {
 
       let idealAngle = 0;
       let isLeft = false;
-      if (isMobile) {
-        if (paramId >= 11 && paramId <= 20) {
-          const slotIndex = 20 - paramId;
-          idealAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
-          isLeft = true;
-        } else {
-          const slotIndex = paramId - 1;
-          idealAngle = -1.25 + (slotIndex / 9) * 2.5;
-          isLeft = false;
-        }
+      
+      if (paramId >= 11 && paramId <= 20) {
+        const slotIndex = 20 - paramId;
+        idealAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
+        isLeft = true;
       } else {
-        if (paramId >= 11 && paramId <= 20) {
-          const slotIndex = 20 - paramId;
-          idealAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
-          isLeft = true;
-        } else {
-          const slotIndex = paramId - 1;
-          idealAngle = -1.25 + (slotIndex / 9) * 2.5;
-          isLeft = false;
-        }
+        const slotIndex = paramId - 1;
+        idealAngle = -1.25 + (slotIndex / 9) * 2.5;
+        isLeft = false;
       }
 
-      const R_x_ideal = isMobile ? MAX_RADIUS + 75 : MAX_RADIUS + 110;
-      const R_y_ideal = isMobile ? MAX_RADIUS + 185 : MAX_RADIUS + 45;
+      const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 165;
+      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 50;
 
       const idealX = CENTER_X + R_x_ideal * Math.cos(idealAngle);
       const idealY = CENTER_Y + R_y_ideal * Math.sin(idealAngle);
@@ -501,8 +490,8 @@ function initChart() {
       lines.forEach(l => { if (l.length > maxCharLen) maxCharLen = l.length; });
 
       // Approximate dynamic text bounding box relative to zoomFactor
-      const approxWidth = maxCharLen * 5.8 * zoomFactor + 30;
-      const approxHeight = lines.length * 13 * zoomFactor + 10;
+      const approxWidth = maxCharLen * 6.5 * zoomFactor + 30; // slightly wider bounding box for safety
+      const approxHeight = lines.length * 14 * zoomFactor + 12;
 
       nodes.push({
         id: paramId,
@@ -521,77 +510,123 @@ function initChart() {
       });
     }
 
-    // Run synchronous relaxation solver (80 iterations)
-    const iterations = 80;
-    const viewportMinX = isMobile ? -20 : -45;
-    const viewportMaxX = isMobile ? 960 : 990;
-    const viewportMinY = isMobile ? 30 : 30;
-    const viewportMaxY = isMobile ? 1070 : 570;
+    // Run synchronous relaxation solver (95 iterations for perfect convergence)
+    const iterations = 95;
 
     for (let iter = 0; iter < iterations; iter++) {
+      // 1. Attraction force to ideal orbit
       for (let j = 0; j < nodes.length; j++) {
         const node = nodes[j];
+        node.x += (node.idealX - node.x) * 0.15;
+        node.y += (node.idealY - node.y) * 0.15;
+      }
 
-        // 1. Anchor spring attraction force
-        let fx = (node.idealX - node.x) * 0.18;
-        let fy = (node.idealY - node.y) * 0.18;
-
-        // 2. Central wheel circle collision avoidance
+      // 2. Central wheel circle collision avoidance
+      for (let j = 0; j < nodes.length; j++) {
+        const node = nodes[j];
         const dx = node.x - CENTER_X;
         const dy = node.y - CENTER_Y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < minCircleDist) {
-          const push = (minCircleDist - dist) * 0.5;
-          fx += (dx / dist) * push;
-          fy += (dy / dist) * push;
+          const push = minCircleDist - dist;
+          node.x += (dx / dist) * push * 0.75;
+          node.y += (dy / dist) * push * 0.75;
         }
+      }
 
-        // 3. Node-to-node overlapping text box repulsion
+      // 3. Node-to-node overlapping text box repulsion (Verlet Position-Based Relaxation)
+      for (let j = 0; j < nodes.length; j++) {
+        const nodeA = nodes[j];
         const rectA = {
-          left: node.isLeft ? node.x - node.approxWidth : node.x - 15,
-          right: node.isLeft ? node.x + 15 : node.x + node.approxWidth,
-          top: node.y - node.approxHeight / 2,
-          bottom: node.y + node.approxHeight / 2
+          left: nodeA.isLeft ? nodeA.x - nodeA.approxWidth : nodeA.x - 15,
+          right: nodeA.isLeft ? nodeA.x + 15 : nodeA.x + nodeA.approxWidth,
+          top: nodeA.y - nodeA.approxHeight / 2,
+          bottom: nodeA.y + nodeA.approxHeight / 2
         };
 
-        for (let k = 0; k < nodes.length; k++) {
-          if (j === k) continue;
-          const other = nodes[k];
-          
-          // Only resolve collision on same side columns
-          if (node.isLeft !== other.isLeft) continue;
+        for (let k = j + 1; k < nodes.length; k++) {
+          const nodeB = nodes[k];
+          if (nodeA.isLeft !== nodeB.isLeft) continue; // Only same column side
 
           const rectB = {
-            left: other.isLeft ? other.x - other.approxWidth : other.x - 15,
-            right: other.isLeft ? other.x + 15 : other.x + other.approxWidth,
-            top: other.y - other.approxHeight / 2,
-            bottom: other.y + other.approxHeight / 2
+            left: nodeB.isLeft ? nodeB.x - nodeB.approxWidth : nodeB.x - 15,
+            right: nodeB.isLeft ? nodeB.x + 15 : nodeB.x + nodeB.approxWidth,
+            top: nodeB.y - nodeB.approxHeight / 2,
+            bottom: nodeB.y + nodeB.approxHeight / 2
           };
 
           const overlapsX = rectA.left < rectB.right && rectA.right > rectB.left;
           const overlapsY = rectA.top < rectB.bottom && rectA.bottom > rectB.top;
 
           if (overlapsX && overlapsY) {
-            // Push vertically to separate rows
-            const overlapY = (node.approxHeight / 2 + other.approxHeight / 2) - Math.abs(node.y - other.y);
-            const pushY = overlapY * 0.3 * (node.y >= other.y ? 1 : -1);
-            fy += pushY;
+            // Push vertically apart
+            const overlapY = Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.top, rectB.top);
+            
+            let dirY = 0;
+            if (nodeA.y < nodeB.y) {
+              dirY = -1;
+            } else if (nodeA.y > nodeB.y) {
+              dirY = 1;
+            } else {
+              dirY = nodeA.id < nodeB.id ? -1 : 1; // tie-breaker
+            }
 
-            // Push horizontally slightly to allow sliding past each other
-            const overlapX = (node.approxWidth / 2 + other.approxWidth / 2) - Math.abs(node.x - other.x);
-            const pushX = overlapX * 0.1 * (node.x >= other.x ? 1 : -1);
-            fx += pushX;
+            const pushY = overlapY * 0.55 * dirY;
+            nodeA.y += pushY * 0.5;
+            nodeB.y -= pushY * 0.5;
+
+            // Push slightly horizontally to allow sliding past
+            const overlapX = Math.min(rectA.right, rectB.right) - Math.max(rectA.left, rectB.left);
+            let dirX = nodeA.x < nodeB.x ? -1 : 1;
+            const pushX = overlapX * 0.15 * dirX;
+            nodeA.x += pushX * 0.5;
+            nodeB.x -= pushX * 0.5;
+
+            // Update rects in-place for immediately subsequent iterations
+            rectA.top += pushY * 0.5;
+            rectA.bottom += pushY * 0.5;
+            rectA.left += pushX * 0.5;
+            rectA.right += pushX * 0.5;
           }
         }
+      }
 
-        // Apply forces & clamp to viewport boundaries
-        node.x += fx;
-        node.y += fy;
-
-        if (node.x < viewportMinX) node.x = viewportMinX;
-        if (node.x > viewportMaxX) node.x = viewportMaxX;
-        if (node.y < viewportMinY) node.y = viewportMinY;
-        if (node.y > viewportMaxY) node.y = viewportMaxY;
+      // 4. Strict clamping to viewport limits (never cut off any text!)
+      for (let j = 0; j < nodes.length; j++) {
+        const node = nodes[j];
+        if (isMobile) {
+          if (node.isLeft) {
+            const minX = -30 + node.approxWidth;
+            const maxX = CENTER_X - 70;
+            if (node.x < minX) node.x = minX;
+            if (node.x > maxX) node.x = maxX;
+          } else {
+            const minX = CENTER_X + 70;
+            const maxX = 980 - node.approxWidth;
+            if (node.x < minX) node.x = minX;
+            if (node.x > maxX) node.x = maxX;
+          }
+          const minY = 40 + node.approxHeight / 2;
+          const maxY = 1060 - node.approxHeight / 2;
+          if (node.y < minY) node.y = minY;
+          if (node.y > maxY) node.y = maxY;
+        } else {
+          if (node.isLeft) {
+            const minX = -45 + node.approxWidth;
+            const maxX = CENTER_X - 90;
+            if (node.x < minX) node.x = minX;
+            if (node.x > maxX) node.x = maxX;
+          } else {
+            const minX = CENTER_X + 90;
+            const maxX = 995 - node.approxWidth;
+            if (node.x < minX) node.x = minX;
+            if (node.x > maxX) node.x = maxX;
+          }
+          const minY = 35 + node.approxHeight / 2;
+          const maxY = 565 - node.approxHeight / 2;
+          if (node.y < minY) node.y = minY;
+          if (node.y > maxY) node.y = maxY;
+        }
       }
     }
 
