@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.7
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.8
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -455,13 +455,20 @@ function initChart() {
       let idealAngle = 0;
       let isLeft = false;
       
+      const s_min = Math.sin(-1.38); // wider angular spread to perfectly utilize top/bottom corners on mobile and desktop
+      const s_max = Math.sin(1.38);
+      
       if (paramId >= 11 && paramId <= 20) {
-        const slotIndex = 20 - paramId;
-        idealAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
+        const slotIndex = 20 - paramId; // 0 to 9
+        const t = slotIndex / 9;
+        const s = s_min + t * (s_max - s_min); // Go from -1.38 to +1.38 (top to bottom)
+        idealAngle = Math.PI - Math.asin(s); // Left side: cosine will be negative
         isLeft = true;
       } else {
-        const slotIndex = paramId - 1;
-        idealAngle = -1.25 + (slotIndex / 9) * 2.5;
+        const slotIndex = paramId - 1; // 0 to 9
+        const t = slotIndex / 9;
+        const s = s_min + t * (s_max - s_min); // Go from -1.38 to +1.38 (top to bottom)
+        idealAngle = Math.asin(s); // Right side: cosine will be positive
         isLeft = false;
       }
 
