@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v2.9
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.0
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -13,7 +13,7 @@ function updateLayoutConstants() {
   if (window.innerWidth < 1200) {
     CENTER_X = 475;
     CENTER_Y = 550;
-    MAX_RADIUS = 225;
+    MAX_RADIUS = 330;
   } else {
     CENTER_X = 475;
     CENTER_Y = 300;
@@ -48,7 +48,7 @@ let previousParamId = null;
 let audioCtx = null;
 let soundEnabled = localStorage.getItem("mapping_neurodiversity_sound") !== "off";
 let animationsEnabled = localStorage.getItem("mapping_neurodiversity_animations") !== "off";
-let zoomFactor = 1.0;
+let zoomFactor = 1.5;
 
 // Speech Synthesis & Standalone Player state
 let speechRate = parseFloat(localStorage.getItem("mapping_neurodiversity_speech_rate")) || 1.0;
@@ -68,7 +68,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (savedZoom !== null) {
     zoomFactor = parseFloat(savedZoom);
   } else {
-    zoomFactor = 1.0;
+    zoomFactor = 1.5;
   }
   document.documentElement.style.setProperty('--zoom-factor', zoomFactor);
   const badge = document.getElementById("zoom-level-badge");
@@ -100,7 +100,7 @@ window.addEventListener("DOMContentLoaded", () => {
 function adjustZoom(delta) {
   zoomFactor = parseFloat((zoomFactor + delta).toFixed(2));
   if (zoomFactor < 0.7) zoomFactor = 0.7;
-  if (zoomFactor > 1.5) zoomFactor = 1.5;
+  if (zoomFactor > 2.2) zoomFactor = 2.2;
   
   localStorage.setItem("mapping_neurodiversity_zoom", zoomFactor);
   
@@ -432,8 +432,8 @@ function initChart() {
       let isLeft = false;
 
       if (isMobile) {
-        const R_x = 300;
-        const R_y = 480;
+        const R_x = 385;
+        const R_y = 515;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
           const nodeAngle = Math.PI + 1.2 - (slotIndex / 9) * 2.4;
