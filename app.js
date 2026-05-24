@@ -357,6 +357,7 @@ function initChart() {
     centerHole.setAttribute("cy", CENTER_Y);
   }
 
+  // Draw Background segments and Radial indicators
   for (let i = 0; i < TOTAL_AXES; i++) {
     const paramId = i + 1;
     const data = palaceData.find(p => p.id === paramId);
@@ -426,144 +427,52 @@ function initChart() {
       selectParameter(paramId);
     });
     labelsGroup.appendChild(textLabel);
+  }
 
-    // DYNAMIC FLANKING NODE GENERATION (Desktop Flanking Node Web vs Mobile Butterfly Wings)
-    if (legendGroup && connectorsGroup) {
-      const hue = i * (360 / TOTAL_AXES);
-      const isLight = document.body.classList.contains("light-mode");
-      let xNode = 0;
-      let yNode = 0;
+  // DYNAMIC COLLISION-AVOIDANCE PHYSICS ENGINE (v3.5-Physics)
+  if (legendGroup && connectorsGroup) {
+    const isLight = document.body.classList.contains("light-mode");
+    const minCircleDist = MAX_RADIUS + 38 * zoomFactor; // stable wheel + radial labels clearance
+    const nodes = [];
+
+    // Pre-calculate ideal coordinates and text dimensions for all 20 nodes
+    for (let i = 0; i < TOTAL_AXES; i++) {
+      const paramId = i + 1;
+      const data = palaceData.find(p => p.id === paramId);
+      if (!data) continue;
+      
+      const textCoords = getCoords(i, MAX_RADIUS + 22);
+
+      let idealAngle = 0;
       let isLeft = false;
-
       if (isMobile) {
-        // Mobile butterfly wing curved layout (fixed circle, dynamic ellipse radii)
-        const R_x = (MAX_RADIUS + 75) - (zoomFactor - 1.5) * 110;
-        const R_y = MAX_RADIUS + 185 - (zoomFactor - 1.5) * 35;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
-          const nodeAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
-          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
-          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
+          idealAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
-          const nodeAngle = -1.25 + (slotIndex / 9) * 2.5;
-          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
-          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
+          idealAngle = -1.25 + (slotIndex / 9) * 2.5;
           isLeft = false;
         }
       } else {
-        // Desktop concentric curved layout wrapping around the circle (fixed circle, dynamic ellipse radii)
-        const R_x = (MAX_RADIUS + 110) - (zoomFactor - 1.0) * 85;
-        const R_y = MAX_RADIUS + 45;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
-          const nodeAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
-          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
-          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
+          idealAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
-          const nodeAngle = -1.25 + (slotIndex / 9) * 2.5;
-          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
-          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
+          idealAngle = -1.25 + (slotIndex / 9) * 2.5;
           isLeft = false;
         }
       }
 
-      // 1. Curved connector path (Bezier spline)
-      const connector = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      connector.setAttribute("class", `connector-line ${paramId === activeParamId ? 'active' : ''}`);
-      connector.setAttribute("id", `connector-line-${paramId}`);
-      
-      const xCircle = textCoords.x;
-      const yCircle = textCoords.y;
+      const R_x_ideal = isMobile ? MAX_RADIUS + 75 : MAX_RADIUS + 110;
+      const R_y_ideal = isMobile ? MAX_RADIUS + 185 : MAX_RADIUS + 45;
 
-      let pathD = "";
-      if (isLeft) {
-        const startX = xNode + 15;
-        const dist = xCircle - startX;
-        const ctrl1X = startX + dist * 0.4;
-        const ctrl2X = xCircle - dist * 0.4;
-        pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
-      } else {
-        const startX = xNode - 15;
-        const dist = startX - xCircle;
-        const ctrl1X = startX - dist * 0.4;
-        const ctrl2X = xCircle + dist * 0.4;
-        pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
-      }
-      
-      connector.setAttribute("d", pathD);
-      // Pre-colored soft pastel connector lines matching their unique hue!
-      const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
-      connector.style.stroke = connStroke;
-      
-      if (paramId === activeParamId) {
-        connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
-        connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
-      }
-      connector.addEventListener("click", () => {
-        selectParameter(paramId);
-      });
-      connectorsGroup.appendChild(connector);
+      const idealX = CENTER_X + R_x_ideal * Math.cos(idealAngle);
+      const idealY = CENTER_Y + R_y_ideal * Math.sin(idealAngle);
 
-      // 2. Legend Flanking Group
-      const nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
-      nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
-      safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
-      
-      // Contrast-aware hued text variables
-      if (isLight) {
-        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 70%, 35%)`);
-        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 85%, 22%)`);
-      } else {
-        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 75%, 72%)`);
-        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
-      }
-
-      nodeGrp.addEventListener("click", () => {
-        selectParameter(paramId);
-      });
-
-      // Flanking Node badge circle
-      const nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      nodeBadge.setAttribute("cx", xNode);
-      nodeBadge.setAttribute("cy", yNode);
-      nodeBadge.setAttribute("r", "12");
-      nodeBadge.setAttribute("class", "legend-node-badge");
-      nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
-      if (paramId === activeParamId) {
-        nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
-        nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
-      }
-      nodeGrp.appendChild(nodeBadge);
-
-      // Flanking Node badge text number
-      const nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      nodeBadgeText.setAttribute("x", xNode);
-      nodeBadgeText.setAttribute("y", yNode + 0.5);
-      nodeBadgeText.setAttribute("class", "legend-node-badge-text");
-      nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
-      nodeBadgeText.textContent = paramId;
-      nodeGrp.appendChild(nodeBadgeText);
-
-      // Flanking Node text label name
-      const nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      nodeText.setAttribute("y", yNode);
-      nodeText.setAttribute("class", "legend-node-text");
-      nodeText.setAttribute("id", `legend-node-text-${paramId}`);
-
-      if (isLeft) {
-        nodeText.setAttribute("x", xNode - 22);
-        nodeText.setAttribute("text-anchor", "end");
-      } else {
-        nodeText.setAttribute("x", xNode + 22);
-        nodeText.setAttribute("text-anchor", "start");
-      }
-
-      // Premium vertical multi-line wrapping for long names on mobile
       const mobileLabelSplits = {
         1: ["Akute", "Reizüberflutung"],
         2: ["Suche nach", "Vertrautheit"],
@@ -587,29 +496,219 @@ function initChart() {
         20: ["Bedürfnis nach", "Routine"]
       };
 
-      // Universal split: Draw multi-line vertical centered wrapped labels on both Desktop and Mobile!
       const lines = mobileLabelSplits[paramId] || [data.nameDE];
-      if (lines.length > 1) {
-        lines.forEach((line, lineIdx) => {
-          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-          tspan.textContent = line;
-          tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
-          if (lineIdx > 0) {
-            tspan.setAttribute("dy", "1.25em");
-          } else {
-            const totalOffset = -((lines.length - 1) * 15) / 2;
-            tspan.setAttribute("dy", `${totalOffset}px`);
-          }
-          nodeText.appendChild(tspan);
-        });
-      } else {
-        nodeText.textContent = data.nameDE;
-      }
-      
-      nodeGrp.appendChild(nodeText);
+      let maxCharLen = 0;
+      lines.forEach(l => { if (l.length > maxCharLen) maxCharLen = l.length; });
 
-      legendGroup.appendChild(nodeGrp);
+      // Approximate dynamic text bounding box relative to zoomFactor
+      const approxWidth = maxCharLen * 5.8 * zoomFactor + 30;
+      const approxHeight = lines.length * 13 * zoomFactor + 10;
+
+      nodes.push({
+        id: paramId,
+        hue: i * (360 / TOTAL_AXES),
+        idealX,
+        idealY,
+        x: idealX,
+        y: idealY,
+        approxWidth,
+        approxHeight,
+        isLeft,
+        lines,
+        data,
+        xCircle: textCoords.x,
+        yCircle: textCoords.y
+      });
     }
+
+    // Run synchronous relaxation solver (80 iterations)
+    const iterations = 80;
+    const viewportMinX = isMobile ? -20 : -45;
+    const viewportMaxX = isMobile ? 960 : 990;
+    const viewportMinY = isMobile ? 30 : 30;
+    const viewportMaxY = isMobile ? 1070 : 570;
+
+    for (let iter = 0; iter < iterations; iter++) {
+      for (let j = 0; j < nodes.length; j++) {
+        const node = nodes[j];
+
+        // 1. Anchor spring attraction force
+        let fx = (node.idealX - node.x) * 0.18;
+        let fy = (node.idealY - node.y) * 0.18;
+
+        // 2. Central wheel circle collision avoidance
+        const dx = node.x - CENTER_X;
+        const dy = node.y - CENTER_Y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < minCircleDist) {
+          const push = (minCircleDist - dist) * 0.5;
+          fx += (dx / dist) * push;
+          fy += (dy / dist) * push;
+        }
+
+        // 3. Node-to-node overlapping text box repulsion
+        const rectA = {
+          left: node.isLeft ? node.x - node.approxWidth : node.x - 15,
+          right: node.isLeft ? node.x + 15 : node.x + node.approxWidth,
+          top: node.y - node.approxHeight / 2,
+          bottom: node.y + node.approxHeight / 2
+        };
+
+        for (let k = 0; k < nodes.length; k++) {
+          if (j === k) continue;
+          const other = nodes[k];
+          
+          // Only resolve collision on same side columns
+          if (node.isLeft !== other.isLeft) continue;
+
+          const rectB = {
+            left: other.isLeft ? other.x - other.approxWidth : other.x - 15,
+            right: other.isLeft ? other.x + 15 : other.x + other.approxWidth,
+            top: other.y - other.approxHeight / 2,
+            bottom: other.y + other.approxHeight / 2
+          };
+
+          const overlapsX = rectA.left < rectB.right && rectA.right > rectB.left;
+          const overlapsY = rectA.top < rectB.bottom && rectA.bottom > rectB.top;
+
+          if (overlapsX && overlapsY) {
+            // Push vertically to separate rows
+            const overlapY = (node.approxHeight / 2 + other.approxHeight / 2) - Math.abs(node.y - other.y);
+            const pushY = overlapY * 0.3 * (node.y >= other.y ? 1 : -1);
+            fy += pushY;
+
+            // Push horizontally slightly to allow sliding past each other
+            const overlapX = (node.approxWidth / 2 + other.approxWidth / 2) - Math.abs(node.x - other.x);
+            const pushX = overlapX * 0.1 * (node.x >= other.x ? 1 : -1);
+            fx += pushX;
+          }
+        }
+
+        // Apply forces & clamp to viewport boundaries
+        node.x += fx;
+        node.y += fy;
+
+        if (node.x < viewportMinX) node.x = viewportMinX;
+        if (node.x > viewportMaxX) node.x = viewportMaxX;
+        if (node.y < viewportMinY) node.y = viewportMinY;
+        if (node.y > viewportMaxY) node.y = viewportMaxY;
+      }
+    }
+
+    // Render all nodes and connectors based on final relaxed coordinates
+    nodes.forEach(node => {
+      const paramId = node.id;
+      const hue = node.hue;
+      const xNode = node.x;
+      const yNode = node.y;
+      const isLeft = node.isLeft;
+      const xCircle = node.xCircle;
+      const yCircle = node.yCircle;
+
+      // 1. Draw curved Bezier spline connector
+      const connector = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      connector.setAttribute("class", `connector-line ${paramId === activeParamId ? 'active' : ''}`);
+      connector.setAttribute("id", `connector-line-${paramId}`);
+
+      let pathD = "";
+      if (isLeft) {
+        const startX = xNode + 15;
+        const dist = xCircle - startX;
+        const ctrl1X = startX + dist * 0.4;
+        const ctrl2X = xCircle - dist * 0.4;
+        pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
+      } else {
+        const startX = xNode - 15;
+        const dist = startX - xCircle;
+        const ctrl1X = startX - dist * 0.4;
+        const ctrl2X = xCircle + dist * 0.4;
+        pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
+      }
+
+      connector.setAttribute("d", pathD);
+      const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
+      connector.style.stroke = connStroke;
+
+      if (paramId === activeParamId) {
+        connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
+        connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
+      }
+      connector.addEventListener("click", () => {
+        selectParameter(paramId);
+      });
+      connectorsGroup.appendChild(connector);
+
+      // 2. Draw Legend Flanking Group
+      const nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
+      nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
+      safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
+
+      if (isLight) {
+        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 70%, 35%)`);
+        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 85%, 22%)`);
+      } else {
+        safeSetProperty(nodeGrp, "--node-text-color", `hsl(${hue}, 75%, 72%)`);
+        safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
+      }
+
+      nodeGrp.addEventListener("click", () => {
+        selectParameter(paramId);
+      });
+
+      // Badge circle
+      const nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      nodeBadge.setAttribute("cx", xNode);
+      nodeBadge.setAttribute("cy", yNode);
+      nodeBadge.setAttribute("r", "12");
+      nodeBadge.setAttribute("class", "legend-node-badge");
+      nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
+      if (paramId === activeParamId) {
+        nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
+        nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
+      }
+      nodeGrp.appendChild(nodeBadge);
+
+      // Badge text number
+      const nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      nodeBadgeText.setAttribute("x", xNode);
+      nodeBadgeText.setAttribute("y", yNode + 0.5);
+      nodeBadgeText.setAttribute("class", "legend-node-badge-text");
+      nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
+      nodeBadgeText.textContent = paramId;
+      nodeGrp.appendChild(nodeBadgeText);
+
+      // Flanking Node text label name
+      const nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      nodeText.setAttribute("y", yNode);
+      nodeText.setAttribute("class", "legend-node-text");
+      nodeText.setAttribute("id", `legend-node-text-${paramId}`);
+
+      if (isLeft) {
+        nodeText.setAttribute("x", xNode - 22);
+        nodeText.setAttribute("text-anchor", "end");
+      } else {
+        nodeText.setAttribute("x", xNode + 22);
+        nodeText.setAttribute("text-anchor", "start");
+      }
+
+      // Draw multi-line vertical centered wrapped labels
+      node.lines.forEach((line, lineIdx) => {
+        const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        tspan.textContent = line;
+        tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
+        if (lineIdx > 0) {
+          tspan.setAttribute("dy", "1.25em");
+        } else {
+          const totalOffset = -((node.lines.length - 1) * 15) / 2;
+          tspan.setAttribute("dy", `${totalOffset}px`);
+        }
+        nodeText.appendChild(tspan);
+      });
+
+      nodeGrp.appendChild(nodeText);
+      legendGroup.appendChild(nodeGrp);
+    });
   }
 
   // Draw fills & overlays
