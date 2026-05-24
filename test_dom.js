@@ -22,9 +22,11 @@ global.document = {
   getElementById: (id) => {
     return {
       innerHTML: "",
+      style: {},
       classList: {
         remove: () => {},
-        add: () => {}
+        add: () => {},
+        toggle: () => {}
       },
       appendChild: () => {},
       scrollTo: () => {},

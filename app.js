@@ -332,8 +332,6 @@ function initChart() {
   
   bgGroup.innerHTML = "";
   labelsGroup.innerHTML = "";
-  if (connectorsGroup) connectorsGroup.innerHTML = "";
-  if (legendGroup) legendGroup.innerHTML = "";
 
   const isMobile = window.innerWidth < 1200;
   const stepSize = (MAX_RADIUS - INNER_RADIUS) / 5;
@@ -605,11 +603,6 @@ function initChart() {
       const xCircle = node.xCircle;
       const yCircle = node.yCircle;
 
-      // 1. Draw curved Bezier spline connector
-      const connector = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      connector.setAttribute("class", `connector-line ${paramId === activeParamId ? 'active' : ''}`);
-      connector.setAttribute("id", `connector-line-${paramId}`);
-
       let pathD = "";
       if (isLeft) {
         const startX = xNode + 15;
@@ -625,23 +618,70 @@ function initChart() {
         pathD = `M ${startX} ${yNode} C ${ctrl1X} ${yNode}, ${ctrl2X} ${yCircle}, ${xCircle} ${yCircle}`;
       }
 
-      connector.setAttribute("d", pathD);
-      const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
-      connector.style.stroke = connStroke;
-
-      if (paramId === activeParamId) {
-        connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
-        connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
+      // 1. Get or draw curved Bezier spline connector
+      let connector = document.getElementById(`connector-line-${paramId}`);
+      if (!connector) {
+        connector = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        connector.setAttribute("id", `connector-line-${paramId}`);
+        connector.addEventListener("click", () => {
+          selectParameter(paramId);
+        });
+        connectorsGroup.appendChild(connector);
       }
-      connector.addEventListener("click", () => {
-        selectParameter(paramId);
-      });
-      connectorsGroup.appendChild(connector);
+      
+      connector.setAttribute("class", `connector-line ${paramId === activeParamId ? 'active' : ''}`);
+      connector.setAttribute("d", pathD);
+      
+      const connStroke = isLight ? `hsla(${hue}, 50%, 45%, 0.24)` : `hsla(${hue}, 60%, 70%, 0.26)`;
+      if (connector.style) {
+        if (paramId === activeParamId) {
+          connector.style.stroke = `hsl(${hue}, 85%, 55%)`;
+          connector.style.filter = `drop-shadow(0 0 6px hsl(${hue}, 85%, 55%, 0.65))`;
+        } else {
+          connector.style.stroke = connStroke;
+          connector.style.filter = "";
+        }
+      }
 
-      // 2. Draw Legend Flanking Group
-      const nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      // 2. Get or draw Legend Flanking Group
+      let nodeGrp = document.getElementById(`legend-node-group-${paramId}`);
+      let nodeBadge, nodeBadgeText, nodeText;
+
+      if (!nodeGrp) {
+        nodeGrp = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
+        nodeGrp.addEventListener("click", () => {
+          selectParameter(paramId);
+        });
+
+        // Badge circle
+        nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        nodeBadge.setAttribute("r", "12");
+        nodeBadge.setAttribute("class", "legend-node-badge");
+        nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
+        nodeGrp.appendChild(nodeBadge);
+
+        // Badge text number
+        nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        nodeBadgeText.setAttribute("class", "legend-node-badge-text");
+        nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
+        nodeBadgeText.textContent = paramId;
+        nodeGrp.appendChild(nodeBadgeText);
+
+        // Flanking Node text label name
+        nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        nodeText.setAttribute("class", "legend-node-text");
+        nodeText.setAttribute("id", `legend-node-text-${paramId}`);
+        nodeGrp.appendChild(nodeText);
+
+        legendGroup.appendChild(nodeGrp);
+      } else {
+        nodeBadge = document.getElementById(`legend-node-badge-${paramId}`);
+        nodeBadgeText = document.getElementById(`legend-node-badge-text-${paramId}`);
+        nodeText = document.getElementById(`legend-node-text-${paramId}`);
+      }
+
       nodeGrp.setAttribute("class", `legend-node-group ${paramId === activeParamId ? 'active' : ''}`);
-      nodeGrp.setAttribute("id", `legend-node-group-${paramId}`);
       safeSetProperty(nodeGrp, "--node-color", `hsl(${hue}, 85%, 62%)`);
 
       if (isLight) {
@@ -652,62 +692,51 @@ function initChart() {
         safeSetProperty(nodeGrp, "--node-text-color-active", `hsl(${hue}, 95%, 85%)`);
       }
 
-      nodeGrp.addEventListener("click", () => {
-        selectParameter(paramId);
-      });
-
-      // Badge circle
-      const nodeBadge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      nodeBadge.setAttribute("cx", xNode);
-      nodeBadge.setAttribute("cy", yNode);
-      nodeBadge.setAttribute("r", "12");
-      nodeBadge.setAttribute("class", "legend-node-badge");
-      nodeBadge.setAttribute("id", `legend-node-badge-${paramId}`);
-      if (paramId === activeParamId) {
-        nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
-        nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
-      }
-      nodeGrp.appendChild(nodeBadge);
-
-      // Badge text number
-      const nodeBadgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      nodeBadgeText.setAttribute("x", xNode);
-      nodeBadgeText.setAttribute("y", yNode + 0.5);
-      nodeBadgeText.setAttribute("class", "legend-node-badge-text");
-      nodeBadgeText.setAttribute("id", `legend-node-badge-text-${paramId}`);
-      nodeBadgeText.textContent = paramId;
-      nodeGrp.appendChild(nodeBadgeText);
-
-      // Flanking Node text label name
-      const nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      nodeText.setAttribute("y", yNode);
-      nodeText.setAttribute("class", "legend-node-text");
-      nodeText.setAttribute("id", `legend-node-text-${paramId}`);
-
-      if (isLeft) {
-        nodeText.setAttribute("x", xNode - 22);
-        nodeText.setAttribute("text-anchor", "end");
-      } else {
-        nodeText.setAttribute("x", xNode + 22);
-        nodeText.setAttribute("text-anchor", "start");
-      }
-
-      // Draw multi-line vertical centered wrapped labels
-      node.lines.forEach((line, lineIdx) => {
-        const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-        tspan.textContent = line;
-        tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
-        if (lineIdx > 0) {
-          tspan.setAttribute("dy", "1.25em");
-        } else {
-          const totalOffset = -((node.lines.length - 1) * 15) / 2;
-          tspan.setAttribute("dy", `${totalOffset}px`);
+      // Update positions
+      if (nodeBadge) {
+        nodeBadge.setAttribute("cx", xNode);
+        nodeBadge.setAttribute("cy", yNode);
+        if (nodeBadge.style) {
+          if (paramId === activeParamId) {
+            nodeBadge.style.fill = `hsl(${hue}, 85%, 62%)`;
+            nodeBadge.style.stroke = `hsl(${hue}, 85%, 62%)`;
+          } else {
+            nodeBadge.style.fill = "";
+            nodeBadge.style.stroke = "";
+          }
         }
-        nodeText.appendChild(tspan);
-      });
+      }
 
-      nodeGrp.appendChild(nodeText);
-      legendGroup.appendChild(nodeGrp);
+      if (nodeBadgeText) {
+        nodeBadgeText.setAttribute("x", xNode);
+        nodeBadgeText.setAttribute("y", yNode + 0.5);
+      }
+
+      if (nodeText) {
+        nodeText.setAttribute("y", yNode);
+        if (isLeft) {
+          nodeText.setAttribute("x", xNode - 22);
+          nodeText.setAttribute("text-anchor", "end");
+        } else {
+          nodeText.setAttribute("x", xNode + 22);
+          nodeText.setAttribute("text-anchor", "start");
+        }
+
+        // Rebuild tspans cleanly
+        nodeText.innerHTML = "";
+        node.lines.forEach((line, lineIdx) => {
+          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan.textContent = line;
+          tspan.setAttribute("x", isLeft ? xNode - 22 : xNode + 22);
+          if (lineIdx > 0) {
+            tspan.setAttribute("dy", "1.25em");
+          } else {
+            const totalOffset = -((node.lines.length - 1) * 15) / 2;
+            tspan.setAttribute("dy", `${totalOffset}px`);
+          }
+          nodeText.appendChild(tspan);
+        });
+      }
     });
   }
 
