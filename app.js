@@ -120,13 +120,25 @@ function adjustZoom(delta) {
 }
 
 function syncThemeColorMeta() {
+  if (typeof document.createElement !== "function") return;
+  
   const isDark = document.body.classList.contains("dark-mode");
   const color = isDark ? "#151121" : "#faf7f2";
-  const metaTags = document.querySelectorAll('meta[name="theme-color"]');
-  if (metaTags.length > 0) {
-    metaTags.forEach(meta => {
-      meta.setAttribute("content", color);
+  
+  // Remove any existing theme-color meta tags
+  const existingMeta = document.querySelectorAll('meta[name="theme-color"]');
+  if (existingMeta && typeof existingMeta.forEach === "function") {
+    existingMeta.forEach(meta => {
+      if (meta && typeof meta.remove === "function") meta.remove();
     });
+  }
+  
+  // Re-create meta-theme-color tag to force repainting on iOS/Android system status & navigation bars!
+  const newMeta = document.createElement("meta");
+  newMeta.setAttribute("name", "theme-color");
+  newMeta.setAttribute("content", color);
+  if (document.head && typeof document.head.appendChild === "function") {
+    document.head.appendChild(newMeta);
   }
 }
 
@@ -506,8 +518,8 @@ function initChart() {
       lines.forEach(l => { if (l.length > maxCharLen) maxCharLen = l.length; });
 
       // Approximate dynamic text bounding box relative to zoomFactor
-      const approxWidth = maxCharLen * 6.5 * zoomFactor + 30; // slightly wider bounding box for safety
-      const approxHeight = lines.length * 14 * zoomFactor + 12;
+      const approxWidth = maxCharLen * 8.0 * zoomFactor + 35; // wider safety margins to prevent horizontal overflow
+      const approxHeight = lines.length * 18.5 * zoomFactor + 16; // increased multiplier (18.5 instead of 14) to match actual responsive clamped font size perfectly!
 
       nodes.push({
         id: paramId,
@@ -530,11 +542,14 @@ function initChart() {
     const iterations = 95;
 
     for (let iter = 0; iter < iterations; iter++) {
-      // 1. Attraction force to ideal orbit
-      for (let j = 0; j < nodes.length; j++) {
-        const node = nodes[j];
-        node.x += (node.idealX - node.x) * 0.15;
-        node.y += (node.idealY - node.y) * 0.15;
+      // 1. Attraction force to ideal orbit (turned off in final 20 iterations for absolute overlap resolution)
+      const applyAttraction = iter < (iterations - 20);
+      if (applyAttraction) {
+        for (let j = 0; j < nodes.length; j++) {
+          const node = nodes[j];
+          node.x += (node.idealX - node.x) * 0.15;
+          node.y += (node.idealY - node.y) * 0.15;
+        }
       }
 
       // 2. Central wheel circle collision avoidance

@@ -2183,6 +2183,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
     width: 100% !important;
     max-width: 100% !important;
     background-color: var(--bg-primary) !important;
+    display: block !important; /* override global flex layout to start exactly at the top of the viewport and flow naturally */
   }
   .app-container {
     grid-template-columns: 1fr !important;
