@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.4
 // Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -13,11 +13,11 @@ function updateLayoutConstants() {
   if (typeof window !== "undefined" && window.innerWidth < 1200) {
     CENTER_X = 475;
     CENTER_Y = 550;
-    MAX_RADIUS = Math.max(220, Math.min(350, Math.round(350 - (zoomFactor - 1.0) * 80)));
+    MAX_RADIUS = 310; /* Fixed large stable mobile radius */
   } else {
     CENTER_X = 475;
     CENTER_Y = 300;
-    MAX_RADIUS = Math.max(140, Math.min(220, Math.round(220 - (zoomFactor - 1.0) * 55)));
+    MAX_RADIUS = 205; /* Fixed large stable desktop radius */
   }
 }
 
@@ -436,35 +436,37 @@ function initChart() {
       let isLeft = false;
 
       if (isMobile) {
-        // Dynamic mobile butterfly wing layout relative to MAX_RADIUS and zoomFactor!
-        const R_x = MAX_RADIUS + 50 + (zoomFactor - 1.0) * 10;
-        const R_y = MAX_RADIUS + 170 - (zoomFactor - 1.0) * 20;
+        // Mobile butterfly wing curved layout (fixed circle, dynamic ellipse radii)
+        const R_x = (MAX_RADIUS + 75) - (zoomFactor - 1.5) * 110;
+        const R_y = MAX_RADIUS + 185 - (zoomFactor - 1.5) * 35;
         if (paramId >= 11 && paramId <= 20) {
           const slotIndex = 20 - paramId;
-          const nodeAngle = Math.PI + 1.2 - (slotIndex / 9) * 2.4;
+          const nodeAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
           xNode = CENTER_X + R_x * Math.cos(nodeAngle);
           yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
           isLeft = true;
         } else {
           const slotIndex = paramId - 1;
-          const nodeAngle = -1.2 + (slotIndex / 9) * 2.4;
+          const nodeAngle = -1.25 + (slotIndex / 9) * 2.5;
           xNode = CENTER_X + R_x * Math.cos(nodeAngle);
           yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
           isLeft = false;
         }
       } else {
-        // Desktop dynamic flanking columns: positioned relative to dynamically-scaled MAX_RADIUS!
-        const defaultY = 50 + (paramId >= 11 && paramId <= 20 ? 20 - paramId : paramId - 1) * 55;
-        yNode = defaultY;
-        const distFromCenterY = Math.abs(defaultY - 300);
-        // Add curve bowing to prevent columns looking like stiff straight lines
-        const curveOffset = Math.pow(distFromCenterY / 250, 2) * 55;
-        
+        // Desktop concentric curved layout wrapping around the circle (fixed circle, dynamic ellipse radii)
+        const R_x = (MAX_RADIUS + 110) - (zoomFactor - 1.0) * 85;
+        const R_y = MAX_RADIUS + 45;
         if (paramId >= 11 && paramId <= 20) {
-          xNode = CENTER_X - (MAX_RADIUS + 45 + (zoomFactor - 1.0) * 15) + curveOffset;
+          const slotIndex = 20 - paramId;
+          const nodeAngle = Math.PI + 1.25 - (slotIndex / 9) * 2.5;
+          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
+          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
           isLeft = true;
         } else {
-          xNode = CENTER_X + (MAX_RADIUS + 45 + (zoomFactor - 1.0) * 15) - curveOffset;
+          const slotIndex = paramId - 1;
+          const nodeAngle = -1.25 + (slotIndex / 9) * 2.5;
+          xNode = CENTER_X + R_x * Math.cos(nodeAngle);
+          yNode = CENTER_Y + R_y * Math.sin(nodeAngle);
           isLeft = false;
         }
       }
