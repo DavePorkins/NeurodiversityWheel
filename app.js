@@ -1,5 +1,5 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.4
-// Implements 2-column layout flanking legend nodes inside SVG, smooth fluid neural animations (Wabern) under animation toggles, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.7
+// Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
 let CENTER_X = 475;
