@@ -39,8 +39,8 @@ let activeProfiles = {
   user: true,
   nt: true,
   adhd: true,
-  ass: true,
-  audhd: false
+  asd: true,
+  audhd: true
 };
 
 let activeParamId = 1;
@@ -54,7 +54,7 @@ let animationFrameId = null;
 
 // Speech Synthesis & Standalone Player state
 let speechRate = parseFloat(localStorage.getItem("mapping_neurodiversity_speech_rate")) || 1.0;
-let currentSpeechKey = null; // 'main', 'nt', 'adhd', 'ass', 'audhd'
+let currentSpeechKey = null; // 'main', 'nt', 'adhd', 'asd', 'audhd'
 let currentSpeakingText = ""; // Holds the exact string currently loaded in TTS
 let isSpeechPaused = false;
 let currentUtterance = null; // Global utterance reference to prevent Chrome garbage collection crash
@@ -587,8 +587,9 @@ function initChart() {
           const overlapsY = rectA.top < rectB.bottom && rectA.bottom > rectB.top;
 
           if (overlapsX && overlapsY) {
-            // Push vertically apart
-            const overlapY = Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.top, rectB.top);
+            // Push vertically apart with a dynamic minimum safe padding to prevent adjacent overlapping
+            const minPadding = 8 * zoomFactor;
+            const overlapY = Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.top, rectB.top) + minPadding;
             
             let dirY = 0;
             if (nodeA.y < nodeB.y) {
@@ -718,7 +719,14 @@ function drawOverlays() {
     return scores;
   }
 
-  // Overlays rendered as wider neon outlines on top
+  // Draw user's own profile polygon outline and experimental zart fill
+  if (activeProfiles.user) {
+    const userPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    userPath.setAttribute("d", getPolygonPath(userRatings));
+    userPath.setAttribute("class", "polygon-overlay user");
+    overlayGroup.appendChild(userPath);
+  }
+
   if (activeProfiles.nt) {
     const ntPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
     ntPath.setAttribute("d", getPolygonPath(getReferenceScores("nt")));
@@ -733,11 +741,11 @@ function drawOverlays() {
     overlayGroup.appendChild(adhdPath);
   }
 
-  if (activeProfiles.ass) {
-    const assPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    assPath.setAttribute("d", getPolygonPath(getReferenceScores("ass")));
-    assPath.setAttribute("class", "polygon-overlay ass");
-    overlayGroup.appendChild(assPath);
+  if (activeProfiles.asd) {
+    const asdPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    asdPath.setAttribute("d", getPolygonPath(getReferenceScores("asd")));
+    asdPath.setAttribute("class", "polygon-overlay asd");
+    overlayGroup.appendChild(asdPath);
   }
 
   if (activeProfiles.audhd) {
@@ -965,6 +973,11 @@ function updateSidebar(paramId) {
   document.getElementById("detail-name-de").textContent = data.nameDE;
   document.getElementById("detail-name-en").textContent = data.nameEN;
   document.getElementById("detail-definition").textContent = data.definition;
+  
+  const scenarioEl = document.getElementById("detail-scenario");
+  if (scenarioEl) {
+    scenarioEl.textContent = data.scenario || "";
+  }
 
   const score = userRatings[paramId] || 1;
   document.getElementById("user-score-slider").value = score;
@@ -980,18 +993,16 @@ function updateSidebar(paramId) {
   const hue = (paramId - 1) * (360 / TOTAL_AXES);
   safeSetProperty(document.documentElement, "--param-color", `hsl(${hue}, 78%, 62%)`);
 
-
-
   document.getElementById("detail-deep-dive").textContent = data.deepDive;
 
   document.getElementById("quote-nt").textContent = `„${data.voices.nt}“`;
   document.getElementById("quote-adhd").textContent = `„${data.voices.adhd}“`;
-  document.getElementById("quote-ass").textContent = `„${data.voices.ass}“`;
+  document.getElementById("quote-asd").textContent = `„${data.voices.asd}“`;
   document.getElementById("quote-audhd").textContent = `„${data.voices.audhd}“`;
 
   document.getElementById("badge-nt-score").textContent = data.ratings.nt;
   document.getElementById("badge-adhd-score").textContent = data.ratings.adhd;
-  document.getElementById("badge-ass-score").textContent = data.ratings.ass;
+  document.getElementById("badge-asd-score").textContent = data.ratings.asd;
   document.getElementById("badge-audhd-score").textContent = data.ratings.audhd;
 
   // Sync scroll positioning
@@ -1270,15 +1281,31 @@ function resetAllPlayerContainers() {
       </button>
     `;
   }
+
+  // 11.2 Deep Dive Player Default Button
+  const deepdiveWrapper = document.getElementById("deepdive-tts-wrapper");
+  if (deepdiveWrapper) {
+    deepdiveWrapper.innerHTML = `
+      <button class="voice-speak-btn compact-btn" onclick="toggleDeepDiveSpeech()" title="Deep Dive vorlesen lassen">
+        <i class="fa-solid fa-circle-play"></i>
+      </button>
+      <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('main', 'deepdive')" title="Feedback zum Gehirn-Deep-Dive">
+        <i class="fa-solid fa-comment-medical"></i>
+      </button>
+    `;
+  }
   
-  // 11.2 Individual Voice Default Buttons
-  const keys = ['nt', 'adhd', 'ass', 'audhd'];
+  // 11.3 Individual Voice Default Buttons
+  const keys = ['nt', 'adhd', 'asd', 'audhd'];
   keys.forEach(k => {
     const wrapper = document.getElementById(`voice-tts-wrapper-${k}`);
     if (wrapper) {
       wrapper.innerHTML = `
         <button class="voice-speak-btn" onclick="toggleVoiceSpeech('${k}')" title="Diese Stimme vorlesen lassen">
           <i class="fa-solid fa-circle-play"></i>
+        </button>
+        <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('${k}', 'voice')" title="Feedback zu dieser Stimme">
+          <i class="fa-solid fa-comment-medical"></i>
         </button>
       `;
     }
@@ -1293,16 +1320,18 @@ function resetAllPlayerContainers() {
 // Draw the compact, transforming buttons inside the active player
 function updateActivePlayerUI() {
   if (!currentSpeechKey) return;
-  const wrapperId = currentSpeechKey === "main" ? "main-tts-wrapper" : `voice-tts-wrapper-${currentSpeechKey}`;
+  const wrapperId = currentSpeechKey === "main" ? "main-tts-wrapper" : 
+                    (currentSpeechKey === "deepdive" ? "deepdive-tts-wrapper" : `voice-tts-wrapper-${currentSpeechKey}`);
   const wrapper = document.getElementById(wrapperId);
   if (!wrapper) return;
   
   const isVoice = currentSpeechKey !== "main";
+  const isDeepDive = currentSpeechKey === "deepdive";
   const activePauseClass = isSpeechPaused ? "active" : "";
   const pauseIcon = isSpeechPaused ? "fa-play" : "fa-pause";
   const pauseTitle = isSpeechPaused ? "Weiter" : "Pause";
   
-  if (!isVoice) {
+  if (!isVoice && !isDeepDive) {
     wrapper.innerHTML = `
       <div class="tts-compact-controls">
         <button class="tts-sub-btn pause-btn ${activePauseClass}" onclick="toggleSpeechPause()" title="${pauseTitle}">
@@ -1689,7 +1718,6 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
       nodeText.setAttribute("text-anchor", "start");
     }
 
-    // Rebuild tspans cleanly
     nodeText.innerHTML = "";
     node.lines.forEach((line, lineIdx) => {
       const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
@@ -1705,3 +1733,195 @@ function renderSingleNodeDOM(node, xNode, yNode, xCircle, yCircle) {
     });
   }
 }
+
+// --- 15. GEHIRN-DEEP-DIVE TTS PLAYER CONTROLLER ---
+function toggleDeepDiveSpeech() {
+  const data = palaceData.find(p => p.id === activeParamId);
+  if (!data) return;
+
+  const text = data.deepDive;
+  const wrapperId = "deepdive-tts-wrapper";
+
+  if (currentSpeechKey === "deepdive") {
+    toggleSpeechPause();
+  } else {
+    stopAllSpeech(true);
+    currentSpeakingText = text;
+    currentSpeechKey = "deepdive";
+    speakUtterance(text, wrapperId, "deepdive");
+  }
+}
+
+// --- 16. SEGMENT-SPECIFIC INLINE FEEDBACK DATABASE SYSTEM ---
+let currentFeedbackContext = null;
+
+function openSegmentFeedback(typeKey, segmentKey) {
+  const data = palaceData.find(p => p.id === activeParamId);
+  if (!data) return;
+
+  let segmentName = "";
+  let originalText = "";
+
+  if (segmentKey === "definition") {
+    segmentName = "Definition / Begriffskatalog";
+    originalText = data.definition;
+  } else if (segmentKey === "deepdive") {
+    segmentName = "Gehirn-Deep-Dive (Das passiert im Gehirn)";
+    originalText = data.deepDive;
+  } else if (segmentKey === "voice") {
+    const voiceNames = {
+      nt: "Neurotypische Stimme (NT)",
+      adhd: "ADHS-Stimme",
+      asd: "Autistische Stimme (ASD)",
+      audhd: "AuDHD-Dilemma Stimme"
+    };
+    segmentName = voiceNames[typeKey] || "Stimme";
+    originalText = data.voices[typeKey] || "";
+  }
+
+  currentFeedbackContext = {
+    paramId: data.id,
+    paramName: `${data.nameDE} (${data.nameEN})`,
+    segmentKey: segmentKey,
+    typeKey: typeKey,
+    segmentName: segmentName,
+    originalText: originalText
+  };
+
+  // Pre-fill elements in modal
+  document.getElementById("fb-parameter-name").textContent = currentFeedbackContext.paramName;
+  document.getElementById("fb-segment-name").textContent = currentFeedbackContext.segmentName;
+  document.getElementById("fb-original-text").textContent = `„${originalText}“`;
+  document.getElementById("fb-message").value = "";
+  document.getElementById("fb-category").value = "Korrektur";
+
+  // Open feedback modal
+  document.getElementById("feedback-modal").classList.add("active");
+  triggerChime(523.25, "sine", 0.08, 0.25);
+  
+  // Pause any active speech to focus on feedback
+  if ("speechSynthesis" in window && window.speechSynthesis.speaking && !isSpeechPaused) {
+    window.speechSynthesis.pause();
+    isSpeechPaused = true;
+    updateActivePlayerUI();
+  }
+}
+
+function closeFeedbackModal() {
+  document.getElementById("feedback-modal").classList.remove("active");
+  triggerChime(392, "sine", 0.04, 0.2);
+  currentFeedbackContext = null;
+}
+
+function saveSegmentFeedback() {
+  if (!currentFeedbackContext) return;
+
+  const msg = document.getElementById("fb-message").value.trim();
+  if (!msg) {
+    triggerChime(220, "sawtooth", 0.1, 0.3);
+    alert("Bitte gib einen Vorschlag oder eine Kritik ein.");
+    return;
+  }
+
+  const category = document.getElementById("fb-category").value;
+  const feedbackEntry = {
+    timestamp: new Date().toISOString(),
+    paramId: currentFeedbackContext.paramId,
+    paramName: currentFeedbackContext.paramName,
+    segmentKey: currentFeedbackContext.segmentKey,
+    typeKey: currentFeedbackContext.typeKey,
+    segmentName: currentFeedbackContext.segmentName,
+    originalText: currentFeedbackContext.originalText,
+    category: category,
+    message: msg
+  };
+
+  // Load existing feedbacks
+  let feedbacks = [];
+  try {
+    feedbacks = JSON.parse(localStorage.getItem("mapping_neurodiversity_feedbacks")) || [];
+  } catch(e) {
+    feedbacks = [];
+  }
+
+  feedbacks.push(feedbackEntry);
+  localStorage.setItem("mapping_neurodiversity_feedbacks", JSON.stringify(feedbacks));
+
+  // Success chime and close
+  triggerChime(880, "sine", 0.06, 0.35);
+  setTimeout(() => triggerChime(1318.5, "sine", 0.06, 0.45), 80);
+  
+  alert("Vielen Dank! Dein Feedback wurde lokal gespeichert. Du kannst deine gesammelten Feedbacks jederzeit im 'Infos'-Menü als Markdown exportieren!");
+  closeFeedbackModal();
+}
+
+function updateFeedbackButtonsVisibility() {
+  let feedbacks = [];
+  try {
+    feedbacks = JSON.parse(localStorage.getItem("mapping_neurodiversity_feedbacks")) || [];
+  } catch(e) {
+    feedbacks = [];
+  }
+
+  const exportBtn = document.getElementById("btn-export-feedback");
+  const clearBtn = document.getElementById("btn-clear-feedback");
+  
+  if (feedbacks.length > 0) {
+    if (exportBtn) exportBtn.style.display = "inline-flex";
+    if (clearBtn) clearBtn.style.display = "inline-flex";
+  } else {
+    if (exportBtn) exportBtn.style.display = "none";
+    if (clearBtn) clearBtn.style.display = "none";
+  }
+}
+
+function exportFeedbacksToMarkdown() {
+  let feedbacks = [];
+  try {
+    feedbacks = JSON.parse(localStorage.getItem("mapping_neurodiversity_feedbacks")) || [];
+  } catch(e) {
+    feedbacks = [];
+  }
+
+  if (feedbacks.length === 0) {
+    alert("Es gibt noch kein gespeichertes Feedback.");
+    return;
+  }
+
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.3)\n`;
+  md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
+  md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
+  md += `---\n\n`;
+
+  feedbacks.forEach((f, idx) => {
+    md += `### 📌 Eintrag ${idx + 1}: ${f.paramName}\n`;
+    md += `* **Kategorie**: ${f.category}\n`;
+    md += `* **Abschnitt**: ${f.segmentName} (Schlüssel: \`${f.segmentKey}\` / Stimme: \`${f.typeKey || 'keine'}\`)\n`;
+    md += `* **Originaler Text**:\n  > ${f.originalText}\n`;
+    md += `* **Kritik / Eigene Formulierung**:\n  **> ${f.message}**\n\n`;
+    md += `---\n\n`;
+  });
+
+  // Trigger file download
+  const blob = new Blob([md], { type: "text/markdown;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", `neurodiversity_feedback_export_${new Date().toISOString().slice(0,10)}.md`);
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  triggerChime(987.77, "sine", 0.05, 0.4);
+}
+
+function clearFeedbacks() {
+  if (confirm("Möchtest du alle lokal gesammelten Feedbacks wirklich unwiderruflich löschen?")) {
+    localStorage.removeItem("mapping_neurodiversity_feedbacks");
+    updateFeedbackButtonsVisibility();
+    triggerChime(329.63, "sine", 0.06, 0.3);
+    alert("Feedback-Speicher erfolgreich geleert!");
+  }
+}
+
