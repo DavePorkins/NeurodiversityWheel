@@ -81,7 +81,7 @@ body.drawer-open {
   -webkit-tap-highlight-color: transparent;
 }
 
-button:focus, path:focus, g:focus, svg:focus {
+button:focus, path:focus, g:focus, svg:focus, text:focus, a:focus, div:focus {
   outline: none !important;
 }
 
@@ -584,49 +584,50 @@ body.light-mode .profile-toggle:hover {
 /* Beautiful custom active styles per profile */
 /* --- 🌈 PREMIUM RAINBOW ANIMATED MY SPECTRUM BUTTON --- */
 @keyframes rainbow-shift {
-  0% { filter: hue-rotate(0deg) saturate(1.15); }
-  100% { filter: hue-rotate(360deg) saturate(1.15); }
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
 #toggle-user.active {
   position: relative;
   background: linear-gradient(90deg, #ff9aa2, #ffdac1, #b5ead7, #c7ceea, #ff9aa2);
+  background-size: 200% auto;
   color: #151121 !important;
-  border: 1px solid transparent !important;
+  border: none !important;
   font-weight: 700;
   box-shadow: 0 0 12px rgba(255, 154, 162, 0.45);
-  transition: filter 0.4s ease;
+  transition: background-position 0.4s ease;
 }
 body.animations-enabled #toggle-user.active {
-  animation: rainbow-shift 12s linear infinite !important;
+  animation: rainbow-shift 6s linear infinite !important;
 }
 
 body.light-mode #toggle-user.active {
   background: linear-gradient(90deg, #ffb3ba, #ffffba, #bae1ff, #ffb3ba);
+  background-size: 200% auto;
   color: #2d263d !important;
-  border: 1px solid transparent !important;
+  border: none !important;
   font-weight: 700;
   box-shadow: 0 0 10px rgba(255, 179, 186, 0.4);
 }
 body.animations-enabled.light-mode #toggle-user.active {
-  animation: rainbow-shift 12s linear infinite !important;
+  animation: rainbow-shift 6s linear infinite !important;
 }
 
 body.dark-mode #toggle-user.active {
-  background: #1a1629;
-  color: #faf8fc !important;
-  border: 1px solid transparent !important;
-  background-image: linear-gradient(#1a1629, #1a1629), linear-gradient(90deg, #ff7675, #fdcb6e, #55efc4, #0984e3, #ff7675);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  box-shadow: 0 0 10px rgba(162, 155, 254, 0.3);
+  background: linear-gradient(90deg, #ff7675, #fdcb6e, #55efc4, #0984e3, #ff7675);
+  background-size: 200% auto;
+  color: #151121 !important;
+  border: none !important;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(162, 155, 254, 0.45);
 }
 body.animations-enabled.dark-mode #toggle-user.active {
-  animation: rainbow-shift 12s linear infinite !important;
+  animation: rainbow-shift 6s linear infinite !important;
 }
 
 body.dark-mode #toggle-user.active .user-dot {
-  background: var(--color-user) !important;
+  background: #151121 !important; /* dark dot on dark mode active state for perfect contrast */
 }
 
 .profile-toggle.active.nt-btn {
@@ -643,10 +644,10 @@ body.dark-mode #toggle-user.active .user-dot {
   box-shadow: 0 0 10px rgba(192, 132, 252, 0.25);
 }
 
-.profile-toggle.active.ass-btn {
+.profile-toggle.active.asd-btn {
   background: rgba(56, 189, 248, 0.1);
-  border-color: var(--color-ass);
-  color: var(--color-ass);
+  border-color: var(--color-asd);
+  color: var(--color-asd);
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
 }
 
@@ -2587,26 +2588,91 @@ body.light-mode .feedback-input {
 
 /* 3D Wedge Edge Glow & Scale on Hover */
 .wedge-active {
-  transition: transform 0.25s ease, filter 0.25s ease;
+  transition: filter 0.25s ease;
   cursor: pointer;
 }
 
 .wedge-active:hover {
-  transform: scale(1.025);
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45)) !important;
 }
 
 /* Premium selected / hover text enhancements */
 .legend-node-group {
   cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
 .legend-node-group:hover {
-  transform: scale(1.03);
+  /* Keep perfectly in place as per user feedback */
 }
 
 .legend-node-group.active .legend-node-text {
   font-weight: 600 !important;
   text-shadow: 0 0 8px var(--color-user);
+}
+
+/* --- 📝 PREMIUM DESIGNED ACTION BUTTONS & HIGH CONTRAST LIGHT MODE FOR FEEDBACK --- */
+body.light-mode .context-text-preview {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #1a1625 !important;
+  border-left-color: var(--color-user) !important;
+  font-weight: 500;
+}
+
+body.light-mode .feedback-input {
+  background: #ffffff !important;
+  border: 1.5px solid #ccc0db !important;
+  color: #1a1625 !important;
+}
+
+body.light-mode .feedback-input:focus {
+  border-color: var(--color-user) !important;
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.3) !important;
+}
+
+body.light-mode .context-item span {
+  color: #1a1625 !important;
+  font-weight: 600;
+}
+
+/* Redesigned Premium Abbrechen & Speichern Modal Buttons */
+.modal-footer .modal-close-action-btn.primary-btn {
+  background: var(--color-user) !important;
+  color: #151121 !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  border: none !important;
+  padding: 0.55rem 1.4rem !important;
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.25) !important;
+  cursor: pointer !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+.modal-footer .modal-close-action-btn.primary-btn:hover {
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 0 15px rgba(45, 212, 191, 0.45) !important;
+}
+
+.modal-footer .modal-close-action-btn.secondary-btn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: var(--text-secondary) !important;
+  border-radius: 8px !important;
+  padding: 0.55rem 1.4rem !important;
+  cursor: pointer !important;
+  transition: background 0.2s, transform 0.2s !important;
+}
+
+.modal-footer .modal-close-action-btn.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  transform: translateY(-1.5px) !important;
+}
+
+body.light-mode .modal-footer .modal-close-action-btn.secondary-btn {
+  background: #f0ebf5 !important;
+  border-color: #d1c8de !important;
+  color: #4a3e61 !important;
+}
+
+body.light-mode .modal-footer .modal-close-action-btn.secondary-btn:hover {
+  background: #e5ddecf2 !important;
 }

@@ -485,7 +485,7 @@ function initChart() {
       }
 
       const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 165;
-      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 50;
+      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 125;
 
       const idealX = CENTER_X + R_x_ideal * Math.cos(idealAngle);
       const idealY = CENTER_Y + R_y_ideal * Math.sin(idealAngle);
@@ -496,7 +496,7 @@ function initChart() {
         3: ["Schwierigkeiten mit", "sozialen Signalen"],
         4: ["Suche nach", "Gleichförmigkeit"],
         5: ["Aufgaben-", "Paralyse"],
-        6: ["Objektpermanenz"],
+        6: ["Objekt-", "permanenz"],
         7: ["Impulsivität"],
         8: ["Zeitblindheit"],
         9: ["Dopamin-", "Suche"],
@@ -719,13 +719,7 @@ function drawOverlays() {
     return scores;
   }
 
-  // Draw user's own profile polygon outline and experimental zart fill
-  if (activeProfiles.user) {
-    const userPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    userPath.setAttribute("d", getPolygonPath(userRatings));
-    userPath.setAttribute("class", "polygon-overlay user");
-    overlayGroup.appendChild(userPath);
-  }
+  // Do not draw user's own profile polygon outline (only comparison profile overlays NT, ADHD, ASD, AuDHD)
 
   if (activeProfiles.nt) {
     const ntPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -1090,6 +1084,7 @@ function openNotesModal() {
   document.getElementById("notes-modal").classList.add("active");
   triggerChime(523.25, "sine", 0.08, 0.35);
   syncViewportLock();
+  updateFeedbackButtonsVisibility();
 }
 
 function closeNotesModal() {

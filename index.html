@@ -133,11 +133,12 @@
 
             <!-- Dynamic SVG Cake Slices Grid & Wedges drawn by JS -->
             <g id="wedges-background-group"></g>
+            
+            <!-- Comparison fluid polygon overlays drawn in background -->
+            <g id="polygon-overlays-group"></g>
+
             <g id="wedges-active-group"></g>
             <g id="wedges-labels-group"></g>
-            
-            <!-- Comparison fluid polygon overlays drawn on top -->
-            <g id="polygon-overlays-group"></g>
             
             <!-- Outer rings and decorative border centered at cx=475, cy=550, radius=225 (mobile defaults) -->
             <circle id="chart-boundary-ring" cx="475" cy="550" r="225" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" class="chart-boundary-ring"></circle>
@@ -163,7 +164,7 @@
             <button id="toggle-asd" class="profile-toggle active asd-btn" onclick="toggleProfile('asd')" title="Autismus Spektrum umschalten">
               <span class="color-dot asd-dot"></span> ASD
             </button>
-            <button id="toggle-audhd" class="profile-toggle audhd-btn" onclick="toggleProfile('audhd')" title="AuDHD Misch-Spektrum umschalten">
+            <button id="toggle-audhd" class="profile-toggle active audhd-btn" onclick="toggleProfile('audhd')" title="AuDHD Misch-Spektrum umschalten">
               <span class="color-dot audhd-dot"></span> AuDHD
             </button>
           </div>
@@ -433,8 +434,11 @@
         <button class="close-btn" onclick="closeFeedbackModal()" aria-label="Schließen"><i class="fa-solid fa-xmark"></i></button>
       </header>
       <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.8rem;">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.6rem;">
           Dein Feedback wird direkt auf diesen spezifischen Textabschnitt bezogen. Dies erleichtert es Savannah Denny bzw. der KI später, deine Korrekturen punktgenau einzuarbeiten.
+        </p>
+        <p class="feedback-hint-note" style="font-size: 0.8rem; color: var(--color-user); margin-bottom: 0.9rem; opacity: 0.85; line-height: 1.3;">
+          <i class="fa-solid fa-circle-info"></i> <strong>Hinweis:</strong> Speichern legt dein Feedback lokal in deinem Browser ab. Du kannst deine gesammelten Korrekturen am Ende jederzeit im "Infos"-Menü (oben rechts) gesammelt als Markdown-Datei exportieren.
         </p>
         
         <div class="feedback-context-box">
