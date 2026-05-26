@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" id="meta-theme-color" content="#151121">
-  <title>Mapping Neurodiversity 🌸 v3.1.7</title>
+  <title>Mapping Neurodiversity 🌸 v3.2.0</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=3.1.7">
+  <link rel="stylesheet" href="style.css?v=3.2.0">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -50,7 +50,7 @@
               <div>
                 <div class="logo-title-row">
                   <h1>Mapping Neurodiversity</h1>
-                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v3.1.7</span>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v3.2.0</span>
                 </div>
                 <p class="subtitle">Das 20-Parameter-Kreisdiagramm nach Savannah Denny</p>
               </div>
@@ -403,7 +403,7 @@
           </li>
           <li>
             <strong>Subjektive Lived Experiences:</strong> 
-            Die Monologe der 4 Stimmen sind aus echten Erfahrungsberichten destilliert, erheben aber keinen Anspruch auf Allgemeingültigkeit.
+            Die Monologe der 4 Stimmen dienen der Veranschaulichung verschiedener Perspektiven und erheben keinen Anspruch auf Allgemeingültigkeit.
           </li>
         </ul>
         
@@ -412,7 +412,7 @@
           <p><strong>Inspiration & Urheberrecht:</strong> Das 20-Parameter-Kreisdiagramm basiert auf dem didaktischen Entwurfsmodell von <strong>Savannah Denny</strong> (Colour Me Neurospicy). Dieses Web-Tool wurde inspiriert durch die studentische Hochschulgruppe Flux am KIT, um Barrieren im Studienalltag abzubauen und den Peer-Austausch zu bereichern.</p>
         </div>
         
-        <p class="modal-disclaimer" style="margin-top: 1rem; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+        <p class="modal-disclaimer" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); opacity: 0.95; line-height: 1.45;">
           <strong>Hinweis zum Inhalt:</strong> Bitte beachte, dass alle beschreibenden Texte und Zitate auf dieser Webseite derzeit noch KI-generiert sind (subject to change). Sie werden fortlaufend verfeinert und überarbeitet – Feedback und Kritik sind daher jederzeit herzlich willkommen!
         </p>
       </div>
@@ -438,33 +438,27 @@
         <button class="close-btn" onclick="closeFeedbackModal()" aria-label="Schließen"><i class="fa-solid fa-xmark"></i></button>
       </header>
       <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.6rem;">
-          Schreib uns einfach kurz, was dir auffällt. Teile uns deine Gedanken mit!
-        </p>
-        <p class="feedback-hint-note" style="font-size: 0.8rem; color: var(--color-audhd); margin-bottom: 0.9rem; opacity: 0.9; line-height: 1.35; font-weight: 500;">
-          <i class="fa-solid fa-circle-info"></i> <strong>Tipp:</strong> Wenn du auf „Speichern“ klickst, wird dein Feedback lokal gemerkt. Du kannst sie dann am Ende in den Infos (oben rechts) gesammelt als Markdown herunterladen/exportieren und uns schicken! 🌸
-        </p>
-        
-        <div class="feedback-context-box">
-          <div class="context-item"><strong>Parameter:</strong> <span id="fb-parameter-name">-</span></div>
-          <div class="context-item"><strong>Bereich:</strong> <span id="fb-segment-name">-</span></div>
+        <!-- Direct context block at the top as requested -->
+        <div class="feedback-context-box" style="margin-bottom: 1.25rem;">
+          <div class="context-item" style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.35rem;"><strong>Parameter:</strong> <span id="fb-parameter-name" style="color: var(--text-primary); font-weight: 600;">-</span></div>
+          <div class="context-item" style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;"><strong>Bereich:</strong> <span id="fb-segment-name" style="color: var(--text-primary); font-weight: 600;">-</span></div>
           <div class="context-text-preview" id="fb-original-text">"Originaler Text..."</div>
         </div>
-
+        
         <div class="form-group" style="margin-top: 1rem;">
-          <label for="fb-message" style="display: block; font-weight: 500; font-size: 0.85rem; margin-bottom: 0.35rem;">Schreib uns, was du denkst oder was du sagen willst:</label>
-          <textarea id="fb-message" class="feedback-input feedback-textarea" placeholder="Was stört dich an dieser Formulierung? Wie würdest du es besser schreiben? Teile deine Gedanken mit uns..."></textarea>
+          <label for="fb-message" style="display: block; font-weight: 600; font-size: 0.88rem; color: var(--text-primary); margin-bottom: 0.45rem;">Deine Gedanken:</label>
+          <textarea id="fb-message" class="feedback-input feedback-textarea" placeholder="Vielen Dank für dein Feedback! 🌸" style="color: var(--text-primary) !important; font-size: 0.9rem !important;"></textarea>
         </div>
       </div>
-      <footer class="modal-footer">
-        <button class="modal-close-action-btn secondary-btn" onclick="closeFeedbackModal()" style="margin-right: 0.5rem;">Abbrechen</button>
+      <footer class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem;">
+        <button class="modal-close-action-btn secondary-btn" onclick="closeFeedbackModal()">Abbrechen</button>
         <button class="modal-close-action-btn primary-btn" onclick="saveSegmentFeedback()">Speichern</button>
       </footer>
     </div>
   </div>
 
   <!-- Scripts -->
-  <script src="palace_data.js?v=3.1.7"></script>
-  <script src="app.js?v=3.1.7"></script>
+  <script src="palace_data.js?v=3.2.0"></script>
+  <script src="app.js?v=3.2.0"></script>
 </body>
 </html>

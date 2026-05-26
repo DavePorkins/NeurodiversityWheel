@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.7 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.2.0 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -2567,20 +2567,21 @@ body.light-mode .feedback-context-box {
 }
 
 .context-text-preview {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  font-size: 0.85rem;
+  color: #e5e1ec !important; /* Highly readable near-white text */
   font-style: italic;
-  background: rgba(0, 0, 0, 0.15);
-  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.28) !important; /* Darker background for high contrast */
+  padding: 0.75rem 0.85rem !important;
   border-radius: 6px;
-  margin-top: 0.4rem;
-  max-height: 80px;
-  overflow-y: auto;
-  border-left: 3px solid var(--color-user);
+  margin-top: 0.5rem;
+  max-height: none !important; /* Fully visible, no scroll clipping! */
+  border-left: 3px solid var(--color-audhd) !important; /* Match warm pink/violet theme */
+  line-height: 1.45;
 }
 
 body.light-mode .context-text-preview {
-  background: rgba(0, 0, 0, 0.04);
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #1a1625 !important;
 }
 
 .feedback-input {
@@ -2773,4 +2774,38 @@ body.light-mode .feedback-input {
 body.light-mode .feedback-context-box {
   background: rgba(162, 155, 254, 0.04) !important;
   border-color: rgba(162, 155, 254, 0.12) !important;
+}
+
+/* --- 📝 Notes Modal Bullet Points Clean Formatting --- */
+.criticism-list {
+  padding-left: 1.35rem !important;
+  margin: 1rem 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.85rem !important;
+}
+
+.criticism-list li {
+  line-height: 1.55 !important;
+  font-size: 0.9rem !important;
+  color: var(--text-secondary) !important;
+}
+
+.criticism-list li strong {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* --- 🎚️ Range Slider Hit-Area and Responsiveness Improvements --- */
+input[type=range] {
+  padding: 10px 0 !important; /* Huge invisible vertical safety cushion area for easy clicking */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s !important;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.22) !important; /* Scale up slightly on hover for modern desktop response */
+  box-shadow: 0 0 16px var(--param-color, var(--color-user)) !important;
 }

@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.1.7
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.2.0
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -484,8 +484,8 @@ function initChart() {
         isLeft = false;
       }
 
-      const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 195;
-      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 55;
+      const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 175;
+      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 125;
 
       const idealX = CENTER_X + R_x_ideal * Math.cos(idealAngle);
       const idealY = CENTER_Y + R_y_ideal * Math.sin(idealAngle);
@@ -651,8 +651,8 @@ function initChart() {
             if (node.x < minX) node.x = minX;
             if (node.x > maxX) node.x = maxX;
           }
-          const minY = 35 + node.approxHeight / 2;
-          const maxY = 565 - node.approxHeight / 2;
+          const minY = 30 + node.approxHeight / 2;
+          const maxY = 570 - node.approxHeight / 2;
           if (node.y < minY) node.y = minY;
           if (node.y > maxY) node.y = maxY;
         }
@@ -1889,14 +1889,13 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.7)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.2.0)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
 
   feedbacks.forEach((f, idx) => {
     md += `### 📌 Eintrag ${idx + 1}: ${f.paramName}\n`;
-    md += `* **Kategorie**: ${f.category}\n`;
     md += `* **Abschnitt**: ${f.segmentName} (Schlüssel: \`${f.segmentKey}\` / Stimme: \`${f.typeKey || 'keine'}\`)\n`;
     md += `* **Originaler Text**:\n  > ${f.originalText}\n`;
     md += `* **Kritik / Eigene Formulierung**:\n  **> ${f.message}**\n\n`;
