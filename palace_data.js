@@ -1,5 +1,5 @@
-// Mapping Neurodiversity - Master Data Base v3.1.3
-// Credit: Savannah Denny (Colour Me Neurospicy) for the 20-parameter model.
+// Mapping Neurodiversity - Master Data Base v3.2.1
+// Credit: Savannah Denny (Colour Me Neurospicy) for the original 22-trait model. We adapted 22 parameters.
 // Tonalität: Neuroaffirmativ, einfühlsam und wissenschaftlich fundiert.
 
 const palaceData = [
@@ -9,12 +9,12 @@ const palaceData = [
     nameDE: "Akute Reizüberflutung",
     definition: "Der Zustand, in dem das sensorische Nervensystem mehr Inputs erhält, als es filtern, verarbeiten und abbauen kann.",
     scenario: "Du stehst mitten in einer überfüllten Mensa. Die Teller klappern, Stimmen hallen laut wider, Neonröhren surren und der Geruch von Essen liegt schwer in der Luft.",
-    deepDive: "Beim sensorischen Overload versagt der Thalamus – das 'Tor zum Bewusstsein' – als Reizfilter. Während ein neurotypisches Gehirn Hintergrundgeräusche, visuelle Reize und Körperempfindungen automatisch dämpft, dringen diese Signale bei neurodivergenten Menschen ungefiltert und mit gleicher Intensität in die Großhirnrinde ein. Im Hochschulalltag (z. B. im überfüllten KIT-Audimax oder in der Mensa) führt dies dazu, dass das Gehirn unter Dauerstress steht. Der Overload baut sich oft über Stunden unbemerkt auf und entlädt sich abrupt in Meltdowns (Ausbrüchen) oder Shutdowns (Erstarrung).",
+    deepDive: "Beim sensorischen Overload funktioniert die Reizfilterung im Thalamus – insbesondere über den thalamischen retikulären Nukleus (TRN) – weniger effektiv. Während ein neurotypisches Gehirn Hintergrundgeräusche, visuelle Reize und Körperempfindungen automatisch dämpft, dringen diese Signale bei neurodivergenten Menschen unzureichend gefiltert und mit annähernd gleicher Intensität in die Großhirnrinde ein. Im Hochschulalltag (z. B. im überfüllten KIT-Audimax oder in der Mensa) führt dies dazu, dass das Gehirn unter Dauerstress steht. Der Overload baut sich oft über Stunden unbemerkt auf und entlädt sich abrupt in Meltdowns (Ausbrüchen) oder Shutdowns (Erstarrung).",
     voices: {
-      nt: "Ich unterhalte mich einfach mit meinen Freunden und esse mein Schnitzel. Es ist zwar laut, aber mein Reizfilter arbeitet einwandfrei. Nach dem Essen bin ich vielleicht etwas müde, aber zu Hause trinke ich eine Tasse Tee und mein Akku ist sofort wieder voll.",
+      nt: "Ich unterhalte mich einfach mit meinen Freunden und esse mein Schnitzel. Es ist zwar laut, aber mein Reizfilter arbeitet einwandfrei. Nach dem Essen bin ich vielleicht etwas müde, aber zu Hause trinke ich eine Tasse Tee und bin ich bald wieder fit.",
       adhd: "Das Chaos lenkt mich extrem ab. Ich verliere ständig den Faden im Gespräch, schaue überall hin und spüre ein lautes inneres Rauschen. Gleichzeitig suche ich manchmal aktiv nach Stimulation, aber dieses ungeordnete Gewusel überfordert mich schnell und ich muss den Raum fluchtartig verlassen.",
       asd: "Das Surren der Neonröhren tut physisch weh. Ich kann die Stimmen meiner Freunde nicht mehr filtern – alles fließt in einen schmerzvollen Lärmteppich. Wenn ich jetzt meine Noise-Cancelling-Kopfhörer nicht aufsetze und die Augen schließe, bricht mein System komplett zusammen und schaltet in den reinen Überlebensmodus.",
-      audhd: "Mein ADHS-Teil will unbedingt mit den anderen lachen, reden und Dopamin sammeln, aber mein autistischer Teil kollabiert unter der visuellen und taktilen Reizflut. Ich stehe mitten im Getümmel, friere komplett ein (Shutdown) und lächele nur noch verkrampft nach außen hin."
+      audhd: "Die ADHS-Seite meines Gehirns will unbedingt mit den anderen lachen, reden und Dopamin sammeln — doch die autistische Seite kollabiert unter der visuellen und taktilen Reizflut. Ich stehe mitten im Getümmel, friere komplett ein (Shutdown) und lächele nur noch verkrampft nach außen hin."
     },
     ratings: { nt: 1, adhd: 3, asd: 5, audhd: 4 }
   },
@@ -31,15 +31,15 @@ const palaceData = [
       asd: "Ich brauche meine bekannten Safe Foods. Eine unbekannte Textur oder ein unerwarteter Geschmack erzeugt bei mir echten physischen Stress. Da ich mich nicht darauf einstellen kann, bleibe ich lieber zu Hause und koche mein bewährtes Nudelgericht der immer gleichen Marke.",
       audhd: "Ich stimme begeistert zu, weil mein ADHS-Teil das Dopamin des Abenteuers sucht. Als wir ankommen und alles laut und unübersichtlich aussieht, blockiert mein autistischer Teil. Ich fühle mich verloren und bestelle das einzige vertraut wirkende Gericht, um mich irgendwie zu regulieren."
     },
-    ratings: { nt: 2, adhd: 1, asd: 5, audhd: 3 }
+    ratings: { nt: 2, adhd: 2, asd: 5, audhd: 3 }
   },
   {
     id: 3,
-    nameEN: "Difficulty with Social Cues",
+    nameEN: "Social Processing Differences",
     nameDE: "Schwierigkeiten mit sozialen Signalen",
     definition: "Eine nicht-intuitive Verarbeitung nonverbaler Kommunikation und impliziter sozialer Regeln.",
     scenario: "In einer Kaffeepause erzählt eine Kollegin eine ironisch gemeinte Anekdote über ihren Chef und blickt dich dann vielsagend an.",
-    deepDive: "Soziale Interaktion basiert bei neurotypischen Menschen auf intuitiver Synchronisation. Für autistische Menschen ist soziale Kommunikation oft wie das Erlernen einer Fremdsprache ohne Grammatikbuch. Sie müssen Blickkontakt, das Timing für Gesprächsbeiträge und die Bedeutung von Redewendungen rational analysieren und berechnen. Das Double Empathy Problem (nach Damian Milton) zeigt, dass autistische Menschen untereinander hervorragend und empathisch kommunizieren – die Barriere entsteht erst im inter-neurotypen Austausch.",
+    deepDive: "Soziale Interaktion basiert bei neurotypischen Menschen auf intuitiver Synchronisation. Für autistische Menschen ist soziale Kommunikation oft wie das Erlernen einer Fremdsprache ohne Grammatikbuch. Sie müssen Blickkontakt, das Timing für Gesprächsbeiträge und die Bedeutung von Redewendungen rational analysieren und berechnen. Das Double Empathy Problem (nach Damian Milton) zeigt, dass autistische Menschen untereinander hervorragend und empathisch kommunizieren – die Barriere entsteht erst im neurotypisch-autistischen Austausch.",
     voices: {
       nt: "Ich verstehe den Witz, die Ironie und die unausgesprochene Botschaft sofort. Ich lache passend, erwidere den Blick spielerisch und werfe das Gespräch ganz natürlich und ohne Nachzudenken weiter.",
       adhd: "Ich verstehe soziale Signale meistens ganz gut, bin aber viel zu ungeduldig. Vor Begeisterung falle ich ihr impulsiv ins Wort, erzähle meine eigene Geschichte und merke erst Sekunden später am Gesichtsausdruck der Kollegin, dass das unhöflich war. Danach schäme ich mich heftig.",
@@ -50,18 +50,18 @@ const palaceData = [
   },
   {
     id: 4,
-    nameEN: "Seeks Repetitive Behaviour",
+    nameEN: "Cognitive Predictability",
     nameDE: "Suche nach Gleichförmigkeit",
     definition: "Das bewusste oder unbewusste Wiederholen spezifischer Verhaltensmuster, Gedankengänge oder Handlungsabfolgen zur Strukturierung der Umwelt.",
     scenario: "Du startest deinen Arbeitstag am Schreibtisch. Jemand schlägt vor, deine Tastatur umzustellen und deine festen Lesezeichen im Browser neu zu sortieren.",
     deepDive: "Im Unterschied zu Stimming (das primär der sensorischen Regulation dient) geht es bei dieser Achse um die kognitive Gleichförmigkeit. Das Gehirn baut verlässliche Pfade auf, um Entscheidungsermüdung (Decision Fatigue) zu verhindern. Typische Beispiele sind das Aufrufen von Webseiten in immer der gleichen Reihenfolge, das Laufen auf bestimmten Fliesenmustern oder die Echolalie (das genussvolle Wiederholen von Wörtern oder Sätzen). Dies schenkt dem Gehirn Vorhersehbarkeit und spart exekutive Energie für den Tag.",
     voices: {
-      nt: "Kein Problem, ich gewöhne mich schnell an die neue Anordnung und tippe einfach weiter. Es wirft meinen Tag oder meine Laune überhaupt nicht aus der Bahn.",
+      nt: "Anfangs fühlt sich das ungewohnt an und ich tippe ein paar Mal falsch. Aber nach einer Stunde habe ich mich umgewöhnt und es stört mich überhaupt nicht mehr.",
       adhd: "Gerne! Wiederholungen fühlen sich für mich wie ein Gefängnis an. Ich verändere mein Desktop-Layout sowieso alle zwei Wochen, um mein Gehirn mit frischen visuellen Reizen wachzuhalten, sonst werde ich unruhig.",
       asd: "Das macht mich fassungslos. Ich brauche mein exaktes System. Ohne meine festen Abläufe, Gewohnheiten und die gewohnte Anordnung meiner Werkzeuge fühlt sich mein Gehirn blockiert an, als ob ein Getriebe blockiert wäre.",
       audhd: "Mein ADHS-Teil bricht meine eigenen Handlungsabläufe ständig chaotisch auf und sorgt für Chaos auf dem Schreibtisch. Mein autistischer Teil reagiert darauf jedoch mit massivem Stress und innerer Leere. Ich sabotiere quasi permanent mein eigenes Bedürfnis nach Struktur."
     },
-    ratings: { nt: 1, adhd: 1, asd: 5, audhd: 3 }
+    ratings: { nt: 1, adhd: 2, asd: 5, audhd: 3 }
   },
   {
     id: 5,
@@ -69,7 +69,7 @@ const palaceData = [
     nameDE: "Aufgaben-Paralyse",
     definition: "Eine exekutive Blockade, bei der eine Person eine anstehende Aufgabe zwar beginnen möchte, das Gehirn jedoch die Handlungsaktivierung verweigert.",
     scenario: "Du musst eine wichtige Hausarbeit schreiben, aber der Dozent hat die Formatierungsvorgaben (Schriftgröße, Zeilenabstand) völlig offengelassen.",
-    deepDive: "Aufgaben-Paralyse ist keine Faulheit. Sie basiert auf einer Funktionsstörung im präfrontalen Kortex, der für die Handlungssteuerung zuständig ist. Bei ADHS liegt dies oft an einem Dopaminmangel – das Gehirn stuft die Aufgabe als nicht lohnenswert ein und verweigert den 'Startbefehl'. Bei Autismus entsteht die Paralyse häufig durch Detail-Overload: Wenn die einzelnen Schritte einer Aufgabe nicht absolut klar strukturiert sind, weiß das Gehirn nicht, wo es anfangen soll, und friert ein.",
+    deepDive: "Aufgaben-Paralyse ist keine Faulheit. Sie basiert auf einer Funktionsstörung im präfrontalen Kortex, der für die Handlungssteuerung zuständig ist. Bei ADHS liegt dies oft an einem Dopaminmangel – das Gehirn stuft die Aufgabe als nicht lohnenswert ein und verweigert den 'Startbefehl'. Bei Autismus entsteht die Paralyse häufig durch Detail-Overload: Wenn die einzelnen Schritte einer Aufgabe nicht absolut klar strukturiert sind, weiß das Gehirn nicht, wo es anfangen soll, und friert ein. Im exekutiven Stufenmodell betrifft die Aufgaben-Paralyse spezifisch die Handlungsinitiierung — den Moment, in dem das Gehirn den 'Startknopf' nicht findet.",
     voices: {
       nt: "Ich habe zwar keine Lust, aber da es sein muss, suche ich mir einfach eine gängige Formatierung aus (z. B. Arial 12, 1.5 Zeilenabstand), setze mich hin und schreibe in Ruhe los. Danach bin ich erleichtert.",
       adhd: "Ich sitze seit Stunden vor dem Schreibtisch. Das Dokument ist geöffnet. Ich will tippen, mein ganzer Körper schreit mich an, dass ich anfangen muss, da die Frist naht. Aber ich starre einfach nur die Wand an, fühle mich schuldig und kann mich physisch nicht bewegen.",
@@ -80,8 +80,8 @@ const palaceData = [
   },
   {
     id: 6,
-    nameEN: "Object Permanence",
-    nameDE: "Objektpermanenz",
+    nameEN: "Out of Sight, Out of Mind",
+    nameDE: "Aus den Augen, aus dem Sinn",
     definition: "Eine Ausprägung des Arbeitsgedächtnisses, bei der Gegenstände, Aufgaben oder Personen außerhalb des Sichtfeldes de-priorisiert werden und in Vergessenheit geraten.",
     scenario: "Du räumst deine frischen Einkäufe auf. Du legst das frische Gemüse tief unten ins geschlossene, blickdichte Gemüsefach deines Kühlschranks.",
     deepDive: "Im neurodivergenten Kontext (insb. ADHS) beschreibt dies die extreme Abhängigkeit des Arbeitsgedächtnisses von visuellen Reizen. Was nicht sichtbar ist, existiert im aktuellen Fokus des Gehirns nicht mehr. Dies führt zu verrottendem Gemüse im Kühlschrank (weil es im Gemüsefach versteckt war), dem Vergessen von Rechnungen in Schubladen oder dem unbeabsichtigten 'Aus den Augen verlieren' von Freunden, weil kein visueller Trigger an sie erinnert ('Out of Sight, Out of Mind').",
@@ -99,7 +99,7 @@ const palaceData = [
     nameDE: "Impulsivität",
     definition: "Das Ausführen von Handlungen oder das Äußern von Gedanken ohne vorherige rationale Abwägung der Konsequenzen.",
     scenario: "Du entdeckst online ein teures Gadget für dein aktuelles Spezialinteresse. Es kostet eigentlich zu viel Geld für dein knappes Monatsbudget.",
-    deepDive: "Impulsivität ist eng mit der Funktionsweise des Dopaminsystems verknüpft. Das ADHS-Gehirn befindet sich in einem ständigen Zustand des Dopaminmangel. Bietet sich eine Möglichkeit für schnelles Dopamin (ein Spontankauf, das Dazwischenreden in einer Diskussion, eine riskante Entscheidung), greift das Gehirn sofort zu, da die biologische Bremse im Gehirn (die inhibitorische Kontrolle im präfrontalen Kortex) schwächer ausgeprägt ist.",
+    deepDive: "Impulsivität ist eng mit der Funktionsweise des Dopaminsystems verknüpft. Das ADHS-Gehirn befindet sich in einem Zustand verminderter Dopamin-Signalübertragung — verursacht durch eine geringere Rezeptordichte und einen überaktiven Dopamintransporter (DAT). Bietet sich eine Möglichkeit für schnelles Dopamin (ein Spontankauf, das Dazwischenreden in einer Diskussion, eine riskante Entscheidung), greift das Gehirn sofort zu, da die biologische Bremse im Gehirn (die inhibitorische Kontrolle im präfrontalen Kortex) schwächer ausgeprägt ist.",
     voices: {
       nt: "Ich sehe das Gadget, es gefällt mir sehr. Aber ich überlege kurz rational, ob es in mein Budget passt. Da ich nächsten Monat Miete zahlen muss, lasse ich es stehen, schließe den Tab und gehe weiter.",
       adhd: "Mein Gehirn leuchtet auf wie ein Weihnachtsbaum. Ehe ich rational nachdenken kann, habe ich auf 'Jetzt kaufen' geklickt. Der Dopaminkick hält genau zwei Minuten an, danach kommt das bittere, schlechte Gewissen über den Kontrollverlust.",
@@ -129,7 +129,7 @@ const palaceData = [
     nameDE: "Dopamin-Suche",
     definition: "Das ständige, biologisch getriebene Bedürfnis des Gehirns nach Stimulation, Neuheit und Belohnung, um ein chronisch niedriges Basal-Dopaminniveau auszugleichen.",
     scenario: "Du musst dich durch eine extrem trockene, langweilige Excel-Tabelle arbeiten. Dein Smartphone liegt neben dir auf dem Schreibtisch.",
-    deepDive: "Dopamin ist der Botenstoff, der Motivation, Antrieb und das Gefühl von Belohnung steuert. ADHS-Gehirne weisen eine geringere Dopamin-Rezeptordichte oder einen zu schnellen Rücktransport des Dopamins auf. Das Gehirn befindet sich im Leerlauf und empfindet diesen Zustand als physisch unangenehm. Daher sucht es ununterbrochen nach Stimulanzien: Koffein, zuckerhaltige Snacks, aufregende Hobbys (die schnell wieder aufgegeben werden), ständiges Smartphone-Checking oder Nervenkitzel.",
+    deepDive: "Dopamin ist der Botenstoff, der Motivation, Antrieb und das Gefühl von Belohnung steuert. ADHS-Gehirne weisen eine geringere Dopamin-Rezeptordichte oder einen zu schnellen Rücktransport des Dopamins auf. Das Gehirn befindet sich im Leerlauf und empfindet diesen Zustand als physisch unangenehm. Daher sucht es ununterbrochen nach Stimulanzien: Koffein, zuckerhaltige Snacks, aufregende Hobbys (die schnell wieder aufgegeben werden), ständiges Smartphone-Checking oder Nervenkitzel. Während Impulsivität das Fehlen einer Handlungsbremse beschreibt, erfasst die Dopamin-Suche den aktiven, biologisch getriebenen Antrieb, ständig neue Stimulationsquellen aufzuspüren.",
     voices: {
       nt: "Es macht keinen Spaß, aber ich ziehe es einfach durch und arbeite die Tabelle ab. Danach mache ich eine wohlverdiente Pause, trinke einen Kaffee und freue mich auf den Feierabend.",
       adhd: "Mein Gehirn weigert sich. Ich verspüre eine fast physische Unruhe und greife alle zwei Minuten impulsiv zum Smartphone, um die Benachrichtigungen zu checken (Dopamin-Hunger). Ohne ständige Stimulation schläft mein Kopf ein.",
@@ -159,7 +159,7 @@ const palaceData = [
     nameDE: "Exekutive Dysfunktion",
     definition: "Eine neurologische Beeinträchtigung der exekutiven Funktionen, die für die Planung, Organisation, Priorisierung und Initiierung von Handlungen verantwortlich sind.",
     scenario: "Deine Wohnung müsste dringend aufgeräumt werden. Überall liegen Kleider, Bücher und Geschirr ungeordnet herum.",
-    deepDive: "Exekutive Dysfunktion ist der 'Flaschenhals' des neurodivergenten Alltags. Der präfrontale Kortex arbeitet wie der Dirigent eines Orchesters. Bei exekutiver Dysfunktion weigert sich der Dirigent zu arbeiten: Das Gehirn kann anstehende Aufgaben nicht in logische Teilschritte zerlegen, verliert den Überblick über Fristen, verlegt Werkzeuge und scheitert am 'Aufräumen' oder der Alltagsbürokratie. Dies führt oft zu hoher mentaler Last (Mental Load) und dem Gefühl der Unzulänglichkeit trotz hoher Intelligenz.",
+    deepDive: "Exekutive Dysfunktion ist der 'Flaschenhals' des neurodivergenten Alltags. Der präfrontale Kortex arbeitet wie der Dirigent eines Orchesters. Bei exekutiver Dysfunktion weigert sich der Dirigent zu arbeiten: Das Gehirn kann anstehende Aufgaben nicht in logische Teilschritte zerlegen, verliert den Überblick über Fristen, verlegt Werkzeuge und scheitert am 'Aufräumen' oder der Alltagsbürokratie. Dies führt oft zu hoher mentaler Last (Mental Load) und dem Gefühl der Unzulänglichkeit trotz hoher Intelligenz. Exekutive Dysfunktion ist die übergeordnete Orchestrierungsstörung — sie umfasst sowohl die Priorisierung ('Was zuerst?') als auch die Handlungsinitiierung ('Wie anfangen?') als Teilaspekte.",
     voices: {
       nt: "Ich nehme mir einen Wäschekorb, fange in einer Ecke an, sortiere die Kleidung und spüle das Geschirr. Nach einer Stunde bin ich fertig, ohne dass es mich mental blockiert.",
       adhd: "Ich sehe das Chaos und mein Gehirn kapituliert sofort. Ich fange an, ein Buch wegzuräumen, finde dabei ein altes Foto, betrachte es, gehe in die Küche, fange an zu spülen, vergesse es und stehe plötzlich im Garten und gieße Blumen.",
@@ -194,7 +194,7 @@ const palaceData = [
       nt: "Ich spiele vielleicht kurz mit meinem Stift oder wippe mit dem Fuß, wenn ich müde werde, kann aber problemlos ruhig dasitzen und aufpassen, ohne dass ich mich unruhig fühle.",
       adhd: "Ohne Fidgeting schläft mein Gehirn ein. Ich muss ununterbrochen auf meinem Stuhl herumrutschen, mit Stiften spielen oder mit dem Fuß wippen, um überhaupt fokussiert zu bleiben. Stillsitzen blockiert mein Denken.",
       asd: "Monotones Stimming erdet mich. Ich wippe sanft mit dem Oberkörper oder reibe meine Hände aneinander. Das sensorische Feedback hilft mir, schmerzhafte Reize im Raum zu blockieren und mich zu regulieren.",
-      audhd: "Mein autistischer Teil braucht intensives Stimming (wie Summen oder Handflapping) zur Regulation. Mein ADHS-Teil schämt sich dafür und unterdrückt es durch Masking. Stattdessen spanne ich unbemerkt meine Muskeln an."
+      audhd: "Mein autistischer Teil braucht intensives Stimming (wie Summen oder Handflapping) zur Regulation. Durch jahrelange soziale Konditionierung unterdrücke ich das Stimming jedoch in der Öffentlichkeit durch rigides Masking. Stattdessen kanalisiere ich die Energie in unsichtbares, anstrengendes Muskelanspannen."
     },
     ratings: { nt: 1, adhd: 4, asd: 5, audhd: 4 }
   },
@@ -208,8 +208,8 @@ const palaceData = [
     voices: {
       nt: "Es ärgert mich kurz, aber ich kann das Feedback sachlich einordnen, atme tief durch und passe die Punkte an. Ich nehme es keinesfalls persönlich.",
       adhd: "Die Kritik trifft mich wie ein emotionaler Tsunami. Mein Gehirn schaltet sofort auf Alarm. Ich spüre eine tiefe, fast physisch schmerzhafte Ablehnung (RSD) und möchte alles hinwerfen. Gefühle überfluten mich komplett.",
-      asd: "Gefühle überfluten mich so intensiv, dass ich sie gar nicht benennen kann (Alexithymie). Ich spüre eine gigantische körperliche Anspannung, die in Weinkrämpfen oder totalem Shutdown mündet.",
-      audhd: "Mein ADHS-Teil reagiert blitzschnell emotional. Mein autistischer Teil versucht jedoch krampfhaft, absolute Kontrolle und Kälte nach außen zu wahren. Dieser Druck führt dazu, dass Emotionen stauen und explodieren."
+      asd: "Ich spüre eine gigantische körperliche Anspannung, kann aber kaum benennen, welches Gefühl das eigentlich ist — ein Phänomen, das Alexithymie genannt wird. Wenn die emotionale Reizflut zu groß wird, mündet sie in unkontrollierbaren Weinkrämpfen oder totalem Shutdown.",
+      audhd: "Emotional reagiere ich blitzschnell und impulsiv auf Reize — das ist mein Gehirn im ADHS-Modus. Gleichzeitig versucht die autistische Seite meines Nervensystems krampfhaft, absolute Kontrolle und Kälte nach außen zu wahren. Dieser innere Druck führt dazu, dass sich Emotionen aufstauen und bei der kleinsten Nichtigkeit explodieren."
     },
     ratings: { nt: 2, adhd: 5, asd: 4, audhd: 5 }
   },
@@ -249,7 +249,7 @@ const palaceData = [
     nameDE: "Priorisierungsprobleme",
     definition: "Die Unfähigkeit des exekutiven Systems, anstehende Aufgaben, Reize oder Informationen nach ihrer tatsächlichen Wichtigkeit oder Dringlichkeit zu filtern.",
     scenario: "Du hast fünf Aufgaben: Steuererklärung machen (dringend), Kleiderschrank aufräumen, Geschirr spülen, E-Mails beantworten, Müll rausbringen.",
-    deepDive: "Ein funktionierendes exekutives System wägt ab: Hausarbeit schreiben (wichtig), Müll rausbringen (dringend), Kleiderschrank sortieren (unwichtig). Bei neurodivergenen Menschen fehlt dieser automatische Filter. Das Gehirn wird von allen anstehenden Aufgaben gleichzeitig lautstark 'angeschrien'. Da alles die gleiche Priorität 1 zu haben scheint, entsteht ein massiver kognitiver Overload. Das Gehirn kapituliert vor der Unmöglichkeit der Entscheidung und flüchtet oft in die Paralyse.",
+    deepDive: "Ein funktionierendes exekutives System wägt ab: Steuererklärung machen (dringend), E-Mails beantworten (wichtig), Kleiderschrank aufräumen (unwichtig). Bei neurodivergenen Menschen fehlt dieser automatische Filter. Das Gehirn wird von allen anstehenden Aufgaben gleichzeitig lautstärkt 'angeschrien'. Da alles die gleiche Priorität 1 zu haben scheint, entsteht ein massiver kognitiver Overload. Das Gehirn kapituliert vor der Unmöglichkeit der Entscheidung und flüchtet oft in die Paralyse. Im exekutiven Stufenmodell ist die Priorisierung der erste Filterschritt ('Was mache ich zuerst?'), noch bevor die Handlungsinitiierung oder die Gesamtorchestierung ins Spiel kommen.",
     voices: {
       nt: "Ich fange natürlich mit der dringendsten Steuererklärung an. Die anderen Dinge erledige ich danach oder morgen, das stresst mich nicht.",
       adhd: "Alle Aufgaben schreien mich gleichzeitig mit der gleichen Lautstärke an. Da mein Gehirn nicht filtern kann, was wichtiger ist, fange ich panisch an, den Kleiderschrank aufzuräumen, während ich wegen der Steuererklärung zittere.",
@@ -279,14 +279,14 @@ const palaceData = [
     nameDE: "Sensibilität für Zurückweisung",
     definition: "Eine extreme, oft physisch schmerzhafte emotionale Reaktion auf die reale oder wahrgenommene Ablehnung, Kritik oder das Gefühl des eigenen Versagens.",
     scenario: "Ein enger Freund verabschiedet sich im Chat mit einer ungewöhnlich kurzen Nachricht ('Ok, bis dann.') ohne Emojis.",
-    deepDive: "Rejection Sensitive Dysphoria (RSD) ist ein neurobiologischer Aspekt von ADHS und keine Charakterschwäche. Durch ein hyper-sensibles Nervensystem verarbeitet das Gehirn soziale Ablehnung oder Kritik mit den exakt gleichen Arealen, die für den physischen Schmerz zuständig sind. RSD führt zu einer ständigen Alarmbereitschaft vor sozialem Fehlverhalten. Dies resultiert oft in People Pleasing (extremer Anpassung) oder dem kompletten Rückzug aus sozialen Wagnissen.",
+    deepDive: "Rejection Sensitive Dysphoria (RSD) beschreibt ein intensiv erlebtes neurobiologisches Phänomen, das vor allem im Kontext von ADHS beschrieben wird, aber auch bei anderen neurodivergenten Profilen auftritt. Obwohl RSD kein offizieller diagnostischer Begriff (DSM-5-TR) ist, findet er zunehmend klinische Anerkennung. Es ist keine Charakterschwäche. Durch ein hyper-sensibles Nervensystem verarbeitet das Gehirn soziale Ablehnung oder Kritik mit den exakt gleichen Arealen, die für den physischen Schmerz zuständig sind. RSD führt zu einer ständigen Alarmbereitschaft vor sozialem Fehlverhalten. Dies resultiert oft in People Pleasing (extremer Anpassung) oder dem kompletten Rückzug aus sozialen Wagnissen.",
     voices: {
       nt: "Ich denke mir nichts dabei – er wird wohl einfach im Stress sein oder schnell losmüssen. Ich antworte einfach nett und mache weiter.",
       adhd: "Mein Gehirn schlägt Alarm. RSD setzt ein: 'Er hasst mich, ich habe etwas falsch gemacht.' Der Gedanke tut physisch weh, ich kann an nichts anderes mehr denken und grübele stundenlang.",
-      asd: "Da ich oft soziale Signale falsch interpretiert habe und ausgegrenzt wurde, bin ich extrem vorsichtig. Ich analysiere die Nachricht rational und suche nach logischen Fehlern in meinem Verhalten.",
+      asd: "Da ich oft soziale Signale anders interpretiert habe und dafür ausgegrenzt wurde, bin ich extrem vorsichtig geworden. Ich analysiere die Nachricht rational und suche nach logischen Fehlern in meinem Verhalten. Die Angst, erneut ausgestoßen zu werden, sitzt tief und begleitet jede Interaktion.",
       audhd: "Mein ADHS-Teil leidet unter RSD und treibt mich in extremes, erschöpfendes People-Pleasing. Mein autistischer Teil hasst dieses Masking jedoch zutiefst und sehnt sich nach Authentizität. Ich stecke im Dauerzwiespalt."
     },
-    ratings: { nt: 2, adhd: 5, asd: 3, audhd: 5 }
+    ratings: { nt: 2, adhd: 5, asd: 4, audhd: 5 }
   },
   {
     id: 20,
@@ -301,6 +301,36 @@ const palaceData = [
       asd: "Die spontane Planänderung wirft mich komplett aus der Bahn. Ohne meine festen Abläufe stürze ich exekutiv ein und gerate in massiven Stress. Ich kann die Transition nicht so schnell vollziehen.",
       audhd: "Das ultimative Dilemma: Mein autistischer Teil benötigt eiserne Routinen, um Angstzustände zu vermeiden. Mein ADHS-Teil bricht diese Routinen jedoch täglich aus Impulsivität und Langeweile selbstsabotierend auf."
     },
-    ratings: { nt: 2, adhd: 1, asd: 3, audhd: 3 }
+    ratings: { nt: 2, adhd: 1, asd: 5, audhd: 4 }
+  },
+  {
+    id: 21,
+    nameEN: "Autistic Inertia",
+    nameDE: "Autistische Trägheit",
+    definition: "Die Schwierigkeit, Übergänge zwischen Zuständen, Aktivitäten oder mentalen Modi zu vollziehen — sei es das Starten, Stoppen oder Wechseln einer Handlung.",
+    scenario: "Du sitzt seit zwei Stunden gemütlich auf dem Sofa und liest ein Buch. Du weißt, dass du in 30 Minuten das Haus verlassen musst, um dich mit Freunden zu treffen.",
+    deepDive: "Autistische Trägheit unterscheidet sich fundamental von der Aufgaben-Paralyse: Während die Paralyse das Starten einer unliebsamen Aufgabe betrifft, beschreibt die Trägheit die Schwierigkeit, von einem beliebigen Zustand in einen anderen zu wechseln — auch von angenehmen Aktivitäten weg. Das Gehirn autistischer Menschen baut besonders stabile neuronale Aktivierungsmuster auf (monotrope Aufmerksamkeit nach Dinah Murray). Ein solches Muster zu unterbrechen und ein neues zu aktivieren, erfordert enormen kognitiven Aufwand. Dies äußert sich im Alltag als 'Klebenbleiben' an einer Tätigkeit, Schwierigkeiten beim Aufstehen, Anziehen oder dem Wechsel zwischen Arbeits- und Pausenmodus.",
+    voices: {
+      nt: "Ich schaue auf die Uhr, lege mein Buch zur Seite und stehe auf. Vielleicht denke ich noch kurz an die Stelle, an der ich gerade gelesen habe, aber der Wechsel gelingt mir ohne besondere Anstrengung.",
+      adhd: "Wenn das Buch spannend ist, verliere ich mich darin und vergesse die Zeit komplett. Aber sobald mich etwas Neues lockt — die Aussicht auf das Treffen, eine Nachricht auf dem Handy — springe ich sofort auf und bin im nächsten Modus.",
+      asd: "Ich weiß, dass ich aufstehen muss. Mein Kopf sagt mir: 'Leg das Buch weg.' Aber mein Körper bewegt sich nicht. Ich stecke fest wie in zähem Honig. Die Transition fühlt sich an wie eine unsichtbare Mauer, die ich physisch nicht durchbrechen kann.",
+      audhd: "Mein Gehirn sendet widersprüchliche Signale: Die ADHS-Seite will längst los, ist unruhig und kribbelt vor Vorfreude auf das Treffen. Die autistische Seite klebt am Sofa fest und kann den Übergang nicht vollziehen. Ich sitze da, innerlich zerrissen, und schaffe es erst in letzter Sekunde aufzustehen."
+    },
+    ratings: { nt: 1, adhd: 2, asd: 5, audhd: 4 }
+  },
+  {
+    id: 22,
+    nameEN: "Neurodivergent Burnout",
+    nameDE: "Neurodivergenter Burnout",
+    definition: "Ein Zustand chronischer physischer, emotionaler und kognitiver Erschöpfung, der durch langfristiges Masking, kumulative sensorische Überlastung und die anhaltende Anpassung an eine neurotypisch geprägte Welt entsteht.",
+    scenario: "Du hast ein extrem anstrengendes Semester hinter dir: viele Gruppenarbeiten, Pflichtpräsentationen, Prüfungsstress und kaum Rückzugsmöglichkeiten. Es ist der erste Tag der Semesterferien.",
+    deepDive: "Neurodivergenter Burnout unterscheidet sich grundlegend von klassischem Arbeits-Burnout oder Depression. Er entsteht nicht primär durch zu viel Arbeit, sondern durch die kumulative Belastung der neurologischen Anpassungsleistung. Jahrelanges Masking, chronischer sensorischer Overload und die tägliche Kompensation exekutiver Herausforderungen erschöpfen das Nervensystem bis zur Funktionsgrenze. Ein markantes Merkmal ist der sogenannte 'Skill Loss' — Fähigkeiten, die zuvor mühsam erlernt und automatisiert wurden (Kochen, Autofahren, Smalltalk), gehen vorübergehend verloren. Betroffene berichten von einem Gefühl, als würde sich ihr Gehirn 'herunterfahren'. Die Erholung dauert oft Monate und erfordert eine grundlegende Reduktion der Anpassungsleistung.",
+    voices: {
+      nt: "Nach dem Semester bin ich erschöpft und brauche dringend Urlaub. Aber nach einer Woche Ausschlafen und Entspannung fühle ich mich weitgehend erholt und kann sogar schon wieder Pläne für das nächste Semester machen.",
+      adhd: "Ich stürze mich ins Semester wie in einen Sprint und verbrenne auf voller Flamme. Wenn die Ferien kommen, crashe ich hart: tagelang im Bett, unfähig, irgendetwas zu tun. Aber sobald ein neuer Reiz auftaucht — ein spontaner Trip, ein neues Hobby — springe ich sofort wieder an.",
+      asd: "Nach Monaten des Maskierens in Seminaren und Gruppenarbeiten bin ich nicht einfach nur müde — ich bin neurologisch leer. Ich verliere Fähigkeiten, die ich mühsam aufgebaut habe: Ich kann plötzlich nicht mehr kochen, nicht mehr telefonieren, nicht mehr einkaufen gehen. Mein Gehirn fährt herunter wie ein überhitzter Computer.",
+      audhd: "Mein ganzes System kollabiert gleichzeitig: Ich kann mich auf gar nichts konzentrieren und bin gleichzeitig unfähig, mich zu erholen, weil die autistische Seite meines Nervensystems keine sichere Umgebung findet, in der sie die Maske ablegen kann. Ich funktioniere monatelang nur noch im Überlebensmodus."
+    },
+    ratings: { nt: 1, adhd: 3, asd: 5, audhd: 5 }
   }
 ];

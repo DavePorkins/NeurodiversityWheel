@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" id="meta-theme-color" content="#151121">
-  <title>Mapping Neurodiversity 🌸 v3.2.0</title>
+  <title>Mapping Neurodiversity 🌸 v3.2.1</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=3.2.0">
+  <link rel="stylesheet" href="style.css?v=3.2.1">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -226,6 +226,13 @@
 
         <!-- Deep Dive text block -->
 
+        <div class="scenario-panel glass-card" style="margin-top: 1rem; margin-bottom: 1rem; padding: 0.85rem; border-left: 3px solid var(--color-user); background: rgba(255, 255, 255, 0.015);">
+          <strong style="display: block; font-size: 0.85rem; color: var(--color-user); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.35rem;">
+            <i class="fa-solid fa-cloud-sun"></i> Beispielsituation (Vergleichs-Szenario)
+          </strong>
+          <p id="detail-scenario" class="scenario-text" style="font-size: 0.88rem; line-height: 1.5; font-style: italic; color: var(--text-secondary); margin: 0;"></p>
+        </div>
+
         <!-- 4-Voices Monologues with individual read-aloud buttons and relate-shortcuts -->
         <div class="voices-container">
           <h3><i class="fa-solid fa-people-group"></i> Die 4 Stimmen (Lived Experience)</h3>
@@ -332,12 +339,6 @@
           </div>
         </div>
 
-        <div class="scenario-panel glass-card" style="margin-top: 1rem; margin-bottom: 1rem; padding: 0.85rem; border-left: 3px solid var(--color-user); background: rgba(255, 255, 255, 0.015);">
-          <strong style="display: block; font-size: 0.85rem; color: var(--color-user); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.35rem;">
-            <i class="fa-solid fa-cloud-sun"></i> Beispielsituation (Vergleichs-Szenario)
-          </strong>
-          <p id="detail-scenario" class="scenario-text" style="font-size: 0.88rem; line-height: 1.5; font-style: italic; color: var(--text-secondary); margin: 0;"></p>
-        </div>
 
         <div class="user-score-panel glass-card">
           <div class="score-header">
@@ -399,17 +400,28 @@
           </li>
           <li>
             <strong>Reduzierte Komplexität:</strong> 
-            20 Parameter decken viele Facetten ab, bilden aber niemals die gesamte, fluide Vielfalt der menschlichen Wahrnehmung ab.
+            22 Parameter decken viele Facetten ab, bilden aber niemals die gesamte, fluide Vielfalt der menschlichen Wahrnehmung ab.
           </li>
           <li>
-            <strong>Subjektive Lived Experiences:</strong> 
-            Die Monologe der 4 Stimmen dienen der Veranschaulichung verschiedener Perspektiven und erheben keinen Anspruch auf Allgemeingültigkeit.
+            <strong>Perspektiven, nicht Porträts:</strong> 
+            Die Monologe der 4 Stimmen sind illustrative Darstellungen, die typische Erfahrungsmuster veranschaulichen sollen. Sie basieren nicht auf individuellen Erfahrungsberichten und erheben keinen Anspruch auf Allgemeingültigkeit.
           </li>
         </ul>
         
         <div class="modal-alert-box">
           <i class="fa-solid fa-circle-nodes accent-icon"></i>
-          <p><strong>Inspiration & Urheberrecht:</strong> Das 20-Parameter-Kreisdiagramm basiert auf dem didaktischen Entwurfsmodell von <strong>Savannah Denny</strong> (Colour Me Neurospicy). Dieses Web-Tool wurde inspiriert durch die studentische Hochschulgruppe Flux am KIT, um Barrieren im Studienalltag abzubauen und den Peer-Austausch zu bereichern.</p>
+          <p><strong>Inspiration &amp; Urheberrecht:</strong> Das 22-Parameter-Kreisdiagramm basiert auf dem didaktischen Reflexionsmodell <em>&quot;Colour Your Own Spectrum&quot;</em> von <strong>Savannah Denny</strong> (Colour Me Neurospicy, Tasmanien). Wir haben 22 Traits daraus adaptiert und um neurowissenschaftliche Deep Dives, Beispielsituationen und vierstimmige Erfahrungsmonologe erweitert. Dieses Web-Tool wurde inspiriert durch die studentische Hochschulgruppe Flux am KIT, um Barrieren im Studienalltag abzubauen und den Peer-Austausch zu bereichern.</p>
+        </div>
+
+        <div class="sources-panel" style="margin-top: 1.2rem; padding: 1rem; border-radius: 12px; background: rgba(162, 155, 254, 0.06); border: 1px solid rgba(162, 155, 254, 0.15);">
+          <h4 style="margin: 0 0 0.6rem 0; font-size: 0.95rem; color: var(--accent-indigo, #a29bfe);"><i class="fa-solid fa-book-bookmark"></i> Quellen &amp; Wissenschaftliche Referenzen</h4>
+          <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.82rem; line-height: 1.6; color: var(--text-secondary);">
+            <li><strong>Colour Me Neurospicy</strong> &mdash; Savannah Denny (Tasmanien, Australien). 22-Trait-Modell &quot;Colour Your Own Spectrum&quot; als Reflexionswerkzeug für neurodivergente Menschen.</li>
+            <li><strong>Monotropismus-Theorie</strong> &mdash; Dinah Murray &amp; Wenn Lawson. Erklärt den fokussierten Aufmerksamkeitsstil autistischer Menschen.</li>
+            <li><strong>Double Empathy Problem</strong> &mdash; Damian Milton (2012). Kommunikationsbarrieren entstehen im Zusammenspiel verschiedener Neurotypen, nicht einseitig.</li>
+            <li><strong>Spiky Profile</strong> &mdash; Meta-Analysen (WAIS-IV/WISC-V) zeigen signifikante intra-individuelle Variabilität in neurodivergenten kognitiven Profilen.</li>
+            <li><strong>Autism Spectrum Wheel</strong> &mdash; Dr. Luke Beardon (2020). Akademisches Modell eines mehrdimensionalen Autismus-Profils.</li>
+          </ul>
         </div>
         
         <p class="modal-disclaimer" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); opacity: 0.95; line-height: 1.45;">

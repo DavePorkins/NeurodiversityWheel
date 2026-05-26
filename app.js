@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.2.0
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.2.1
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -7,7 +7,7 @@ let CENTER_Y = 300;
 let CENTER = 300; // legacy placeholder
 let MAX_RADIUS = 180; // slightly smaller to give breathing space for flanking legend nodes
 const INNER_RADIUS = 32; 
-const TOTAL_AXES = 20;
+const TOTAL_AXES = 22;
 
 function updateLayoutConstants() {
   if (typeof window !== "undefined" && window.innerWidth < 1200) {
