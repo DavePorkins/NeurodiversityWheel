@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.2 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.4 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -81,8 +81,12 @@ body.drawer-open {
   -webkit-tap-highlight-color: transparent;
 }
 
-button:focus, path:focus, g:focus, svg:focus, text:focus, a:focus, div:focus {
+*:focus, *:focus-visible, *:active {
   outline: none !important;
+  outline-color: transparent !important;
+}
+* {
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 html, body {
@@ -497,46 +501,56 @@ body.light-mode .svg-axis-label-bg {
 }
 
 /* --- ⚡ COZY GLOWING OVERLAYS (Thicker, softer neon strokes) --- */
-.polygon-overlay {
+/* --- ⚡ COZY GLOWING OVERLAYS (Split into Fills in background and Strokes on top) --- */
+.polygon-overlay-fill {
+  fill-opacity: 0.06 !important; /* Zarte Hintergrund-Füllung */
+  stroke: none !important;
+  pointer-events: none;
+  transition: d 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.polygon-overlay-stroke {
   stroke-width: 3.5px; /* Breitere Linien für hervorragende Erkennbarkeit */
-  fill-opacity: 0.07 !important; /* Zarte Hintergrund-Füllung */
+  fill: none !important;
   stroke-linecap: round;
   stroke-linejoin: round;
   pointer-events: none;
   transition: d 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.polygon-overlay.user {
-  stroke: var(--color-user);
-  fill: var(--color-user) !important;
-  fill-opacity: 0.08 !important;
-  filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.4));
-}
-
-.polygon-overlay.nt {
-  stroke: var(--color-nt);
+.polygon-overlay-fill.nt {
   fill: var(--color-nt) !important;
   fill-opacity: 0.04 !important;
 }
+.polygon-overlay-stroke.nt {
+  stroke: var(--color-nt);
+}
 
-.polygon-overlay.adhd {
-  stroke: var(--color-adhd);
+.polygon-overlay-fill.adhd {
   fill: var(--color-adhd) !important;
-  fill-opacity: 0.07 !important;
+  fill-opacity: 0.06 !important;
+}
+.polygon-overlay-stroke.adhd {
+  stroke: var(--color-adhd);
   filter: drop-shadow(0 0 6px rgba(251, 146, 60, 0.45));
 }
 
-.polygon-overlay.asd {
-  stroke: var(--color-asd);
+.polygon-overlay-fill.asd {
   fill: var(--color-asd) !important;
-  fill-opacity: 0.07 !important;
+  fill-opacity: 0.06 !important;
+}
+.polygon-overlay-stroke.asd {
+  stroke: var(--color-asd);
   filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.45));
 }
 
-.polygon-overlay.audhd {
-  stroke: var(--color-audhd);
+.polygon-overlay-fill.audhd {
   fill: var(--color-audhd) !important;
   fill-opacity: 0.08 !important;
+}
+.polygon-overlay-stroke.audhd {
+  stroke: var(--color-audhd);
+  stroke-width: 4.2px;
   filter: drop-shadow(0 0 8px rgba(244, 114, 182, 0.5));
 }
 
@@ -2675,4 +2689,77 @@ body.light-mode .modal-footer .modal-close-action-btn.secondary-btn {
 
 body.light-mode .modal-footer .modal-close-action-btn.secondary-btn:hover {
   background: #e5ddecf2 !important;
+}
+
+/* Disabled states for permanent export buttons */
+.nav-btn:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-muted) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.light-mode .nav-btn:disabled {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #9d95ad !important;
+}
+
+.nav-btn.danger-btn:disabled {
+  background: rgba(239, 68, 68, 0.02) !important;
+  border-color: rgba(239, 68, 68, 0.06) !important;
+  color: var(--text-muted) !important;
+}
+
+/* Premium Soft HSL input shading and AuDHD-colored Pastel Speichern Button */
+.feedback-input {
+  background: rgba(162, 155, 254, 0.05) !important;
+  border: 1.5px solid rgba(162, 155, 254, 0.15) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  padding: 0.65rem 0.85rem !important;
+  font-family: inherit;
+  font-size: 0.88rem !important;
+  transition: var(--transition-smooth);
+}
+
+.feedback-input:focus {
+  border-color: var(--color-audhd) !important;
+  box-shadow: 0 0 10px rgba(244, 114, 182, 0.25) !important;
+}
+
+body.light-mode .feedback-input {
+  background: #fbf9fe !important;
+  border: 1.5px solid #d1c8de !important;
+  color: #1a1625 !important;
+}
+
+/* Redesigned pastel-violet-pink saving buttons for feedback modal specifically */
+#feedback-modal .modal-close-action-btn.primary-btn {
+  background: linear-gradient(135deg, #c084fc, #f472b6) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(244, 114, 182, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+#feedback-modal .modal-close-action-btn.primary-btn:hover {
+  box-shadow: 0 4px 20px rgba(244, 114, 182, 0.45) !important;
+  transform: translateY(-1.5px) !important;
+}
+
+/* Subtle border context colors */
+.feedback-context-box {
+  border-left: 4px solid var(--color-audhd) !important;
+  background: rgba(162, 155, 254, 0.03) !important;
+  border: 1px solid rgba(162, 155, 254, 0.08);
+}
+
+body.light-mode .feedback-context-box {
+  background: rgba(162, 155, 254, 0.04) !important;
+  border-color: rgba(162, 155, 254, 0.12) !important;
 }

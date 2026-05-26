@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" id="meta-theme-color" content="#151121">
-  <title>Mapping Neurodiversity 🌸 v3.1.3</title>
+  <title>Mapping Neurodiversity 🌸 v3.1.4</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=3.1.3">
+  <link rel="stylesheet" href="style.css?v=3.1.4">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -50,7 +50,7 @@
               <div>
                 <div class="logo-title-row">
                   <h1>Mapping Neurodiversity</h1>
-                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v3.1.3</span>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v3.1.4</span>
                 </div>
                 <p class="subtitle">Das 20-Parameter-Kreisdiagramm nach Savannah Denny</p>
               </div>
@@ -134,11 +134,14 @@
             <!-- Dynamic SVG Cake Slices Grid & Wedges drawn by JS -->
             <g id="wedges-background-group"></g>
             
-            <!-- Comparison fluid polygon overlays drawn in background -->
-            <g id="polygon-overlays-group"></g>
+            <!-- Comparison fluid polygon overlay FILLS drawn in background -->
+            <g id="polygon-overlays-fill-group"></g>
 
             <g id="wedges-active-group"></g>
             <g id="wedges-labels-group"></g>
+            
+            <!-- Comparison fluid polygon overlay STROKES/LINES drawn on top of active wedges -->
+            <g id="polygon-overlays-stroke-group"></g>
             
             <!-- Outer rings and decorative border centered at cx=475, cy=550, radius=225 (mobile defaults) -->
             <circle id="chart-boundary-ring" cx="475" cy="550" r="225" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" class="chart-boundary-ring"></circle>
@@ -414,10 +417,10 @@
       </div>
       <footer class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <div>
-          <button id="btn-export-feedback" class="nav-btn" onclick="exportFeedbacksToMarkdown()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; display: none;">
-            <i class="fa-solid fa-download"></i> Feedbacks exportieren
+          <button id="btn-export-feedback" class="nav-btn" onclick="exportFeedbacksToMarkdown()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" disabled>
+            <i class="fa-solid fa-download"></i> Feedbacks exportieren (0)
           </button>
-          <button id="btn-clear-feedback" class="nav-btn danger-btn" onclick="clearFeedbacks()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; display: none; margin-left: 0.4rem; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: #ef4444;">
+          <button id="btn-clear-feedback" class="nav-btn danger-btn" onclick="clearFeedbacks()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; margin-left: 0.4rem;" disabled>
             <i class="fa-solid fa-trash-can"></i> Zurücksetzen
           </button>
         </div>
@@ -448,19 +451,8 @@
         </div>
 
         <div class="form-group" style="margin-top: 1rem;">
-          <label for="fb-category" style="display: block; font-weight: 500; font-size: 0.85rem; margin-bottom: 0.3rem;">Kategorie:</label>
-          <select id="fb-category" class="feedback-input">
-            <option value="Korrektur">Textkorrektur / Grammatik</option>
-            <option value="Kritik">Inhaltliche Kritik / Verbesserung</option>
-            <option value="Erfahrung">Eigene Erfahrung einbringen</option>
-            <option value="Design">Design- & Funktionsvorschlag</option>
-            <option value="Sonstiges">Sonstiges</option>
-          </select>
-        </div>
-
-        <div class="form-group" style="margin-top: 1rem;">
-          <label for="fb-message" style="display: block; font-weight: 500; font-size: 0.85rem; margin-bottom: 0.3rem;">Dein Vorschlag oder Kritik:</label>
-          <textarea id="fb-message" class="feedback-input feedback-textarea" placeholder="Was stört dich an dieser Formulierung? Wie würdest du es besser schreiben?"></textarea>
+          <label for="fb-message" style="display: block; font-weight: 500; font-size: 0.85rem; margin-bottom: 0.35rem;">Schreib uns, was du denkst oder was du sagen willst:</label>
+          <textarea id="fb-message" class="feedback-input feedback-textarea" placeholder="Was stört dich an dieser Formulierung? Wie würdest du es besser schreiben? Teile deine Gedanken mit uns..."></textarea>
         </div>
       </div>
       <footer class="modal-footer">
@@ -471,7 +463,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="palace_data.js?v=3.1.3"></script>
-  <script src="app.js?v=3.1.3"></script>
+  <script src="palace_data.js?v=3.1.4"></script>
+  <script src="app.js?v=3.1.4"></script>
 </body>
 </html>

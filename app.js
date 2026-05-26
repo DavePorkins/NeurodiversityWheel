@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.1.2
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.1.4
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -652,7 +652,7 @@ function initChart() {
             if (node.x > maxX) node.x = maxX;
           }
           const minY = 35 + node.approxHeight / 2;
-          const maxY = 565 - node.approxHeight / 2;
+          const maxY = 1065 - node.approxHeight / 2;
           if (node.y < minY) node.y = minY;
           if (node.y > maxY) node.y = maxY;
         }
@@ -708,8 +708,12 @@ function drawWedges() {
 }
 
 function drawOverlays() {
-  const overlayGroup = document.getElementById("polygon-overlays-group");
-  overlayGroup.innerHTML = "";
+  const fillGroup = document.getElementById("polygon-overlays-fill-group");
+  const strokeGroup = document.getElementById("polygon-overlays-stroke-group");
+  if (!fillGroup || !strokeGroup) return;
+
+  fillGroup.innerHTML = "";
+  strokeGroup.innerHTML = "";
 
   function getReferenceScores(profileKey) {
     let scores = {};
@@ -719,35 +723,24 @@ function drawOverlays() {
     return scores;
   }
 
-  // Do not draw user's own profile polygon outline (only comparison profile overlays NT, ADHD, ASD, AuDHD)
+  const profiles = ["nt", "adhd", "asd", "audhd"];
+  profiles.forEach(pKey => {
+    if (activeProfiles[pKey]) {
+      const dPath = getPolygonPath(getReferenceScores(pKey));
 
-  if (activeProfiles.nt) {
-    const ntPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    ntPath.setAttribute("d", getPolygonPath(getReferenceScores("nt")));
-    ntPath.setAttribute("class", "polygon-overlay nt");
-    overlayGroup.appendChild(ntPath);
-  }
+      // Append zart fill path to background layer
+      const fillPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      fillPath.setAttribute("d", dPath);
+      fillPath.setAttribute("class", `polygon-overlay-fill ${pKey}`);
+      fillGroup.appendChild(fillPath);
 
-  if (activeProfiles.adhd) {
-    const adhdPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    adhdPath.setAttribute("d", getPolygonPath(getReferenceScores("adhd")));
-    adhdPath.setAttribute("class", "polygon-overlay adhd");
-    overlayGroup.appendChild(adhdPath);
-  }
-
-  if (activeProfiles.asd) {
-    const asdPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    asdPath.setAttribute("d", getPolygonPath(getReferenceScores("asd")));
-    asdPath.setAttribute("class", "polygon-overlay asd");
-    overlayGroup.appendChild(asdPath);
-  }
-
-  if (activeProfiles.audhd) {
-    const audhdPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    audhdPath.setAttribute("d", getPolygonPath(getReferenceScores("audhd")));
-    audhdPath.setAttribute("class", "polygon-overlay audhd");
-    overlayGroup.appendChild(audhdPath);
-  }
+      // Append glowing outline stroke path to foreground layer (on top of wedges)
+      const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      strokePath.setAttribute("d", dPath);
+      strokePath.setAttribute("class", `polygon-overlay-stroke ${pKey}`);
+      strokeGroup.appendChild(strokePath);
+    }
+  });
 }
 
 // --- 5. SELECTION & SIDEBAR UPDATING ---
@@ -1788,7 +1781,6 @@ function openSegmentFeedback(typeKey, segmentKey) {
   document.getElementById("fb-segment-name").textContent = currentFeedbackContext.segmentName;
   document.getElementById("fb-original-text").textContent = `„${originalText}“`;
   document.getElementById("fb-message").value = "";
-  document.getElementById("fb-category").value = "Korrektur";
 
   // Open feedback modal
   document.getElementById("feedback-modal").classList.add("active");
@@ -1818,7 +1810,7 @@ function saveSegmentFeedback() {
     return;
   }
 
-  const category = document.getElementById("fb-category").value;
+  const category = "Feedback";
   const feedbackEntry = {
     timestamp: new Date().toISOString(),
     paramId: currentFeedbackContext.paramId,
@@ -1842,6 +1834,9 @@ function saveSegmentFeedback() {
   feedbacks.push(feedbackEntry);
   localStorage.setItem("mapping_neurodiversity_feedbacks", JSON.stringify(feedbacks));
 
+  // Update notes menu counters live!
+  updateFeedbackButtonsVisibility();
+
   // Success chime and close
   triggerChime(880, "sine", 0.06, 0.35);
   setTimeout(() => triggerChime(1318.5, "sine", 0.06, 0.45), 80);
@@ -1861,12 +1856,23 @@ function updateFeedbackButtonsVisibility() {
   const exportBtn = document.getElementById("btn-export-feedback");
   const clearBtn = document.getElementById("btn-clear-feedback");
   
-  if (feedbacks.length > 0) {
-    if (exportBtn) exportBtn.style.display = "inline-flex";
-    if (clearBtn) clearBtn.style.display = "inline-flex";
-  } else {
-    if (exportBtn) exportBtn.style.display = "none";
-    if (clearBtn) clearBtn.style.display = "none";
+  if (exportBtn) {
+    exportBtn.style.display = "inline-flex";
+    exportBtn.innerHTML = `<i class="fa-solid fa-download"></i> Feedbacks exportieren (${feedbacks.length})`;
+    if (feedbacks.length > 0) {
+      exportBtn.removeAttribute("disabled");
+    } else {
+      exportBtn.setAttribute("disabled", "true");
+    }
+  }
+
+  if (clearBtn) {
+    clearBtn.style.display = "inline-flex";
+    if (feedbacks.length > 0) {
+      clearBtn.removeAttribute("disabled");
+    } else {
+      clearBtn.setAttribute("disabled", "true");
+    }
   }
 }
 
@@ -1883,7 +1889,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.3)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.4)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
