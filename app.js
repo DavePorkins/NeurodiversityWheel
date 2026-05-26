@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.2.1
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.2.2
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -467,19 +467,19 @@ function initChart() {
       let idealAngle = 0;
       let isLeft = false;
       
-      const s_min = Math.sin(-1.30); // beautiful balanced angular orbit spread to perfectly align with wheel flanks
-      const s_max = Math.sin(1.30);
+      const s_min = Math.sin(-1.42); // increased angular spread to utilize empty top/bottom space
+      const s_max = Math.sin(1.42);
       
-      if (paramId >= 11 && paramId <= 20) {
-        const slotIndex = 20 - paramId; // 0 to 9
-        const t = slotIndex / 9;
-        const s = s_min + t * (s_max - s_min); // Go from -1.30 to +1.30 (top to bottom)
+      if (paramId >= 12 && paramId <= 22) {
+        const slotIndex = 22 - paramId; // 0 to 10
+        const t = slotIndex / 10;
+        const s = s_min + t * (s_max - s_min); // Go from -1.42 to +1.42 (top to bottom)
         idealAngle = Math.PI - Math.asin(s); // Left side: cosine will be negative
         isLeft = true;
       } else {
-        const slotIndex = paramId - 1; // 0 to 9
-        const t = slotIndex / 9;
-        const s = s_min + t * (s_max - s_min); // Go from -1.30 to +1.30 (top to bottom)
+        const slotIndex = paramId - 1; // 0 to 10
+        const t = slotIndex / 10;
+        const s = s_min + t * (s_max - s_min); // Go from -1.42 to +1.42 (top to bottom)
         idealAngle = Math.asin(s); // Right side: cosine will be positive
         isLeft = false;
       }
@@ -496,7 +496,7 @@ function initChart() {
         3: ["Schwierigkeiten mit", "sozialen Signalen"],
         4: ["Suche nach", "Gleichförmigkeit"],
         5: ["Aufgaben-", "Paralyse"],
-        6: ["Objekt-", "permanenz"],
+        6: ["Aus den Augen,", "aus dem Sinn"],
         7: ["Impulsivität"],
         8: ["Zeitblindheit"],
         9: ["Dopamin-", "Suche"],
@@ -510,7 +510,9 @@ function initChart() {
         17: ["Priorisierungs-", "probleme"],
         18: ["Interozeptions-", "Probleme"],
         19: ["Sensibilität für", "Zurückweisung"],
-        20: ["Bedürfnis nach", "Routine"]
+        20: ["Bedürfnis nach", "Routine"],
+        21: ["Autistische", "Trägheit"],
+        22: ["Neurodivergenter", "Burnout"]
       };
 
       const lines = mobileLabelSplits[paramId] || [data.nameDE];
