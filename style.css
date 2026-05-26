@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.5 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.7 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -2113,7 +2113,7 @@ body.light-mode .connector-line {
 
 .legend-node-group {
   cursor: pointer;
-  transition: var(--transition-bounce);
+  transition: opacity 0.2s ease;
 }
 
 .legend-node-badge {
@@ -2121,7 +2121,7 @@ body.light-mode .connector-line {
   stroke: rgba(255, 255, 255, 0.06);
   stroke-width: 1px;
   r: calc(12px * var(--zoom-factor, 1.5)) !important;
-  transition: var(--transition-bounce);
+  transition: fill 0.2s ease, stroke 0.2s ease;
 }
 
 body.light-mode .legend-node-badge {
@@ -2142,7 +2142,7 @@ body.light-mode .legend-node-badge {
   fill: var(--text-secondary);
   text-anchor: middle;
   dominant-baseline: middle;
-  transition: var(--transition-smooth);
+  transition: fill 0.2s ease;
   pointer-events: none;
 }
 
@@ -2162,7 +2162,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
   font-weight: 500;
   fill: var(--node-text-color, var(--text-muted)) !important;
   dominant-baseline: middle;
-  transition: var(--transition-bounce);
+  transition: fill 0.2s ease, opacity 0.2s ease;
   pointer-events: auto; /* enable click detection directly on parameter text label */
 }
 
@@ -2660,20 +2660,21 @@ body.light-mode .context-item span {
 
 /* Redesigned Premium Abbrechen & Speichern Modal Buttons */
 .modal-footer .modal-close-action-btn.primary-btn {
-  background: var(--color-user) !important;
-  color: #151121 !important;
+  background: linear-gradient(135deg, #8a7cfb, #c084fc) !important;
+  color: #ffffff !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
   border: none !important;
   padding: 0.55rem 1.4rem !important;
-  box-shadow: 0 0 10px rgba(45, 212, 191, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(138, 124, 251, 0.35) !important;
   cursor: pointer !important;
   transition: transform 0.2s, box-shadow 0.2s !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.12);
 }
 
 .modal-footer .modal-close-action-btn.primary-btn:hover {
   transform: translateY(-1.5px) !important;
-  box-shadow: 0 0 15px rgba(45, 212, 191, 0.45) !important;
+  box-shadow: 0 6px 18px rgba(138, 124, 251, 0.5) !important;
 }
 
 .modal-footer .modal-close-action-btn.secondary-btn {

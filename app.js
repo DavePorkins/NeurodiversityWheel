@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.1.4
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.1.7
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -16,7 +16,7 @@ function updateLayoutConstants() {
     MAX_RADIUS = 310; /* Fixed large stable mobile radius */
   } else {
     CENTER_X = 475;
-    CENTER_Y = 550; /* CENTER_Y set to 550 to center the wheel perfectly in the SVG viewport */
+    CENTER_Y = 300; /* CENTER_Y set to 300 to center the wheel perfectly in the 600px-high desktop SVG viewport */
     MAX_RADIUS = 205; /* Fixed large stable desktop radius */
   }
 }
@@ -484,8 +484,8 @@ function initChart() {
         isLeft = false;
       }
 
-      const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 165;
-      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 225;
+      const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 195;
+      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 55;
 
       const idealX = CENTER_X + R_x_ideal * Math.cos(idealAngle);
       const idealY = CENTER_Y + R_y_ideal * Math.sin(idealAngle);
@@ -518,7 +518,7 @@ function initChart() {
       lines.forEach(l => { if (l.length > maxCharLen) maxCharLen = l.length; });
 
       // Approximate dynamic text bounding box relative to zoomFactor
-      const approxWidth = maxCharLen * 6.5 * zoomFactor + 30; // balanced bounding box for safety
+      const approxWidth = maxCharLen * 7.5 * zoomFactor + 32; // balanced bounding box for safety
       const approxHeight = lines.length * 16.0 * zoomFactor + 14; // balanced multiplier for safe clamped line spacing headroom!
 
       nodes.push({
@@ -625,34 +625,34 @@ function initChart() {
         const node = nodes[j];
         if (isMobile) {
           if (node.isLeft) {
-            const minX = -30 + node.approxWidth;
-            const maxX = CENTER_X - 70;
+            const minX = -10 + node.approxWidth;
+            const maxX = CENTER_X - 60;
             if (node.x < minX) node.x = minX;
             if (node.x > maxX) node.x = maxX;
           } else {
-            const minX = CENTER_X + 70;
-            const maxX = 980 - node.approxWidth;
+            const minX = CENTER_X + 60;
+            const maxX = 950 - node.approxWidth;
             if (node.x < minX) node.x = minX;
             if (node.x > maxX) node.x = maxX;
           }
-          const minY = 40 + node.approxHeight / 2;
-          const maxY = 1060 - node.approxHeight / 2;
+          const minY = 45 + node.approxHeight / 2;
+          const maxY = 1055 - node.approxHeight / 2;
           if (node.y < minY) node.y = minY;
           if (node.y > maxY) node.y = maxY;
         } else {
           if (node.isLeft) {
-            const minX = -45 + node.approxWidth;
-            const maxX = CENTER_X - 90;
+            const minX = -10 + node.approxWidth;
+            const maxX = CENTER_X - 80;
             if (node.x < minX) node.x = minX;
             if (node.x > maxX) node.x = maxX;
           } else {
-            const minX = CENTER_X + 90;
-            const maxX = 995 - node.approxWidth;
+            const minX = CENTER_X + 80;
+            const maxX = 950 - node.approxWidth;
             if (node.x < minX) node.x = minX;
             if (node.x > maxX) node.x = maxX;
           }
           const minY = 35 + node.approxHeight / 2;
-          const maxY = 1065 - node.approxHeight / 2;
+          const maxY = 565 - node.approxHeight / 2;
           if (node.y < minY) node.y = minY;
           if (node.y > maxY) node.y = maxY;
         }
@@ -1889,7 +1889,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.5)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.7)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
