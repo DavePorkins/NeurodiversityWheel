@@ -1,4 +1,4 @@
-/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.4 */
+/* Mapping Neurodiversity - Refined "Pastel Perfect" Style Sheet v3.1.5 */
 /* Liefert ein vollendetes Buntes Kreisdiagramm mit wählbarem Light-Theme und perfektem Kontrast. */
 
 :root {
@@ -25,7 +25,7 @@
   --color-audhd-rgb: 244, 114, 182;
   
   /* Glassmorphismus */
-  --glass-bg: rgba(26, 21, 41, 0.55);
+  --glass-bg: rgba(18, 14, 30, 0.28);
   --glass-blur: blur(20px);
   --panel-radius: 24px;
   --card-radius: 14px;
@@ -1205,13 +1205,13 @@ body.light-mode .audhd-card {
 }
 
 .nav-btn {
-  background: rgba(255, 255, 255, 0.015);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: var(--card-radius);
+  background: rgba(162, 155, 254, 0.08) !important;
+  border: 1.5px solid rgba(162, 155, 254, 0.28) !important;
+  border-radius: 8px !important;
   color: var(--text-primary);
   font-family: var(--font-header);
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   padding: 0.5rem 1rem;
   cursor: pointer;
   display: flex;
@@ -1220,9 +1220,21 @@ body.light-mode .audhd-card {
   transition: var(--transition-smooth);
 }
 
+.nav-btn:hover:not(:disabled) {
+  background: rgba(162, 155, 254, 0.18) !important;
+  border-color: var(--color-audhd) !important;
+  box-shadow: 0 0 10px rgba(162, 155, 254, 0.2);
+  transform: translateY(-1px);
+}
+
 body.light-mode .nav-btn {
-  background: rgba(0, 0, 0, 0.015);
-  border-color: rgba(0, 0, 0, 0.03);
+  background: rgba(162, 155, 254, 0.06) !important;
+  border-color: rgba(162, 155, 254, 0.3) !important;
+  color: #2c2838 !important;
+}
+
+body.light-mode .nav-btn:hover:not(:disabled) {
+  background: rgba(162, 155, 254, 0.12) !important;
 }
 
 .primary-btn {
@@ -1325,10 +1337,10 @@ body.light-mode .modal-header .close-btn {
 }
 
 .modal-alert-box {
-  background: rgba(45, 212, 191, 0.03);
-  border: 1px dashed rgba(45, 212, 191, 0.12);
+  background: rgba(162, 155, 254, 0.04) !important;
+  border: 1.5px dashed rgba(162, 155, 254, 0.18) !important;
   border-radius: var(--card-radius);
-  padding: 0.75rem;
+  padding: 0.85rem;
   display: flex;
   gap: 0.65rem;
 }
@@ -1340,20 +1352,20 @@ body.light-mode .modal-header .close-btn {
 }
 
 .modal-close-action-btn {
-  background: linear-gradient(135deg, var(--color-user) 0%, #06b6d4 100%) !important;
-  color: #0d0a14 !important;
-  font-weight: 700 !important;
+  background: linear-gradient(135deg, #c084fc 0%, #f472b6 100%) !important; /* gorgeous warm pastel pink/violet gradient */
+  color: #ffffff !important;
+  font-weight: 600 !important;
   border: none !important;
-  padding: 0.65rem 1.75rem !important;
-  border-radius: 30px !important;
+  padding: 0.6rem 1.6rem !important;
+  border-radius: 8px !important; /* modern rounded rectangles */
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(45, 212, 191, 0.35);
+  box-shadow: 0 4px 15px rgba(244, 114, 182, 0.35);
   transition: var(--transition-bounce) !important;
 }
 
 .modal-close-action-btn:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 6px 20px rgba(45, 212, 191, 0.5) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 20px rgba(244, 114, 182, 0.5) !important;
 }
 
 /* Header controls and toggle areas styled below */
@@ -2157,8 +2169,7 @@ body.light-mode .legend-node-group.active .legend-node-badge-text {
 .legend-node-group:hover .legend-node-text,
 .legend-node-group.active .legend-node-text {
   fill: var(--node-text-color-active, var(--text-primary)) !important;
-  font-weight: 700;
-  font-size: calc(clamp(15px, 1.3vw, 17px) * var(--zoom-factor, 1)); /* dynamic active fluid size scaling */
+  font-weight: 600 !important;
 }
 
 /* Responsive adjustment overrides for 2 columns collapse & hardware-accelerated slide-in mobile drawers */
@@ -2621,7 +2632,6 @@ body.light-mode .feedback-input {
 
 .legend-node-group.active .legend-node-text {
   font-weight: 600 !important;
-  text-shadow: 0 0 8px var(--color-user);
 }
 
 /* --- 📝 PREMIUM DESIGNED ACTION BUTTONS & HIGH CONTRAST LIGHT MODE FOR FEEDBACK --- */

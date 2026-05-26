@@ -16,7 +16,7 @@ function updateLayoutConstants() {
     MAX_RADIUS = 310; /* Fixed large stable mobile radius */
   } else {
     CENTER_X = 475;
-    CENTER_Y = 300;
+    CENTER_Y = 550; /* CENTER_Y set to 550 to center the wheel perfectly in the SVG viewport */
     MAX_RADIUS = 205; /* Fixed large stable desktop radius */
   }
 }
@@ -485,7 +485,7 @@ function initChart() {
       }
 
       const R_x_ideal = isMobile ? MAX_RADIUS + 95 : MAX_RADIUS + 165;
-      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 125;
+      const R_y_ideal = isMobile ? MAX_RADIUS + 205 : MAX_RADIUS + 225;
 
       const idealX = CENTER_X + R_x_ideal * Math.cos(idealAngle);
       const idealY = CENTER_Y + R_y_ideal * Math.sin(idealAngle);
@@ -1889,7 +1889,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.4)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.1.5)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
