@@ -2862,7 +2862,7 @@ input[type=range]::-webkit-slider-thumb:hover {
   box-shadow: 0 0 16px var(--param-color, var(--color-user)) !important;
 }
 
-/* --- 🌟 LIGHT MODE MODAL STYLING Refinements (v3.3.8) --- */
+/* --- 🌟 LIGHT MODE MODAL STYLING Refinements (v3.3.9) --- */
 body.light-mode .modal-content {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;

@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" id="meta-theme-color" content="#151121">
-  <title>Mapping Neurodiversity 🌸 v3.3.8</title>
+  <title>Mapping Neurodiversity 🌸 v3.3.9</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
   <!-- Geometric Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=3.3.8">
+  <link rel="stylesheet" href="style.css?v=3.3.9">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -50,7 +50,7 @@
               <div>
                 <div class="logo-title-row">
                   <h1>Mapping Neurodiversity</h1>
-                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v3.3.8</span>
+                  <span class="version-badge"><i class="fa-solid fa-leaf"></i> v3.3.9</span>
                 </div>
                 <p class="subtitle">Das 22-Parameter-Kreisdiagramm nach Savannah Denny</p>
               </div>
@@ -221,8 +221,26 @@
           <p class="definition-text" id="detail-definition">Der Zustand, in dem das sensorische Nervensystem mehr Inputs erhält, als es filtern, verarbeiten und abbauen kann.</p>
         </div>
 
+        <!-- Deep Dive text block (Das passiert in deinem Gehirn) right below the definition -->
+        <div class="deep-dive-panel" style="margin-top: 1.25rem;">
+          <div class="deep-dive-header-row">
+            <h3><i class="fa-solid fa-book-open-reader"></i> Das passiert in deinem Gehirn:</h3>
+            <div class="deep-dive-actions">
+              <div id="deepdive-tts-wrapper" class="tts-player-wrapper inline-player">
+                <button class="voice-speak-btn compact-btn" onclick="toggleDeepDiveSpeech()" title="Deep Dive vorlesen lassen">
+                  <i class="fa-solid fa-circle-play"></i>
+                </button>
+              </div>
+              <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('main', 'deepdive')" title="Feedback zum Gehirn-Deep-Dive">
+                <i class="fa-solid fa-comment-medical"></i>
+              </button>
+            </div>
+          </div>
+          <p id="detail-deep-dive" class="deep-dive-text">Ausführlicher Erklärungstext der neurobiologischen und psychologischen Zusammenhänge.</p>
+        </div>
+
         <!-- 4-Voices Monologues with individual read-aloud buttons and relate-shortcuts -->
-        <div class="voices-container">
+        <div class="voices-container" style="margin-top: 1.25rem;">
           <h3><i class="fa-solid fa-people-group"></i> Die 4 Stimmen (Lived Experience)</h3>
           <p class="voices-intro">Lies dir an, wie unterschiedliche Menschen diese Achse erfahren, und übernehme ihr Rating bei starker Übereinstimmung:</p>
           
@@ -246,10 +264,12 @@
                 <span class="voice-avatar nt-avatar"><i class="fa-solid fa-face-smile"></i></span>
                 <strong>Neurotypische Perspektive (NT)</strong>
               </div>
-              <div id="voice-tts-wrapper-nt" class="voice-tts-wrapper">
-                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('nt')" title="Diese Stimme vorlesen lassen">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
+              <div class="voice-tts-actions" style="display: flex; align-items: center; gap: 0.35rem;">
+                <div id="voice-tts-wrapper-nt" class="voice-tts-wrapper inline-player">
+                  <button class="voice-speak-btn compact-btn" onclick="toggleVoiceSpeech('nt')" title="Diese Stimme vorlesen lassen">
+                    <i class="fa-solid fa-circle-play"></i>
+                  </button>
+                </div>
                 <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('nt', 'voice')" title="Feedback zu dieser Stimme">
                   <i class="fa-solid fa-comment-medical"></i>
                 </button>
@@ -271,10 +291,12 @@
                 <span class="voice-avatar adhd-avatar"><i class="fa-solid fa-bolt-lightning"></i></span>
                 <strong>ADHS-Perspektive</strong>
               </div>
-              <div id="voice-tts-wrapper-adhd" class="voice-tts-wrapper">
-                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('adhd')" title="Diese Stimme vorlesen lassen">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
+              <div class="voice-tts-actions" style="display: flex; align-items: center; gap: 0.35rem;">
+                <div id="voice-tts-wrapper-adhd" class="voice-tts-wrapper inline-player">
+                  <button class="voice-speak-btn compact-btn" onclick="toggleVoiceSpeech('adhd')" title="Diese Stimme vorlesen lassen">
+                    <i class="fa-solid fa-circle-play"></i>
+                  </button>
+                </div>
                 <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('adhd', 'voice')" title="Feedback zu dieser Stimme">
                   <i class="fa-solid fa-comment-medical"></i>
                 </button>
@@ -296,10 +318,12 @@
                 <span class="voice-avatar asd-avatar"><i class="fa-solid fa-puzzle-piece"></i></span>
                 <strong>Autistische Perspektive (ASD)</strong>
               </div>
-              <div id="voice-tts-wrapper-asd" class="voice-tts-wrapper">
-                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('asd')" title="Diese Stimme vorlesen lassen">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
+              <div class="voice-tts-actions" style="display: flex; align-items: center; gap: 0.35rem;">
+                <div id="voice-tts-wrapper-asd" class="voice-tts-wrapper inline-player">
+                  <button class="voice-speak-btn compact-btn" onclick="toggleVoiceSpeech('asd')" title="Diese Stimme vorlesen lassen">
+                    <i class="fa-solid fa-circle-play"></i>
+                  </button>
+                </div>
                 <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('asd', 'voice')" title="Feedback zu dieser Stimme">
                   <i class="fa-solid fa-comment-medical"></i>
                 </button>
@@ -321,10 +345,12 @@
                 <span class="voice-avatar audhd-avatar"><i class="fa-solid fa-yin-yang"></i></span>
                 <strong>Das AuDHD-Dilemma</strong>
               </div>
-              <div id="voice-tts-wrapper-audhd" class="voice-tts-wrapper">
-                <button class="voice-speak-btn" onclick="toggleVoiceSpeech('audhd')" title="Diese Stimme vorlesen lassen">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
+              <div class="voice-tts-actions" style="display: flex; align-items: center; gap: 0.35rem;">
+                <div id="voice-tts-wrapper-audhd" class="voice-tts-wrapper inline-player">
+                  <button class="voice-speak-btn compact-btn" onclick="toggleVoiceSpeech('audhd')" title="Diese Stimme vorlesen lassen">
+                    <i class="fa-solid fa-circle-play"></i>
+                  </button>
+                </div>
                 <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('audhd', 'voice')" title="Feedback zu dieser Stimme">
                   <i class="fa-solid fa-comment-medical"></i>
                 </button>
@@ -338,24 +364,6 @@
               </button>
             </footer>
           </div>
-        </div>
-
-        <!-- Deep Dive text block at the very bottom of the details -->
-        <div class="deep-dive-panel" style="margin-top: 1.25rem;">
-          <div class="deep-dive-header-row">
-            <h3><i class="fa-solid fa-book-open-reader"></i> Das passiert in deinem Gehirn:</h3>
-            <div class="deep-dive-actions">
-              <div id="deepdive-tts-wrapper" class="tts-player-wrapper inline-player">
-                <button class="voice-speak-btn compact-btn" onclick="toggleDeepDiveSpeech()" title="Deep Dive vorlesen lassen">
-                  <i class="fa-solid fa-circle-play"></i>
-                </button>
-              </div>
-              <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('main', 'deepdive')" title="Feedback zum Gehirn-Deep-Dive">
-                <i class="fa-solid fa-comment-medical"></i>
-              </button>
-            </div>
-          </div>
-          <p id="detail-deep-dive" class="deep-dive-text">Ausführlicher Erklärungstext der neurobiologischen und psychologischen Zusammenhänge.</p>
         </div>
 
         <div class="user-score-panel glass-card">
@@ -481,14 +489,16 @@
           <img id="share-qr-code" src="" alt="QR Code" style="display: block; width: 200px; height: 200px; border-radius: 8px;" />
         </div>
         
-        <!-- Plain Link to Copy -->
-        <div style="width: 100%; display: flex; flex-direction: column; gap: 0.4rem; text-align: left;">
+        <!-- Plain Link to Copy (Fully written out for high visibility in screenshots!) -->
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
           <label style="font-size: 0.78rem; text-transform: uppercase; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px;">Webseiten-Link:</label>
-          <div style="display: flex; gap: 0.4rem; width: 100%;">
-            <input id="share-url-input" type="text" readonly style="flex: 1; padding: 0.55rem; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-size: 0.82rem; font-family: monospace; text-align: center;" />
-            <button class="primary-btn" onclick="copyShareUrl()" style="padding: 0.55rem 0.8rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer;"><i class="fa-solid fa-copy"></i></button>
+          <div id="share-url-display" style="padding: 0.65rem 0.85rem; border-radius: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.85rem; font-family: monospace; word-break: break-all; text-align: center; line-height: 1.4; border-left: 3px solid var(--color-user);">
+            https://daveporkins.github.io/NeurodiversityWheel/
           </div>
-          <span id="copy-status" style="font-size: 0.78rem; color: var(--color-user); font-weight: 500; height: 1rem; margin-top: 0.2rem; display: block; text-align: center;"></span>
+          <!-- Hidden input for clipboard select compatibility -->
+          <input id="share-url-input" type="text" readonly style="display: none;" />
+          <button class="primary-btn" onclick="copyShareUrl()" style="padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; font-weight: 600;"><i class="fa-solid fa-copy"></i> Link in Zwischenablage kopieren</button>
+          <span id="copy-status" style="font-size: 0.78rem; color: var(--color-user); font-weight: 500; height: 1rem; margin-top: 0.1rem; display: block; text-align: center;"></span>
         </div>
       </div>
     </div>
@@ -522,7 +532,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="palace_data.js?v=3.3.8"></script>
-  <script src="app.js?v=3.3.8"></script>
+  <script src="palace_data.js?v=3.3.9"></script>
+  <script src="app.js?v=3.3.9"></script>
 </body>
 </html>

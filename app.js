@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.8
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.9
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -1968,7 +1968,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.8)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.9)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -2004,7 +2004,7 @@ function clearFeedbacks() {
   }
 }
 
-// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.8) ---
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.9) ---
 function openShareModal() {
   const modal = document.getElementById("share-modal");
   const qrImg = document.getElementById("share-qr-code");
@@ -2013,6 +2013,9 @@ function openShareModal() {
   if (modal && qrImg && urlInput) {
     const currentUrl = window.location.href.split('#')[0]; // Strip hash/anchor info
     urlInput.value = currentUrl;
+    
+    const displayDiv = document.getElementById("share-url-display");
+    if (displayDiv) displayDiv.textContent = currentUrl;
     
     // Set public secure high-contrast QR code image (deep slate violet)
     qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=6c5ce7&data=${encodeURIComponent(currentUrl)}`;
