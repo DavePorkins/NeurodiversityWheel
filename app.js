@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.5
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.6
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -270,10 +270,10 @@ function getPolygonPath(scores, waveType = null) {
 
     let currentRadius = INNER_RADIUS + (rating * stepSize);
 
-    // Apply a beautiful, highly aesthetic 4-period symmetric wave for the Neurotypical baseline
-    // Period = TOTAL_AXES / 4, creating exactly 4 full wavy cycles around the circle to keep the shape perfectly centered and balanced!
+    // Apply a beautiful, highly aesthetic 7-period symmetric wave for the Neurotypical baseline
+    // Period = TOTAL_AXES / 7, creating exactly 7 fine wavy cycles around the circle to keep the shape perfectly centered, balanced, and organic (preventing it from looking squarish)!
     if (waveType === "nt-wave-1") {
-      currentRadius += Math.sin(i * (4 * 2 * Math.PI / TOTAL_AXES)) * (stepSize * 0.22);
+      currentRadius += Math.sin(i * (7 * 2 * Math.PI / TOTAL_AXES)) * (stepSize * 0.16);
     }
 
     // Clamp radius to ensure it never exceeds MAX_RADIUS or goes below INNER_RADIUS
@@ -1970,7 +1970,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.5)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.6)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -2006,7 +2006,7 @@ function clearFeedbacks() {
   }
 }
 
-// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.5) ---
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.6) ---
 function openShareModal() {
   const modal = document.getElementById("share-modal");
   const qrImg = document.getElementById("share-qr-code");
