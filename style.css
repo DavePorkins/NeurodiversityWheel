@@ -575,40 +575,34 @@ body.light-mode .svg-axis-label-bg {
   r: 3.5px; /* Slightly larger for AuDHD since the line is thicker */
 }
 
-/* --- 🌸 NEUROTYPICAL WAVY strands --- */
-.polygon-overlay-stroke.nt.nt-wave-1 {
+/* --- 🌸 NEUROTYPICAL WAVY baseline --- */
+.polygon-overlay-stroke.nt {
   stroke-width: 3.5px; /* Thicker and highly visible! */
   stroke: var(--color-nt);
   opacity: 0.9;
   filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.25)); /* Soft purple/indigo baseline glow */
 }
 
-.polygon-overlay-stroke.nt.nt-wave-2 {
-  stroke-width: 2.5px; /* Thicker and highly visible! */
-  stroke: var(--color-nt);
-  stroke-dasharray: 4 3; /* Concentric textured strand */
-  opacity: 0.7;
-}
-
-.polygon-overlay-fill.nt.nt-wave-1 {
-  fill-opacity: 0.035 !important;
-}
-
-.polygon-overlay-fill.nt.nt-wave-2 {
-  fill-opacity: 0.015 !important;
+.polygon-overlay-fill.nt {
+  fill: var(--color-nt) !important;
+  fill-opacity: 0.04 !important;
 }
 
 /* Center Infinity Logo theme colors */
 .chart-center-logo path {
-  fill: url(#center-rainbow-grad);
-  stroke: none;
-  filter: drop-shadow(0px 0px 4px rgba(162, 155, 254, 0.6));
+  stroke: url(#center-rainbow-grad);
+  stroke-width: 5.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0px 0px 4px rgba(162, 155, 254, 0.55));
   transition: filter 0.3s ease;
 }
 
 body.light-mode .chart-center-logo path {
-  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.15));
 }
+
 
 
 

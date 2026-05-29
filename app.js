@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.2
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.3
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -261,14 +261,18 @@ function getPolygonPath(scores, waveType = null) {
 
   for (let i = 0; i < TOTAL_AXES; i++) {
     const paramId = i + 1;
-    const rating = scores[paramId] || 1;
+    let rating = scores[paramId] || 1;
+
+    // Force NT baseline rating to exactly 1.5, placing it in the middle of Level 1 and Level 2
+    if (waveType === "nt-wave-1") {
+      rating = 1.5;
+    }
+
     let currentRadius = INNER_RADIUS + (rating * stepSize);
 
-    // Apply subtle aesthetic wave modulation for Neurotypical baseline
+    // Apply subtle aesthetic wave modulation for Neurotypical baseline (slithering krummer Kreis)
     if (waveType === "nt-wave-1") {
       currentRadius += Math.sin(i * 1.8) * 4.5;
-    } else if (waveType === "nt-wave-2") {
-      currentRadius += Math.cos(i * 2.2) * 4.5;
     }
 
     // Clamp radius to ensure it never exceeds MAX_RADIUS or goes below INNER_RADIUS
@@ -276,6 +280,7 @@ function getPolygonPath(scores, waveType = null) {
 
     points.push(getCoords(i, currentRadius));
   }
+
 
   if (points.length < 3) return "";
 
@@ -770,23 +775,20 @@ function drawOverlays() {
   profiles.forEach(pKey => {
     if (activeProfiles[pKey]) {
       if (pKey === "nt") {
-        // Draw TWO intertwining wavy lines for NT!
-        const waves = ["nt-wave-1", "nt-wave-2"];
-        waves.forEach(wType => {
-          const dPath = getPolygonPath(getReferenceScores(pKey), wType);
+        // Draw ONE wavy slithering baseline for NT!
+        const dPath = getPolygonPath(getReferenceScores(pKey), "nt-wave-1");
 
-          // Append zart fill path to background layer
-          const fillPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          fillPath.setAttribute("d", dPath);
-          fillPath.setAttribute("class", `polygon-overlay-fill nt ${wType}`);
-          fillGroup.appendChild(fillPath);
+        // Append zart fill path to background layer
+        const fillPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        fillPath.setAttribute("d", dPath);
+        fillPath.setAttribute("class", "polygon-overlay-fill nt");
+        fillGroup.appendChild(fillPath);
 
-          // Append glowing outline stroke path to foreground layer (on top of wedges)
-          const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          strokePath.setAttribute("d", dPath);
-          strokePath.setAttribute("class", `polygon-overlay-stroke nt ${wType}`);
-          strokeGroup.appendChild(strokePath);
-        });
+        // Append glowing outline stroke path to foreground layer (on top of wedges)
+        const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        strokePath.setAttribute("d", dPath);
+        strokePath.setAttribute("class", "polygon-overlay-stroke nt");
+        strokeGroup.appendChild(strokePath);
       } else {
         const dPath = getPolygonPath(getReferenceScores(pKey));
 
@@ -1968,7 +1970,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.2)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.3)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -2004,7 +2006,7 @@ function clearFeedbacks() {
   }
 }
 
-// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.2) ---
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.3) ---
 function openShareModal() {
   const modal = document.getElementById("share-modal");
   const qrImg = document.getElementById("share-qr-code");
