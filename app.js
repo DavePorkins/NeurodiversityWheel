@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.3
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.4
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -270,9 +270,10 @@ function getPolygonPath(scores, waveType = null) {
 
     let currentRadius = INNER_RADIUS + (rating * stepSize);
 
-    // Apply subtle aesthetic wave modulation for Neurotypical baseline (slithering krummer Kreis)
+    // Apply seamless consistent 1-period wave modulation for Neurotypical baseline (gently slithering circle)
+    // Period = TOTAL_AXES, completing exactly 1 full wave seamlessly around the entire 22-parameter wheel!
     if (waveType === "nt-wave-1") {
-      currentRadius += Math.sin(i * 1.8) * 4.5;
+      currentRadius += Math.sin(i * (2 * Math.PI / TOTAL_AXES)) * (stepSize * 0.35);
     }
 
     // Clamp radius to ensure it never exceeds MAX_RADIUS or goes below INNER_RADIUS
@@ -280,7 +281,6 @@ function getPolygonPath(scores, waveType = null) {
 
     points.push(getCoords(i, currentRadius));
   }
-
 
   if (points.length < 3) return "";
 
@@ -300,7 +300,7 @@ function getPolygonPath(scores, waveType = null) {
 
   let path = "";
   const n = points.length;
-  const tension = 0.35; // Tighter tension (0.35) mathematically limits overshoot while preserving smooth flow
+  const tension = 0.0; // Complete soft roundness (0.0) for highly fluid, smooth curves!
 
   // Start path exactly at the first point (clamped)
   const pStart = clampToMax(points[0]);
@@ -313,16 +313,16 @@ function getPolygonPath(scores, waveType = null) {
     const p2 = clampToMax(points[(i + 1) % n]);
     const p3 = clampToMax(points[(i + 2) % n]);
 
-    // Calculate control points with clamping
-    const cp1 = clampToMax({
+    // Calculate control points without clamping to preserve perfect C1 tangent continuity (removing spikiness)
+    const cp1 = {
       x: p1.x + (p2.x - p0.x) * (1 - tension) / 6,
       y: p1.y + (p2.y - p0.y) * (1 - tension) / 6
-    });
+    };
 
-    const cp2 = clampToMax({
+    const cp2 = {
       x: p2.x - (p3.x - p1.x) * (1 - tension) / 6,
       y: p2.y - (p3.y - p1.y) * (1 - tension) / 6
-    });
+    };
 
     path += ` C ${cp1.x.toFixed(2)},${cp1.y.toFixed(2)} ${cp2.x.toFixed(2)},${cp2.y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
   }
@@ -1970,7 +1970,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.3)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.4)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -2006,7 +2006,7 @@ function clearFeedbacks() {
   }
 }
 
-// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.3) ---
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.4) ---
 function openShareModal() {
   const modal = document.getElementById("share-modal");
   const qrImg = document.getElementById("share-qr-code");
