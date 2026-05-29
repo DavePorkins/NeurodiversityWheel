@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.7
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.8
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -1359,9 +1359,6 @@ function resetAllPlayerContainers() {
       <button class="voice-speak-btn compact-btn" onclick="toggleDeepDiveSpeech()" title="Deep Dive vorlesen lassen">
         <i class="fa-solid fa-circle-play"></i>
       </button>
-      <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('main', 'deepdive')" title="Feedback zum Gehirn-Deep-Dive">
-        <i class="fa-solid fa-comment-medical"></i>
-      </button>
     `;
   }
   
@@ -1373,9 +1370,6 @@ function resetAllPlayerContainers() {
       wrapper.innerHTML = `
         <button class="voice-speak-btn" onclick="toggleVoiceSpeech('${k}')" title="Diese Stimme vorlesen lassen">
           <i class="fa-solid fa-circle-play"></i>
-        </button>
-        <button class="segment-feedback-btn compact-btn" onclick="openSegmentFeedback('${k}', 'voice')" title="Feedback zu dieser Stimme">
-          <i class="fa-solid fa-comment-medical"></i>
         </button>
       `;
     }
@@ -1838,6 +1832,9 @@ function openSegmentFeedback(typeKey, segmentKey) {
   } else if (segmentKey === "deepdive") {
     segmentName = "Gehirn-Deep-Dive (Das passiert im Gehirn)";
     originalText = data.deepDive;
+  } else if (segmentKey === "scenario") {
+    segmentName = "Beispielsituation (Vergleichs-Szenario)";
+    originalText = data.scenario || "";
   } else if (segmentKey === "voice") {
     const voiceNames = {
       nt: "Neurotypische Stimme (NT)",
@@ -1971,7 +1968,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.7)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.8)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -2007,7 +2004,7 @@ function clearFeedbacks() {
   }
 }
 
-// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.7) ---
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.8) ---
 function openShareModal() {
   const modal = document.getElementById("share-modal");
   const qrImg = document.getElementById("share-qr-code");

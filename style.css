@@ -2861,3 +2861,51 @@ input[type=range]::-webkit-slider-thumb:hover {
   transform: scale(1.22) !important; /* Scale up slightly on hover for modern desktop response */
   box-shadow: 0 0 16px var(--param-color, var(--color-user)) !important;
 }
+
+/* --- 🌟 LIGHT MODE MODAL STYLING Refinements (v3.3.8) --- */
+body.light-mode .modal-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12) !important;
+}
+
+body.light-mode .modal-overlay {
+  background: rgba(21, 17, 33, 0.35) !important; /* Lighter, warm translucent overlay in light mode */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.sources-panel {
+  margin-top: 1.2rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(162, 155, 254, 0.06);
+  border: 1px solid rgba(162, 155, 254, 0.15);
+}
+
+.sources-panel h4 {
+  margin: 0 0 0.6rem 0;
+  font-size: 0.95rem;
+  color: #6c5ce7;
+}
+
+body.light-mode .sources-panel {
+  background: rgba(108, 92, 231, 0.06) !important;
+  border-color: rgba(108, 92, 231, 0.18) !important;
+}
+
+body.light-mode .sources-panel h4 {
+  color: #5c4dcc !important;
+}
+
+body.light-mode .modal-alert-box {
+  background: rgba(108, 92, 231, 0.04) !important;
+  border-color: rgba(108, 92, 231, 0.18) !important;
+  color: #2d263d !important;
+}
+
+body.light-mode .modal-header .header-action-btn {
+  background: rgba(108, 92, 231, 0.08) !important;
+  border-color: rgba(108, 92, 231, 0.2) !important;
+  color: #5c4dcc !important;
+}
