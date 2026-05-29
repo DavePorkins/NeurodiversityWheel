@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.2.2
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.0
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -251,12 +251,8 @@ function getWedgePath(cx, cy, rInner, rOuter, startAngle, endAngle) {
   `.trim().replace(/\s+/g, ' ');
 }
 
-// Generates overlays polygon path
-// CRITICAL MATHEMATICAL CORRECTION:
-// Replace INNER_RADIUS + rating*stepSize - stepSize/2 with INNER_RADIUS + rating*stepSize
-// so overlay lines terminate EXACTLY at wedge level boundaries instead of their center!
-// PREMIUM polish: Generates a perfectly smooth closed quadratic spline curve
-// to turn jagged zig-zags into organic, flowing rounded shapes!
+// PREMIUM polish: Generates a perfectly smooth closed Catmull-Rom interpolating spline curve
+// to turn jagged zig-zags into organic, flowing rounded shapes that pass EXACTLY through the data points!
 function getPolygonPath(scores) {
   updateLayoutConstants();
   let points = [];
@@ -271,25 +267,31 @@ function getPolygonPath(scores) {
   if (points.length < 3) return "";
 
   let path = "";
-  // Start at the midpoint of the last segment and first segment to ensure closed smooth joint!
-  const pLast = points[points.length - 1];
-  const pFirst = points[0];
-  const startMidX = (pLast.x + pFirst.x) / 2;
-  const startMidY = (pLast.y + pFirst.y) / 2;
+  const n = points.length;
+  const tension = 0.15; // Elegant tension to keep it smooth and tight
 
-  path += `M ${startMidX},${startMidY}`;
+  // Start path exactly at the first point
+  path += `M ${points[0].x.toFixed(2)},${points[0].y.toFixed(2)}`;
 
-  for (let i = 0; i < points.length; i++) {
-    const pCurrent = points[i];
-    const pNext = points[(i + 1) % points.length];
-    const nextMidX = (pCurrent.x + pNext.x) / 2;
-    const nextMidY = (pCurrent.y + pNext.y) / 2;
+  // Draw cubic Bezier segments to interpolate through all points
+  for (let i = 0; i < n; i++) {
+    const p0 = points[(i - 1 + n) % n];
+    const p1 = points[i];
+    const p2 = points[(i + 1) % n];
+    const p3 = points[(i + 2) % n];
 
-    path += ` Q ${pCurrent.x},${pCurrent.y} ${nextMidX},${nextMidY}`;
+    const cp1x = p1.x + (p2.x - p0.x) * (1 - tension) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) * (1 - tension) / 6;
+
+    const cp2x = p2.x - (p3.x - p1.x) * (1 - tension) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) * (1 - tension) / 6;
+
+    path += ` C ${cp1x.toFixed(2)},${cp1y.toFixed(2)} ${cp2x.toFixed(2)},${cp2y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
   }
 
   return path + " Z";
 }
+
 
 // --- 4. PARAMETER LIST & CHART RENDERING ---
 
@@ -1891,7 +1893,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.2.0)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.0)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;

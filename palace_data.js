@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Master Data Base v3.2.2
+// Mapping Neurodiversity - Master Data Base v3.3.0
 // Credit: Savannah Denny (Colour Me Neurospicy) for the original 22-trait model. We adapted 22 parameters.
 // Tonalität: Neuroaffirmativ, einfühlsam und wissenschaftlich fundiert.
 
@@ -24,14 +24,14 @@ const palaceData = [
     nameDE: "Suche nach Vertrautheit",
     definition: "Das aktive Aufsuchen bekannter Muster, Medien, Speisen oder Umgebungen als bewusste Regulationsstrategie für das Nervensystem.",
     scenario: "Du planst ein Abendessen. Ein Kollege schlägt spontan ein brandneues indisches Streetfood-Lokal mit völlig ungewohnten Gewürzen und unbekanntem Menü vor.",
-    deepDive: "Das Gehirn ist eine Vorhersagemaschine. Die Verarbeitung neuer oder unvorhersehbarer Situationen kostet massiv Energie. Wenn der sensorische Filter offen ist und Reize ungefiltert einströmen, bietet das Bekannte eine schützende Oase der Vorhersehbarkeit. Dies zeigt sich im wiederholten Konsum vertrauter Medien (wo das Ergebnis bekannt ist), dem Essen von 'Safe Foods' (konstante sensorische Eigenschaften) oder dem Einhalten gleicher Wege. Es dient als effektive Coping-Strategie zur Regulation des überreizten Nervensystems.",
+    deepDive: "Das Gehirn ist eine Vorhersagemaschine (Predictive Coding). Die Verarbeitung neuer oder unvorhersehbarer Situationen kostet massiv Energie. Je offener der sensorische Filter ist, desto höher ist die sogenannte Unsicherheitsintoleranz (Intolerance of Uncertainty): Das Nervensystem gewichtet unbekannte Reize als potenzielle Bedrohung. Das Bekannte bietet eine schützende Oase der Vorhersehbarkeit. Dies zeigt sich im wiederholten Konsum vertrauter Medien, dem Essen von 'Safe Foods' (konstante sensorische Eigenschaften) oder dem Einhalten gleicher Wege. Es ist eine effektive Regulationsstrategie für ein offenes sensorisches System.",
     voices: {
       nt: "Klingt super spannend! Ich kenne zwar die indischen Speisen nicht, freue mich aber auf das neue Geschmackserlebnis und probiere gerne etwas Spontanes aus. Wenn es mir nicht schmeckt, ist das auch kein Weltuntergang.",
       adhd: "Endlich Abwechslung! Jedes Mal das Gleiche zu essen langweilt mich zu Tode. Ich brauche ständig neue Restaurants, neue Playlists und neue Routen, sonst schläft mein Gehirn ein. Ich bestelle sofort das außergewöhnlichste Gericht auf der Karte.",
       asd: "Ich brauche meine bekannten Safe Foods. Eine unbekannte Textur oder ein unerwarteter Geschmack erzeugt bei mir echten physischen Stress. Da ich mich nicht darauf einstellen kann, bleibe ich lieber zu Hause und koche mein bewährtes Nudelgericht der immer gleichen Marke.",
       audhd: "Ich stimme begeistert zu, weil mein ADHS-Teil das Dopamin des Abenteuers sucht. Als wir ankommen und alles laut und unübersichtlich aussieht, blockiert mein autistischer Teil. Ich fühle mich verloren und bestelle das einzige vertraut wirkende Gericht, um mich irgendwie zu regulieren."
     },
-    ratings: { nt: 2, adhd: 2, asd: 5, audhd: 3 }
+    ratings: { nt: 1, adhd: 2, asd: 5, audhd: 3 }
   },
   {
     id: 3,
@@ -39,7 +39,7 @@ const palaceData = [
     nameDE: "Schwierigkeiten mit sozialen Signalen",
     definition: "Eine nicht-intuitive Verarbeitung nonverbaler Kommunikation und impliziter sozialer Regeln.",
     scenario: "In einer Kaffeepause erzählt eine Kollegin eine ironisch gemeinte Anekdote über ihren Chef und blickt dich dann vielsagend an.",
-    deepDive: "Soziale Interaktion erfordert eine komplexe, oft unbewusste intuitive Synchronisation von Mimik, Gestik und impliziten Regeln. Wenn diese Synchronisation nicht intuitiv abläuft, muss soziale Kommunikation kognitiv verarbeitet werden – wie das rationale Analysieren einer Fremdsprache. Das sogenannte Double Empathy Problem verdeutlicht, dass Kommunikationsbarrieren nicht einseitig auf einem Defizit beruhen, sondern primär im Zusammenspiel unterschiedlicher neurobiologischer Verarbeitungsweisen entstehen.",
+    deepDive: "Soziale Interaktion erfordert eine komplexe, oft unbewusste intuitive Synchronisation von Mimik, Gestik und impliziten Regeln. Wenn diese Synchronisation nicht intuitiv abläuft, muss soziale Kommunikation kognitiv verarbeitet werden – wie das rationale Analysieren einer Fremdsprache. Das Double Empathy Problem (nach Damian Milton, 2012) verdeutlicht, dass Kommunikationsbarrieren nicht einseitig auf einem Defizit beruhen, sondern primär im Zusammenspiel unterschiedlicher neurobiologischer Verarbeitungsweisen entstehen. Studien zeigen, dass autistische Menschen untereinander hervorragend und empathisch kommunizieren – die Barriere entsteht erst im neurotypisch-autistischen Austausch.",
     voices: {
       nt: "Ich verstehe den Witz, die Ironie und die unausgesprochene Botschaft sofort. Ich lache passend, erwidere den Blick spielerisch und werfe das Gespräch ganz natürlich und ohne Nachzudenken weiter.",
       adhd: "Ich verstehe soziale Signale meistens ganz gut, bin aber viel zu ungeduldig. Vor Begeisterung falle ich ihr impulsiv ins Wort, erzähle meine eigene Geschichte und merke erst Sekunden später am Gesichtsausdruck der Kollegin, dass das unhöflich war. Danach schäme ich mich heftig.",
@@ -91,7 +91,7 @@ const palaceData = [
       asd: "Ich habe ein extrem strukturiertes Ordnungssystem. Jedes Ding hat seinen festen, beschrifteten Platz in einem geschlossenen Schrank. Ich vergesse das Gemüse nicht, da ich mir seine Position logisch eingeprägt habe. Das schützt mich vor visuellem Overload.",
       audhd: "Ich brauche geschlossene, minimalistische Schränke, weil mich herumliegendes Zeug visuell komplett überfordert. Sobald ich die Sachen aber wegräume, vergisst mein ADHS-Teil sofort, dass sie existieren, und ich kaufe Lebensmittel dreimal doppelt."
     },
-    ratings: { nt: 1, adhd: 5, asd: 1, audhd: 4 }
+    ratings: { nt: 1, adhd: 5, asd: 2, audhd: 4 }
   },
   {
     id: 7,
@@ -99,14 +99,14 @@ const palaceData = [
     nameDE: "Impulsivität",
     definition: "Das Ausführen von Handlungen oder das Äußern von Gedanken ohne vorherige rationale Abwägung der Konsequenzen.",
     scenario: "Du entdeckst online ein teures Gadget für dein aktuelles Spezialinteresse. Es kostet eigentlich zu viel Geld für dein knappes Monatsbudget.",
-    deepDive: "Impulsivität basiert auf einer verminderten inhibitorischen Kontrolle im präfrontalen Kortex. Wenn im Nervensystem eine verminderte basale Dopamin-Signalübertragung vorliegt (z. B. durch erhöhten Rücktransport oder geringere Rezeptordichte), befindet sich das Gehirn in einem konstanten Unterstimulationszustand. Bietet sich eine Gelegenheit zur sofortigen Ausschüttung von Botenstoffen (wie Dopamin) – etwa durch Spontankäufe oder impulsive Reaktionen –, überstimmt das Gehirn die rationale Handlungsbremse, um die biologische Homöostase wiederherzustellen.",
+    deepDive: "Impulsivität basiert auf einer verminderten inhibitorischen Kontrolle im präfrontalen Kortex. Wenn in den fronto-striatalen Netzwerken eine veränderte dopaminerge und noradrenerge Signalübertragung vorliegt, ist die kognitive Bremsfunktion ('Top-Down-Regulation') geschwächt. Bietet sich eine Gelegenheit zur sofortigen Belohnung – etwa durch Spontankäufe oder impulsive Reaktionen –, überstimmt das Gehirn die rationale Handlungsbremse, weil die biologische Regulationskapazität des präfrontalen Kortex in diesem Moment nicht ausreicht.",
     voices: {
       nt: "Ich sehe das Gadget, es gefällt mir sehr. Aber ich überlege kurz rational, ob es in mein Budget passt. Da ich nächsten Monat Miete zahlen muss, lasse ich es stehen, schließe den Tab und gehe weiter.",
       adhd: "Mein Gehirn leuchtet auf wie ein Weihnachtsbaum. Ehe ich rational nachdenken kann, habe ich auf 'Jetzt kaufen' geklickt. Der Dopaminkick hält genau zwei Minuten an, danach kommt das bittere, schlechte Gewissen über den Kontrollverlust.",
       asd: "Spontane Käufe machen mir Angst. Ich plane Anschaffungen wochenlang im Voraus, lese Dutzende Rezensionen und vergleiche Preise. Wenn ich ungeplant Geld ausgeben soll, blockiert mein System sofort.",
       audhd: "Mein ADHS-Teil kauft impulsiv im Hyperfokus. Mein autistischer Teil reagiert am nächsten Tag mit Panik und lähmenden Schuldgefühlen über den plötzlichen Kontrollverlust und die Störung des Budgets. Das Gerät erzeugt puren Stress."
     },
-    ratings: { nt: 2, adhd: 5, asd: 1, audhd: 4 }
+    ratings: { nt: 1, adhd: 5, asd: 2, audhd: 4 }
   },
   {
     id: 8,
@@ -114,7 +114,7 @@ const palaceData = [
     nameDE: "Zeitblindheit",
     definition: "Die Unfähigkeit des Gehirns, den Fluss der Zeit intuitiv wahrzunehmen oder die Dauer zukünftiger Aufgaben realistisch einzuschätzen.",
     scenario: "Du musst in 20 Minuten am Bahnhof sein. Du siehst, dass in der Spüle noch ein Teller steht und die Kaffeemaschine gereinigt werden sollte.",
-    deepDive: "Zeitblindheit beschreibt eine veränderte neuronale Verarbeitung des Zeitflusses. Die intuitive Einschätzung von Zeitabständen und zukünftiger Dauer erfordert eine komplexe Integration verschiedener Gehirnareale. Fehlt diese intuitive Taktung, teilt das Gehirn die Zeit primär in zwei Zustände: 'Jetzt' und 'Nicht Jetzt'. Alles in der Zukunft liegende wird als unbestimmt wahrgenommen, bis es in die unmittelbare Gegenwart rückt. Dies erschwert die intuitive zeitliche Planung und führt dazu, dass Zeiträume extrem verschätzt werden.",
+    deepDive: "Zeitblindheit beschreibt eine veränderte neuronale Verarbeitung des Zeitflusses. Die intuitive Einschätzung von Zeitabständen und zukünftiger Dauer erfordert eine komplexe Integration verschiedener Gehirnareale. Russell Barkley beschreibt das ADHS-Zeithorizont-Modell als zwei Zustände: 'Jetzt' und 'Nicht Jetzt'. Alles in der Zukunft liegende wird als unbestimmt wahrgenommen, bis es in die unmittelbare Gegenwart rückt. Bei autistischen Menschen zeigt sich Zeitverarbeitung anders: Sie tendieren zu rigider, minutiöser Zeiteinteilung und benötigen Vorlaufzeit für Übergänge. Beide Formen erschweren die flexible zeitliche Planung.",
     voices: {
       nt: "Ich spüle kurz den Teller ab, ziehe meine Jacke an und gehe in Ruhe los. Ich kann die Zeit gut einschätzen und komme genau 3 Minuten vor Abfahrt des Zuges am Gleis an.",
       adhd: "Zeit ist für mich ein abstraktes Konstrukt. Ich fange an, die Küche zu wischen, und denke, es dauert eine Minute. Plötzlich sind 25 Minuten um, und ich verpasse meinen Zug komplett. Ich verschätze mich permanent.",
@@ -127,16 +127,16 @@ const palaceData = [
     id: 9,
     nameEN: "Dopamine Seeking",
     nameDE: "Dopamin-Suche",
-    definition: "Das ständige, biologisch getriebene Bedürfnis des Gehirns nach Stimulation, Neuheit und Belohnung, um ein chronisch niedriges Basal-Dopaminniveau auszugleichen.",
+    definition: "Das ständige, biologisch getriebene Bedürfnis des Gehirns nach Stimulation, Neuheit und Belohnung, um eine veränderte basale Dopamin-Regulation auszugleichen.",
     scenario: "Du musst dich durch eine extrem trockene, langweilige Excel-Tabelle arbeiten. Dein Smartphone liegt neben dir auf dem Schreibtisch.",
-    deepDive: "Dopamin steuert Motivation, Antrieb und das Belohnungsgefühl. Liegt im Nervensystem eine verringerte basale Dopamin-Aktivität vor, verharrt das Gehirn in einem als unangenehm empfundenen 'Leerlauf'. Dies erzeugt einen starken biologischen Antrieb, das Belohnungszentrum durch externe Reize künstlich zu stimulieren. Typische Reaktionen sind die ständige Suche nach Neuheit (Hobbys, Smartphone-Nachrichten) oder physischen Stimulanzien (Zucker, Koffein, Nervenkitzel). Während Impulsivität die schwache Handlungsbremse beschreibt, bezeichnet Dopamin-Suche diesen aktiven Drang zur Stimulationserhöhung.",
+    deepDive: "Dopamin steuert Motivation, Antrieb und das Belohnungsgefühl. Bei einer Dysbalance zwischen tonischer (basaler) und phasischer (reizgetriebener) Dopamin-Aktivität kann das Gehirn in einen als unangenehm empfundenen 'Leerlauf' geraten. Es handelt sich nicht um einen einfachen Dopaminmangel, sondern um eine veränderte Regulation: Routinetätigkeiten erzeugen zu wenig Belohnungssignal, während neue Reize eine überschießende phasische Antwort auslösen. Dies erzeugt einen biologischen Antrieb zur ständigen Stimulationserhöhung. Während Impulsivität die schwache Handlungsbremse beschreibt, bezeichnet Dopamin-Suche diesen aktiven Drang nach Neuheit und Belohnung.",
     voices: {
       nt: "Es macht keinen Spaß, aber ich ziehe es einfach durch und arbeite die Tabelle ab. Danach mache ich eine wohlverdiente Pause, trinke einen Kaffee und freue mich auf den Feierabend.",
       adhd: "Mein Gehirn weigert sich. Ich verspüre eine fast physische Unruhe und greife alle zwei Minuten impulsiv zum Smartphone, um die Benachrichtigungen zu checken (Dopamin-Hunger). Ohne ständige Stimulation schläft mein Kopf ein.",
       asd: "Ich brauche keine ständige Neuheit. Ich finde meine Befriedigung in der tiefen, systematischen Beschäftigung mit meinen Spezialgebieten. Trockene Routinen stören mich kaum, solange sie einen klaren Sinn ergeben.",
       audhd: "Ich stecke in einer Dauerschleife: Mein ADHS-Teil will den nächsten Dopaminkick und greift zum Handy. Mein autistischer Teil rebelliert, weil die Ablenkung die Arbeitsstruktur zerstört. Ich bin gleichzeitig unterstimuliert und überfordert."
     },
-    ratings: { nt: 2, adhd: 5, asd: 1, audhd: 4 }
+    ratings: { nt: 1, adhd: 5, asd: 2, audhd: 4 }
   },
   {
     id: 10,
@@ -163,7 +163,7 @@ const palaceData = [
     voices: {
       nt: "Ich nehme mir einen Wäschekorb, fange in einer Ecke an, sortiere die Kleidung und spüle das Geschirr. Nach einer Stunde bin ich fertig, ohne dass es mich mental blockiert.",
       adhd: "Ich sehe das Chaos und mein Gehirn kapituliert sofort. Ich fange an, ein Buch wegzuräumen, finde dabei ein altes Foto, betrachte es, gehe in die Küche, fange an zu spülen, vergesse es und stehe plötzlich im Garten und gieße Blumen.",
-      asd: "Ich kann Ordnung halten, solange ich die volle Kontrolle über meine Umgebung habe. Wenn mir jedoch ein unstrukturiertes Chaos von außen aufgezwungen wird, bricht meine exekutive Planung zusammen und ich blockiere komplett.",
+      asd: "Ich kann Ordnung halten, wenn mein System funktioniert. Sobald aber eine unvorhergesehene Variable mein etabliertes Ordnungssystem durchbricht — ob von außen aufgezwungenes Chaos oder ein plötzlich nicht mehr funktionierendes Ablagesystem —, fehlt mir die exekutive Flexibilität, spontan umzustrukturieren. Dann blockiere ich komplett.",
       audhd: "Mein autistischer Teil leidet unter der Unordnung und braucht dringend Struktur. Mein ADHS-Teil blockiert jedoch bei der exekutiven Ausführung. Ich lebe im stresserzeugenden Chaos, unfähig, es zu beseitigen."
     },
     ratings: { nt: 1, adhd: 5, asd: 3, audhd: 5 }
@@ -181,7 +181,7 @@ const palaceData = [
       asd: "Ich spiele eine Rolle nach einem erlernten Drehbuch. Ich lächele, wenn andere lächeln, und berechne meinen Blickkontakt. Zu Hause falle ich erschöpft in einen Shutdown – die Maske abzunehmen ist wie das Ablegen einer zentnerschweren Rüstung.",
       audhd: "Mein ADHS-Teil will laut, impulsiv und exzentrisch sein. Mein autistischer Teil hat extreme Angst vor sozialer Ablehnung und erzwingt eine perfekte Maske. Ich maskiere so gut, dass mir niemand meine Not glaubt."
     },
-    ratings: { nt: 2, adhd: 3, asd: 5, audhd: 5 }
+    ratings: { nt: 1, adhd: 3, asd: 5, audhd: 5 }
   },
   {
     id: 13,
@@ -204,14 +204,14 @@ const palaceData = [
     nameDE: "Emotionale Dysregulation",
     definition: "Eine verminderte Fähigkeit, die Intensität, Dauer und den Ausdruck von Emotionen kognitiv zu dämpfen.",
     scenario: "Ein Dozent oder Vorgesetzter äußert eine sachliche Kritik an einem von dir erstellten Entwurf.",
-    deepDive: "Emotionen können das Nervensystem mit enormer Intensität treffen. Gibt es eine verringerte regulierende Verbindung zwischen der Amygdala (dem emotionalen Alarmzentrum) und dem präfrontalen Kortex (der kognitiven Kontrolle), fehlt die Dämpfung. Dies führt dazu, dass Reize ungefiltert intensive Gefühle auslösen – sowohl extrem positive wie 'Hyperfocus Joy' als auch schlagartige Frustration bei kleinen Rückschlägen.",
+    deepDive: "Emotionale Dysregulation ist ein Kernaspekt neurodivergenter Erfahrung. Sie basiert auf einer verringerten regulierenden Verbindung zwischen der Amygdala (dem emotionalen Alarmzentrum) und dem präfrontalen Kortex (der kognitiven Kontrolle). Ohne diese Dämpfung treffen Emotionen das Nervensystem mit voller Wucht — sowohl extrem positive (Hyperfocus Joy, Euphorie) als auch schlagartige Frustration bei kleinen Rückschlägen. Ein verwandtes Phänomen ist die Alexithymie: die Schwierigkeit, eigene Emotionen zu identifizieren und zu benennen, obwohl sie intensiv körperlich spürbar sind. Etwa die Hälfte aller autistischen Menschen erlebt Alexithymie.",
     voices: {
       nt: "Es ärgert mich kurz, aber ich kann das Feedback sachlich einordnen, atme tief durch und passe die Punkte an. Ich nehme es keinesfalls persönlich.",
       adhd: "Die Kritik trifft mich wie ein emotionaler Tsunami. Mein Gehirn schaltet sofort auf Alarm. Ich spüre eine tiefe, fast physisch schmerzhafte Ablehnung (RSD) und möchte alles hinwerfen. Gefühle überfluten mich komplett.",
       asd: "Ich spüre eine gigantische körperliche Anspannung, kann aber kaum benennen, welches Gefühl das eigentlich ist — ein Phänomen, das Alexithymie genannt wird. Wenn die emotionale Reizflut zu groß wird, mündet sie in unkontrollierbaren Weinkrämpfen oder totalem Shutdown.",
-      audhd: "Emotional reagiere ich blitzschnell und impulsiv auf Reize — das ist mein Gehirn im ADHS-Modus. Gleichzeitig versucht die autistische Seite meines Nervensystems krampfhaft, absolute Kontrolle und Kälte nach außen zu wahren. Dieser innere Druck führt dazu, dass sich Emotionen aufstauen und bei der kleinsten Nichtigkeit explodieren."
+      audhd: "Emotional reagiere ich blitzschnell und impulsiv auf Reize — mein Nervensystem hat kaum eine Bremse. Gleichzeitig versucht die autistische Seite meines Gehirns krampfhaft, absolute Kontrolle und Kälte nach außen zu wahren. Dieser innere Druck führt dazu, dass sich Emotionen aufstauen und bei der kleinsten Nichtigkeit explodieren."
     },
-    ratings: { nt: 2, adhd: 5, asd: 4, audhd: 5 }
+    ratings: { nt: 1, adhd: 5, asd: 4, audhd: 5 }
   },
   {
     id: 15,
@@ -241,7 +241,7 @@ const palaceData = [
       asd: "Ein lebenslanges Spezialinteresse wird geweckt. Ich beginne, das Thema akribisch zu systematisieren, erstelle Tabellen und sammle Daten. Diese Beschäftigung ist mein sicherer Anker und lädt meine Energie auf.",
       audhd: "Ich lebe im Dauer-Hobby-Verschleiß. Mein ADHS-Teil stürzt sich obsessiv und teuer in neue Hyperfixationen. Mein autistischer Teil leidet unter dem Verlust der Beständigkeit und schämt sich für das unfertige Chaos."
     },
-    ratings: { nt: 2, adhd: 5, asd: 5, audhd: 5 }
+    ratings: { nt: 1, adhd: 5, asd: 5, audhd: 5 }
   },
   {
     id: 17,
@@ -253,7 +253,7 @@ const palaceData = [
     voices: {
       nt: "Ich fange natürlich mit der dringendsten Steuererklärung an. Die anderen Dinge erledige ich danach oder morgen, das stresst mich nicht.",
       adhd: "Alle Aufgaben schreien mich gleichzeitig mit der gleichen Lautstärke an. Da mein Gehirn nicht filtern kann, was wichtiger ist, fange ich panisch an, den Kleiderschrank aufzuräumen, während ich wegen der Steuererklärung zittere.",
-      asd: "Ich versuche, alle Aufgaben mit 100%iger Perfektion gleichzeitig zu erledigen, da mir klare Kriterien für Wichtigkeit fehlen. Das führt zu extremem Perfektionismus und schnellem Erschöpfungs-Burnout.",
+      asd: "Wenn mir keine klaren, externen Kriterien für die Reihenfolge gegeben werden, erscheinen mir alle Aufgaben als logisch gleichwertig. Ich kann keine sinnvolle Hierarchie bilden und brauche eine explizite Struktur von außen — andernfalls versuche ich, alles gleichzeitig perfekt zu erledigen, was mich schnell erschöpft.",
       audhd: "Mein autistischer Teil braucht eine perfekte, logische Liste, um handlungsfähig zu sein. Mein ADHS-Teil bricht sie sofort auf, da er impulsiv tut, was das meiste Dopamin verspricht. Ich erstelle Listen, die ich dann frustriert ignoriere."
     },
     ratings: { nt: 1, adhd: 5, asd: 3, audhd: 5 }
@@ -267,7 +267,7 @@ const palaceData = [
     deepDive: "Interozeption bezeichnet die neuronale Verarbeitung innerer Körpersignale (wie Hunger, Durst, Erschöpfung, Kälte oder Schmerz). Wenn diese inneren Reize auf dem Weg zum Bewusstsein gedämpft werden – oder durch einen monotropen Aufmerksamkeitsfokus ausgeblendet werden –, fehlen dem Gehirn wichtige Regulationsdaten. Die Signale werden oft erst dann wahrgenommen, wenn sie eine kritische Intensität erreichen (z. B. plötzlicher Schwindel statt Hunger), was die rechtzeitige körperliche Selbstfürsorge erschwert.",
     voices: {
       nt: "Ich merke zwischendurch ganz natürlich, dass mein Magen leise knurrt oder meine Blase voll ist. Ich stehe einfach auf, esse etwas und arbeite entspannt weiter.",
-      adhd: "Ich vergesse das Essen und Trinken komplett. Erst wenn ich abends mit hämmernden Kopfschmerzen aufwache, merke ich, dass ich seit Stunden nichts getrunken habe. Mein Körper sendet einfach keine Signale rechtzeitig.",
+      adhd: "Ich vergesse das Essen und Trinken komplett. Erst wenn ich abends mit hämmernden Kopfschmerzen aufwache, merke ich, dass ich seit Stunden nichts getrunken habe. Mein Körper sendet die Signale zwar, aber mein Gehirn registriert sie im Aufmerksamkeitsstrom einfach nicht.",
       asd: "Ich nehme Körpersignale extrem diffus wahr. Ich spüre eine dumpfe Unruhe oder Gereiztheit, weiß aber nicht, warum. Erst wenn mir mein Partner Essen gibt, merke ich: Ich war einfach nur hungrig.",
       audhd: "Im Hyperfokus blende ich alle Körpersignale komplett aus. Sobald der Fokus bricht, bricht mein Körper zusammen: Ich spüre schlagartig extreme Dehydrierung, Gliederschmerzen, eine volle Blase und totale Erschöpfung auf einmal."
     },
@@ -279,14 +279,14 @@ const palaceData = [
     nameDE: "Sensibilität für Zurückweisung",
     definition: "Eine extreme, oft physisch schmerzhafte emotionale Reaktion auf die reale oder wahrgenommene Ablehnung, Kritik oder das Gefühl des eigenen Versagens.",
     scenario: "Ein enger Freund verabschiedet sich im Chat mit einer ungewöhnlich kurzen Nachricht ('Ok, bis dann.') ohne Emojis.",
-    deepDive: "Sensibilität für Zurückweisung beschreibt eine intensive, oft körperlich spürbare emotionale Reaktion auf reale oder vermutete Ablehnung, Kritik oder Ausgrenzung. In einem hyper-sensiblen Nervensystem verarbeitet das Gehirn soziale Zurückweisung in denselben Arealen, die auch für physischen Schmerz zuständig sind. Um dieser schmerzhaften Erfahrung vorzubeugen, verbleibt das System in einer ständigen Alarmbereitschaft (Vigilanz). Dies führt häufig zu Verhaltensmustern wie extremer sozialer Anpassung (People Pleasing) oder vorsorglichem sozialem Rückzug.",
+    deepDive: "Rejection Sensitive Dysphoria (RSD) ist ein von William Dodson geprägter klinischer Beobachtungsbegriff, der kein offizieller diagnostischer Begriff (DSM-5-TR) ist, aber ein reales und weit verbreitetes Phänomen beschreibt. In einem hyper-sensiblen Nervensystem verarbeitet das Gehirn soziale Zurückweisung in denselben Arealen, die auch für physischen Schmerz zuständig sind. Um dieser schmerzhaften Erfahrung vorzubeugen, verbleibt das System in einer ständigen sozialen Alarmbereitschaft (Vigilanz). Dies führt häufig zu Verhaltensmustern wie extremer sozialer Anpassung (People Pleasing) oder vorsorglichem sozialem Rückzug. Das Phänomen tritt sowohl bei ADHS als auch bei Autismus auf.",
     voices: {
       nt: "Ich denke mir nichts dabei – er wird wohl einfach im Stress sein oder schnell losmüssen. Ich antworte einfach nett und mache weiter.",
       adhd: "Mein Gehirn schlägt Alarm. RSD setzt ein: 'Er hasst mich, ich habe etwas falsch gemacht.' Der Gedanke tut physisch weh, ich kann an nichts anderes mehr denken und grübele stundenlang.",
       asd: "Da ich oft soziale Signale anders interpretiert habe und dafür ausgegrenzt wurde, bin ich extrem vorsichtig geworden. Ich analysiere die Nachricht rational und suche nach logischen Fehlern in meinem Verhalten. Die Angst, erneut ausgestoßen zu werden, sitzt tief und begleitet jede Interaktion.",
       audhd: "Mein ADHS-Teil leidet unter RSD und treibt mich in extremes, erschöpfendes People-Pleasing. Mein autistischer Teil hasst dieses Masking jedoch zutiefst und sehnt sich nach Authentizität. Ich stecke im Dauerzwiespalt."
     },
-    ratings: { nt: 2, adhd: 5, asd: 4, audhd: 5 }
+    ratings: { nt: 1, adhd: 5, asd: 4, audhd: 5 }
   },
   {
     id: 20,
@@ -301,7 +301,7 @@ const palaceData = [
       asd: "Die spontane Planänderung wirft mich komplett aus der Bahn. Ohne meine festen Abläufe stürze ich exekutiv ein und gerate in massiven Stress. Ich kann die Transition nicht so schnell vollziehen.",
       audhd: "Das ultimative Dilemma: Mein autistischer Teil benötigt eiserne Routinen, um Angstzustände zu vermeiden. Mein ADHS-Teil bricht diese Routinen jedoch täglich aus Impulsivität und Langeweile selbstsabotierend auf."
     },
-    ratings: { nt: 2, adhd: 1, asd: 5, audhd: 4 }
+    ratings: { nt: 1, adhd: 2, asd: 5, audhd: 4 }
   },
   {
     id: 21,
@@ -309,7 +309,7 @@ const palaceData = [
     nameDE: "Autistische Trägheit",
     definition: "Die Schwierigkeit, Übergänge zwischen Zuständen, Aktivitäten oder mentalen Modi zu vollziehen — sei es das Starten, Stoppen oder Wechseln einer Handlung.",
     scenario: "Du sitzt seit zwei Stunden gemütlich auf dem Sofa und liest ein Buch. Du weißt, dass du in 30 Minuten das Haus verlassen musst, um dich mit Freunden zu treffen.",
-    deepDive: "Autistische Trägheit (Inertia) beschreibt die neurologisch verankerte Schwierigkeit, Übergänge zwischen Zuständen, Aktivitäten oder mentalen Modi zu vollziehen – sei es das Starten, Stoppen oder Wechseln einer Handlung. Sie basiert auf dem Aufbau extrem stabiler neuronaler Aktivierungsmuster (monotrope Aufmerksamkeit). Ein etabliertes Aufmerksamkeitsmuster zu unterbrechen und ein neues zu aktivieren, erfordert einen enormen kognitiven Energieaufwand. Dies äußert sich als 'Klebenbleiben' an Tätigkeiten, auch wenn diese beendet werden sollen, oder als exekutive Blockade beim Moduswechsel im Alltag.",
+    deepDive: "Autistische Trägheit (Inertia) ist ein seit ca. 2018 zunehmend erforschtes Konzept, das sich fundamental von der Aufgaben-Paralyse (P5) unterscheidet: Während die Paralyse das Starten unliebsamer Aufgaben betrifft, beschreibt die Trägheit die Schwierigkeit, von einem beliebigen Zustand in einen anderen zu wechseln — auch von angenehmen Aktivitäten weg. Sie basiert auf der monotropen Aufmerksamkeit (nach Dinah Murray): Das Gehirn baut extrem stabile neuronale Aktivierungsmuster auf. Ein solches Muster zu unterbrechen, erfordert enormen kognitiven Energieaufwand. Die Forschung zu 'Autistic Flow' (Heasman et al., 2024) zeigt, dass dieser tiefe Fokus intrinsisch wertvoll ist — die Schwierigkeit liegt im erzwungenen Übergang, nicht im Fokus selbst.",
     voices: {
       nt: "Ich schaue auf die Uhr, lege mein Buch zur Seite und stehe auf. Vielleicht denke ich noch kurz an die Stelle, an der ich gerade gelesen habe, aber der Wechsel gelingt mir ohne besondere Anstrengung.",
       adhd: "Wenn das Buch spannend ist, verliere ich mich darin und vergesse die Zeit komplett. Aber sobald mich etwas Neues lockt — die Aussicht auf das Treffen, eine Nachricht auf dem Handy — springe ich sofort auf und bin im nächsten Modus.",
