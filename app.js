@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.6
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.7
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -270,10 +270,11 @@ function getPolygonPath(scores, waveType = null) {
 
     let currentRadius = INNER_RADIUS + (rating * stepSize);
 
-    // Apply a beautiful, highly aesthetic 7-period symmetric wave for the Neurotypical baseline
-    // Period = TOTAL_AXES / 7, creating exactly 7 fine wavy cycles around the circle to keep the shape perfectly centered, balanced, and organic (preventing it from looking squarish)!
+    // Apply a perfectly regular, highly detailed 11-period alternating wave for the Neurotypical baseline
+    // By using Nyquist frequency (11 cycles over 22 axes) with a Pi/4 phase shift, the wave alternates perfectly 
+    // at every single axis, creating a 100% symmetric, regular, and beautifully soft curvy gear/flower line!
     if (waveType === "nt-wave-1") {
-      currentRadius += Math.sin(i * (7 * 2 * Math.PI / TOTAL_AXES)) * (stepSize * 0.16);
+      currentRadius += Math.sin(i * Math.PI + Math.PI / 4) * (stepSize * 0.20);
     }
 
     // Clamp radius to ensure it never exceeds MAX_RADIUS or goes below INNER_RADIUS
@@ -1970,7 +1971,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.6)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.7)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -2006,7 +2007,7 @@ function clearFeedbacks() {
   }
 }
 
-// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.6) ---
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.7) ---
 function openShareModal() {
   const modal = document.getElementById("share-modal");
   const qrImg = document.getElementById("share-qr-code");
