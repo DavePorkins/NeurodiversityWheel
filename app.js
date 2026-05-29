@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.0
+// Mapping Neurodiversity - Cosmic Flanking Logic v3.3.1
 // Implements 2-column layout flanking legend nodes inside SVG, requestAnimationFrame JS glide node evasion animations, flatter bezier connectors, mathematically centered absolute range slider ticks with Kaum/Extrem side labels, and relaxed breathing margins.
 
 // --- 1. CONFIGURATION & STATE ---
@@ -253,44 +253,78 @@ function getWedgePath(cx, cy, rInner, rOuter, startAngle, endAngle) {
 
 // PREMIUM polish: Generates a perfectly smooth closed Catmull-Rom interpolating spline curve
 // to turn jagged zig-zags into organic, flowing rounded shapes that pass EXACTLY through the data points!
-function getPolygonPath(scores) {
+// Optional waveType parameter adds subtle concentric slithering waves for the Neurotypical baseline.
+function getPolygonPath(scores, waveType = null) {
   updateLayoutConstants();
   let points = [];
+  const stepSize = (MAX_RADIUS - INNER_RADIUS) / 5;
+
   for (let i = 0; i < TOTAL_AXES; i++) {
     const paramId = i + 1;
     const rating = scores[paramId] || 1;
-    const stepSize = (MAX_RADIUS - INNER_RADIUS) / 5;
-    const currentRadius = INNER_RADIUS + (rating * stepSize);
+    let currentRadius = INNER_RADIUS + (rating * stepSize);
+
+    // Apply subtle aesthetic wave modulation for Neurotypical baseline
+    if (waveType === "nt-wave-1") {
+      currentRadius += Math.sin(i * 1.8) * 4.5;
+    } else if (waveType === "nt-wave-2") {
+      currentRadius += Math.cos(i * 2.2) * 4.5;
+    }
+
+    // Clamp radius to ensure it never exceeds MAX_RADIUS or goes below INNER_RADIUS
+    currentRadius = Math.max(INNER_RADIUS, Math.min(MAX_RADIUS, currentRadius));
+
     points.push(getCoords(i, currentRadius));
   }
 
   if (points.length < 3) return "";
 
+  // Helper to clamp any calculated point to MAX_RADIUS to guarantee 0% overshoot beyond outer boundaries
+  function clampToMax(pt) {
+    const dx = pt.x - CENTER_X;
+    const dy = pt.y - CENTER_Y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > MAX_RADIUS) {
+      return {
+        x: CENTER_X + (dx / dist) * MAX_RADIUS,
+        y: CENTER_Y + (dy / dist) * MAX_RADIUS
+      };
+    }
+    return pt;
+  }
+
   let path = "";
   const n = points.length;
-  const tension = 0.15; // Elegant tension to keep it smooth and tight
+  const tension = 0.35; // Tighter tension (0.35) mathematically limits overshoot while preserving smooth flow
 
-  // Start path exactly at the first point
-  path += `M ${points[0].x.toFixed(2)},${points[0].y.toFixed(2)}`;
+  // Start path exactly at the first point (clamped)
+  const pStart = clampToMax(points[0]);
+  path += `M ${pStart.x.toFixed(2)},${pStart.y.toFixed(2)}`;
 
   // Draw cubic Bezier segments to interpolate through all points
   for (let i = 0; i < n; i++) {
-    const p0 = points[(i - 1 + n) % n];
-    const p1 = points[i];
-    const p2 = points[(i + 1) % n];
-    const p3 = points[(i + 2) % n];
+    const p0 = clampToMax(points[(i - 1 + n) % n]);
+    const p1 = clampToMax(points[i]);
+    const p2 = clampToMax(points[(i + 1) % n]);
+    const p3 = clampToMax(points[(i + 2) % n]);
 
-    const cp1x = p1.x + (p2.x - p0.x) * (1 - tension) / 6;
-    const cp1y = p1.y + (p2.y - p0.y) * (1 - tension) / 6;
+    // Calculate control points with clamping
+    const cp1 = clampToMax({
+      x: p1.x + (p2.x - p0.x) * (1 - tension) / 6,
+      y: p1.y + (p2.y - p0.y) * (1 - tension) / 6
+    });
 
-    const cp2x = p2.x - (p3.x - p1.x) * (1 - tension) / 6;
-    const cp2y = p2.y - (p3.y - p1.y) * (1 - tension) / 6;
+    const cp2 = clampToMax({
+      x: p2.x - (p3.x - p1.x) * (1 - tension) / 6,
+      y: p2.y - (p3.y - p1.y) * (1 - tension) / 6
+    });
 
-    path += ` C ${cp1x.toFixed(2)},${cp1y.toFixed(2)} ${cp2x.toFixed(2)},${cp2y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
+    path += ` C ${cp1.x.toFixed(2)},${cp1.y.toFixed(2)} ${cp2.x.toFixed(2)},${cp2.y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
   }
 
   return path + " Z";
 }
+
 
 
 // --- 4. PARAMETER LIST & CHART RENDERING ---
@@ -379,6 +413,11 @@ function initChart() {
     centerHole.setAttribute("cx", CENTER_X);
     centerHole.setAttribute("cy", CENTER_Y);
   }
+  const centerLogo = document.getElementById("chart-center-logo");
+  if (centerLogo) {
+    centerLogo.setAttribute("transform", `translate(${CENTER_X}, ${CENTER_Y})`);
+  }
+
 
   // Draw Background segments and Radial indicators
   for (let i = 0; i < TOTAL_AXES; i++) {
@@ -730,19 +769,55 @@ function drawOverlays() {
   const profiles = ["nt", "adhd", "asd", "audhd"];
   profiles.forEach(pKey => {
     if (activeProfiles[pKey]) {
-      const dPath = getPolygonPath(getReferenceScores(pKey));
+      if (pKey === "nt") {
+        // Draw TWO intertwining wavy lines for NT!
+        const waves = ["nt-wave-1", "nt-wave-2"];
+        waves.forEach(wType => {
+          const dPath = getPolygonPath(getReferenceScores(pKey), wType);
 
-      // Append zart fill path to background layer
-      const fillPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      fillPath.setAttribute("d", dPath);
-      fillPath.setAttribute("class", `polygon-overlay-fill ${pKey}`);
-      fillGroup.appendChild(fillPath);
+          // Append zart fill path to background layer
+          const fillPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          fillPath.setAttribute("d", dPath);
+          fillPath.setAttribute("class", `polygon-overlay-fill nt ${wType}`);
+          fillGroup.appendChild(fillPath);
 
-      // Append glowing outline stroke path to foreground layer (on top of wedges)
-      const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      strokePath.setAttribute("d", dPath);
-      strokePath.setAttribute("class", `polygon-overlay-stroke ${pKey}`);
-      strokeGroup.appendChild(strokePath);
+          // Append glowing outline stroke path to foreground layer (on top of wedges)
+          const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          strokePath.setAttribute("d", dPath);
+          strokePath.setAttribute("class", `polygon-overlay-stroke nt ${wType}`);
+          strokeGroup.appendChild(strokePath);
+        });
+      } else {
+        const dPath = getPolygonPath(getReferenceScores(pKey));
+
+        // Append zart fill path to background layer
+        const fillPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        fillPath.setAttribute("d", dPath);
+        fillPath.setAttribute("class", `polygon-overlay-fill ${pKey}`);
+        fillGroup.appendChild(fillPath);
+
+        // Append glowing outline stroke path to foreground layer (on top of wedges)
+        const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        strokePath.setAttribute("d", dPath);
+        strokePath.setAttribute("class", `polygon-overlay-stroke ${pKey}`);
+        strokeGroup.appendChild(strokePath);
+
+        // Draw glowing circular markers at vertices for high readability
+        const refScores = getReferenceScores(pKey);
+        for (let i = 0; i < TOTAL_AXES; i++) {
+          const paramId = i + 1;
+          const rating = refScores[paramId] || 1;
+          const stepSize = (MAX_RADIUS - INNER_RADIUS) / 5;
+          const currentRadius = INNER_RADIUS + (rating * stepSize);
+          const coords = getCoords(i, currentRadius);
+
+          const marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          marker.setAttribute("cx", coords.x.toFixed(2));
+          marker.setAttribute("cy", coords.y.toFixed(2));
+          marker.setAttribute("class", `polygon-overlay-marker ${pKey}`);
+          strokeGroup.appendChild(marker);
+        }
+      }
     }
   });
 }
@@ -1893,7 +1968,7 @@ function exportFeedbacksToMarkdown() {
     return;
   }
 
-  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.0)\n`;
+  let md = `# 🌸 Mapping Neurodiversity - Feedback-Export (v3.3.1)\n`;
   md += `Erstellt am: ${new Date().toLocaleDateString("de-DE")} - ${new Date().toLocaleTimeString("de-DE")}\n\n`;
   md += `Kopiere diesen Block komplett und gib ihn der KI, um alle gewünschten Anpassungen vollautomatisch und fehlerfrei einzupflegen!\n\n`;
   md += `---\n\n`;
@@ -1928,4 +2003,55 @@ function clearFeedbacks() {
     alert("Feedback-Speicher erfolgreich geleert!");
   }
 }
+
+// --- 🌸 SHARE & QR-CODE SYSTEM (v3.3.1) ---
+function openShareModal() {
+  const modal = document.getElementById("share-modal");
+  const qrImg = document.getElementById("share-qr-code");
+  const urlInput = document.getElementById("share-url-input");
+  
+  if (modal && qrImg && urlInput) {
+    const currentUrl = window.location.href.split('#')[0]; // Strip hash/anchor info
+    urlInput.value = currentUrl;
+    
+    // Set public secure high-contrast QR code image (deep slate violet)
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=6c5ce7&data=${encodeURIComponent(currentUrl)}`;
+    
+    modal.style.display = "flex";
+    modal.classList.add("active");
+    triggerChime(659.25, "sine", 0.05, 0.25);
+  }
+}
+
+function closeShareModal() {
+  const modal = document.getElementById("share-modal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.remove("active");
+    const status = document.getElementById("copy-status");
+    if (status) status.textContent = "";
+    triggerChime(440, "sine", 0.05, 0.2);
+  }
+}
+
+function copyShareUrl() {
+  const urlInput = document.getElementById("share-url-input");
+  const status = document.getElementById("copy-status");
+  if (urlInput && status) {
+    urlInput.select();
+    urlInput.setSelectionRange(0, 99999); // for mobile support
+    navigator.clipboard.writeText(urlInput.value)
+      .then(() => {
+        status.textContent = "✓ Link erfolgreich kopiert!";
+        triggerChime(880, "sine", 0.06, 0.3);
+        setTimeout(() => {
+          status.textContent = "";
+        }, 2000);
+      })
+      .catch(() => {
+        status.textContent = "Fehler beim Kopieren.";
+      });
+  }
+}
+
 

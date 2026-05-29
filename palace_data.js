@@ -1,4 +1,4 @@
-// Mapping Neurodiversity - Master Data Base v3.3.0
+// Mapping Neurodiversity - Master Data Base v3.3.1
 // Credit: Savannah Denny (Colour Me Neurospicy) for the original 22-trait model. We adapted 22 parameters.
 // Tonalität: Neuroaffirmativ, einfühlsam und wissenschaftlich fundiert.
 
